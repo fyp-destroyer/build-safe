@@ -11,6 +11,10 @@
     "category": "Mason, demolition contractor, or structural engineer",
     "optional": "Experienced mason or contractor for drilling, tile prep, or wall changes"
   },
+  "tiling": {
+    "category": "Tile installer or waterproofing contractor",
+    "optional": "Tile installer recommended for wet areas, large rooms, uneven surfaces, or waterproofing"
+  },
   "painting": {
     "category": "Painter or handyman",
     "optional": "No professional usually required unless height, lead paint, or ventilation risk exists"
@@ -18,6 +22,10 @@
   "carpentry": {
     "category": "Carpenter or handyman",
     "optional": "Handyman or carpenter optional for heavy mounted items"
+  },
+  "hvac": {
+    "category": "Licensed HVAC technician",
+    "optional": "HVAC technician recommended for thermostat wiring, AC units, refrigerant, furnace, or duct work"
   },
   "roofing": {
     "category": "Licensed roofing contractor",

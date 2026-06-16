@@ -61,12 +61,24 @@ CATEGORY_PROFILES: dict[str, CategoryProfile] = {
             "valve",
         ),
     ),
+    "tiling": CategoryProfile(
+        label="Tiling",
+        base_score=28,
+        keywords=(
+            "tile",
+            "tiles",
+            "tiling",
+            "ceramic",
+            "grout",
+            "thinset",
+            "bathroom floor",
+            "kitchen backsplash",
+        ),
+    ),
     "masonry_demolition": CategoryProfile(
         label="Masonry / Demolition",
         base_score=38,
         keywords=(
-            "tile",
-            "tiles",
             "masonry",
             "brick",
             "concrete",
@@ -85,7 +97,22 @@ CATEGORY_PROFILES: dict[str, CategoryProfile] = {
     "carpentry": CategoryProfile(
         label="Carpentry / Assembly",
         base_score=20,
-        keywords=("shelf", "cabinet", "door", "assemble", "furniture", "wood"),
+        keywords=("shelf", "cabinet", "door", "assemble", "furniture", "wood", "stud", "railing"),
+    ),
+    "hvac": CategoryProfile(
+        label="HVAC",
+        base_score=46,
+        keywords=(
+            "hvac",
+            "air conditioner",
+            "ac unit",
+            "air conditioning",
+            "thermostat",
+            "duct",
+            "furnace",
+            "heat pump",
+            "refrigerant",
+        ),
     ),
     "cleaning": CategoryProfile(
         label="Cleaning",

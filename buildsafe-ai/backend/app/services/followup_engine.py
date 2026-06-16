@@ -19,6 +19,11 @@ QUESTION_BANK: dict[str, list[tuple[str, str]]] = {
         ("hidden_services_checked", "Could electrical wiring, plumbing, or gas lines be behind the surface?"),
         ("permit_checked", "Does the work require building approval or a local permit?"),
     ],
+    "tiling": [
+        ("surface_prepared", "Is the surface clean, flat, waterproofed if needed, and structurally sound?"),
+        ("wet_area", "Is this tiling in a shower, bathroom, balcony, or other wet area?"),
+        ("hidden_services_checked", "Have you checked for hidden wiring or plumbing before cutting or drilling?"),
+    ],
     "painting": [
         ("ventilation", "Can the room be ventilated during painting and drying?"),
         ("lead_paint", "Is there old peeling paint that could contain lead?"),
@@ -28,6 +33,11 @@ QUESTION_BANK: dict[str, list[tuple[str, str]]] = {
         ("wall_type", "What type of wall or surface will hold the shelf, cabinet, or fixture?"),
         ("weight_load", "What load will the installed item need to support?"),
         ("hidden_services_checked", "Have you checked for hidden wiring or plumbing before drilling?"),
+    ],
+    "hvac": [
+        ("refrigerant_involved", "Does the task involve refrigerant lines, compressor work, or sealed AC components?"),
+        ("dedicated_circuit", "Does the unit require a dedicated electrical circuit or breaker work?"),
+        ("manufacturer_manual", "Do you have the manufacturer manual and correct filter or replacement part?"),
     ],
     "roofing": [
         ("fall_protection", "Do you have suitable fall protection and stable access?"),

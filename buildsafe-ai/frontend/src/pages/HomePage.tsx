@@ -1,6 +1,7 @@
 import { AlertOctagon, Building2, HardHat, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 
+import { AdminSeedDataPanel } from "../components/AdminSeedDataPanel";
 import { AssessmentForm } from "../components/AssessmentForm";
 import { ResultCard } from "../components/ResultCard";
 import { assessTask } from "../services/api";
@@ -87,6 +88,7 @@ export function HomePage(): JSX.Element {
           </section>
 
           <ResultCard result={result} />
+          <AdminSeedDataPanel />
         </div>
       </main>
     </div>

@@ -35,3 +35,18 @@ export interface AssessmentResponse {
   safety_warnings: string[];
   rules_triggered: string[];
 }
+
+export interface SeedDataResponse {
+  tools: Record<string, string[]>;
+  materials: Record<string, { materials: string[]; ppe: string[] }>;
+  safety_rules: Array<{
+    id: string;
+    description: string;
+    category: string;
+    keywords: string[];
+    min_risk_level: number;
+    score_boost: number;
+    warning: string;
+  }>;
+  professional_categories: Record<string, { category: string; optional: string }>;
+}

@@ -19,20 +19,41 @@ export function AssessmentForm({ isSubmitting, onSubmit }: AssessmentFormProps):
   const [locationType, setLocationType] = useState<LocationType>("house");
   const [urgency, setUrgency] = useState<Urgency>("medium");
   const [budgetRange, setBudgetRange] = useState("$50-$100");
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
 
+    const task = taskDescription.trim();
+    const budget = budgetRange.trim();
+    const tools = availableTools
+      .split(",")
+      .map((tool) => tool.trim())
+      .filter(Boolean);
+
+    if (task.length < 3) {
+      setValidationError("Enter a task with at least 3 characters.");
+      return;
+    }
+
+    if (task.length > 300) {
+      setValidationError("Keep the task description under 300 characters.");
+      return;
+    }
+
+    if (tools.length > 25) {
+      setValidationError("List at most 25 available tools.");
+      return;
+    }
+
+    setValidationError(null);
     onSubmit({
-      task_description: taskDescription.trim(),
+      task_description: task,
       user_skill_level: skillLevel,
-      available_tools: availableTools
-        .split(",")
-        .map((tool) => tool.trim())
-        .filter(Boolean),
+      available_tools: tools,
       location_type: locationType,
       urgency,
-      budget_range: budgetRange.trim(),
+      budget_range: budget || "not specified",
       answers_to_followups: {},
     });
   }
@@ -113,6 +134,12 @@ export function AssessmentForm({ isSubmitting, onSubmit }: AssessmentFormProps):
         )}
         Assess Risk
       </button>
+
+      {validationError ? (
+        <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+          {validationError}
+        </p>
+      ) : null}
     </form>
   );
 }

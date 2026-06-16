@@ -10,8 +10,10 @@ TIME_ESTIMATES: dict[str, str] = {
     "electrical": "1-3 hours for inspection or minor fixture work",
     "plumbing": "1-4 hours depending on access and shutoff",
     "masonry_demolition": "Half day to 2 days depending on surface and debris handling",
+    "tiling": "Half day to 2 days depending on layout, surface preparation, and curing time",
     "painting": "2-8 hours per room plus drying time",
     "carpentry": "1-4 hours depending on mounting and alignment",
+    "hvac": "30 minutes for filter replacement; professional assessment for AC, refrigerant, or furnace work",
     "roofing": "Professional assessment required before estimating",
     "gas": "Licensed technician assessment required",
     "structural": "Engineer or contractor assessment required",
@@ -22,8 +24,10 @@ COST_ESTIMATES: dict[str, str] = {
     "electrical": "$50-$250 DIY materials, professional labor varies by scope",
     "plumbing": "$20-$180 DIY materials, more if hidden leaks are involved",
     "masonry_demolition": "$40-$500+ depending on tools, disposal, and permits",
+    "tiling": "$50-$600+ depending on area, tile type, adhesive, grout, and waterproofing",
     "painting": "$30-$250 depending on paint, primer, and room size",
     "carpentry": "$20-$200 depending on hardware and materials",
+    "hvac": "$10-$80 for filter/thermostat materials; professional quote for AC, duct, refrigerant, or furnace work",
     "roofing": "Professional quote recommended",
     "gas": "Licensed professional quote required",
     "structural": "Engineer or contractor quote required",
@@ -50,6 +54,10 @@ def get_recommendations(category_key: str, risk_level: str) -> dict[str, Any]:
     else:
         professional = professional_payload["category"]
 
+    # TODO: Quote request system.
+    # This can later create a quote_request record from the task, risk tier, category, and budget.
+    # TODO: Professional marketplace.
+    # Replace static categories with verified local professional profiles, availability, and ratings.
     return {
         "required_tools": category_tools,
         "required_materials": material_payload["materials"],

@@ -11,12 +11,20 @@
     "materials": ["dust sheets", "debris bags", "wall anchors if installing tile or fixtures", "patching compound"],
     "ppe": ["hard hat", "dust mask or respirator", "work gloves", "safety goggles", "hearing protection"]
   },
+  "tiling": {
+    "materials": ["tiles", "thinset or tile adhesive", "grout", "tile spacers", "waterproofing membrane if needed", "silicone sealant"],
+    "ppe": ["cut-resistant gloves", "safety goggles", "knee pads", "dust mask"]
+  },
   "painting": {
     "materials": ["primer", "paint", "painter tape", "sandpaper", "drop cloth"],
     "ppe": ["safety glasses", "nitrile gloves", "respirator or mask for low-ventilation areas"]
   },
   "carpentry": {
     "materials": ["screws", "wall anchors", "brackets", "wood filler"],
+    "ppe": ["safety glasses", "work gloves", "dust mask"]
+  },
+  "hvac": {
+    "materials": ["replacement filter", "thermostat batteries", "foil HVAC tape", "approved condensate tablets if needed"],
     "ppe": ["safety glasses", "work gloves", "dust mask"]
   },
   "roofing": {

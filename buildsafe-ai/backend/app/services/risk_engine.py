@@ -67,13 +67,17 @@ def assess_risk(request: AssessmentRequest) -> dict[str, Any]:
     rules_triggered: list[str] = []
     safety_warnings: list[str] = []
 
-    # Future ML integration point:
+    # TODO: ML classifier integration.
     # A trained classifier can produce category/risk priors here, then the
-    # rules below can remain as a safety guardrail for high-risk hazards.
+    # rules below can remain as deterministic safety guardrails for high-risk hazards.
     for rule in _load_safety_rules():
         if _contains_any(task_text, rule["keywords"]):
             category = rule.get("category", category)
-            risk_score = max(risk_score, MIN_SCORE_BY_LEVEL[rule["min_risk_level"]])
+            score_override = rule.get("score_override")
+            if score_override is not None:
+                risk_score = int(score_override)
+            else:
+                risk_score = max(risk_score, MIN_SCORE_BY_LEVEL[rule["min_risk_level"]])
             risk_score += int(rule.get("score_boost", 0))
             rules_triggered.append(f'{rule["id"]}: {rule["description"]}')
             warning = rule.get("warning")
@@ -84,16 +88,18 @@ def assess_risk(request: AssessmentRequest) -> dict[str, Any]:
         "electrical",
         "plumbing",
         "masonry_demolition",
+        "tiling",
+        "hvac",
         "roofing",
         "gas",
         "structural",
     }
-    if skill_level == "beginner" and category in trade_categories:
+    if skill_level == "beginner" and category in trade_categories and risk_score >= 30:
         risk_score += 10
         rules_triggered.append(
             "SKILL_BEGINNER_TRADE: Beginner skill level increases risk for trade work."
         )
-    elif skill_level == "expert" and category not in {"gas", "structural", "roofing"}:
+    elif skill_level == "expert" and category not in {"gas", "structural", "roofing", "hvac"}:
         risk_score -= 5
         rules_triggered.append(
             "SKILL_EXPERT_OFFSET: Expert skill slightly reduces risk for non-critical tasks."
@@ -120,8 +126,21 @@ def assess_risk(request: AssessmentRequest) -> dict[str, Any]:
             "Emergency conditions can hide serious hazards. Stabilize the area and contact emergency services if life, fire, gas, or flooding risk is present."
         )
 
-    critical_info_categories = {"electrical", "plumbing", "masonry_demolition", "gas", "structural", "roofing"}
-    if category in critical_info_categories and _answers_missing_or_unknown(request.answers_to_followups):
+    critical_info_categories = {
+        "electrical",
+        "plumbing",
+        "masonry_demolition",
+        "tiling",
+        "hvac",
+        "gas",
+        "structural",
+        "roofing",
+    }
+    if (
+        category in critical_info_categories
+        and risk_score >= 30
+        and _answers_missing_or_unknown(request.answers_to_followups)
+    ):
         risk_score += 8
         rules_triggered.append(
             "MISSING_CRITICAL_INFO: Missing safety details increase uncertainty."

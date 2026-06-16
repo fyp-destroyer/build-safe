@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-from app.schemas import AssessmentRequest, AssessmentResponse
+from app.schemas import AssessmentRequest, AssessmentResponse, SeedDataResponse
 from app.services.followup_engine import get_follow_up_questions
 from app.services.recommendation_engine import get_recommendations
 from app.services.risk_engine import assess_risk
+from app.services.seed_data import get_seed_data
 
 app = FastAPI(
     title="BuildSafe AI API",
@@ -26,11 +29,25 @@ app.add_middleware(
 )
 
 
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(_, exc: RequestValidationError) -> JSONResponse:
+    return JSONResponse(
+        status_code=422,
+        content={
+            "message": "Invalid assessment input",
+            "details": exc.errors(),
+        },
+    )
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "service": "buildsafe-ai-api"}
 
 
+# TODO: Photo upload.
+# Add a multipart endpoint that stores task photos, extracts observable hazards,
+# and passes image-derived signals into the risk engine.
 @app.post("/api/assess-task", response_model=AssessmentResponse)
 def assess_task(payload: AssessmentRequest) -> AssessmentResponse:
     risk_result = assess_risk(payload)
@@ -43,3 +60,8 @@ def assess_task(payload: AssessmentRequest) -> AssessmentResponse:
         follow_up_questions=follow_up_questions,
         **recommendations,
     )
+
+
+@app.get("/api/admin/seed-data", response_model=SeedDataResponse)
+def read_seed_data() -> SeedDataResponse:
+    return SeedDataResponse(**get_seed_data())

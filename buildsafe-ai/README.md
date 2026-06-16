@@ -2,6 +2,8 @@
 
 Safety-first DIY and construction task assessment prototype for a Computer Science Final Year Project.
 
+For repository-wide product and development rules, see [PROJECT_INSTRUCTIONS.md](PROJECT_INSTRUCTIONS.md).
+
 ## Stack
 
 - Backend: FastAPI, Python, JSON seed data

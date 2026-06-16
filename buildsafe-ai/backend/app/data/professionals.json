@@ -1,0 +1,38 @@
+{
+  "electrical": {
+    "category": "Licensed electrician",
+    "optional": "Electrician recommended for wiring, fixtures, or breaker-related work"
+  },
+  "plumbing": {
+    "category": "Licensed plumber",
+    "optional": "Plumber recommended if shutoff, hidden pipes, or active leaks are involved"
+  },
+  "masonry_demolition": {
+    "category": "Mason, demolition contractor, or structural engineer",
+    "optional": "Experienced mason or contractor for drilling, tile prep, or wall changes"
+  },
+  "painting": {
+    "category": "Painter or handyman",
+    "optional": "No professional usually required unless height, lead paint, or ventilation risk exists"
+  },
+  "carpentry": {
+    "category": "Carpenter or handyman",
+    "optional": "Handyman or carpenter optional for heavy mounted items"
+  },
+  "roofing": {
+    "category": "Licensed roofing contractor",
+    "optional": "Roofing contractor recommended for access, height, or leak diagnosis"
+  },
+  "gas": {
+    "category": "Licensed gas technician",
+    "optional": "Licensed gas technician required for gas line work"
+  },
+  "structural": {
+    "category": "Structural engineer or licensed contractor",
+    "optional": "Structural engineer recommended before any structural change"
+  },
+  "general": {
+    "category": "Handyman or relevant trade professional",
+    "optional": "No professional usually required for low-risk general DIY"
+  }
+}

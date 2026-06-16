@@ -1,0 +1,67 @@
+{
+  "rules": [
+    {
+      "id": "ELEC_GENERAL",
+      "description": "Electrical wiring, exposed wires, breakers, outlets, and ceiling fan work can create shock or fire risk.",
+      "category": "electrical",
+      "keywords": ["electrical wiring", "repair wiring", "wiring", "exposed wire", "ceiling fan", "breaker", "outlet", "socket", "switch"],
+      "min_risk_level": 3,
+      "score_boost": 6,
+      "warning": "Switch off power at the breaker and verify the circuit with a voltage tester before touching any wiring."
+    },
+    {
+      "id": "ELEC_MAIN_PANEL",
+      "description": "Main panel or service panel work exposes users to high-current electrical hazards.",
+      "category": "electrical",
+      "keywords": ["main panel", "main electrical panel", "breaker panel", "service panel", "consumer unit"],
+      "min_risk_level": 5,
+      "score_boost": 8,
+      "warning": "Do not open or modify the main electrical panel unless you are licensed and authorized."
+    },
+    {
+      "id": "GAS_LINE",
+      "description": "Gas line work can cause fire, explosion, poisoning, or code violations.",
+      "category": "gas",
+      "keywords": ["gas line", "gas pipe", "gas leak", "natural gas", "propane", "gas connection"],
+      "min_risk_level": 5,
+      "score_boost": 10,
+      "warning": "Leave the area and contact emergency services or a licensed gas technician if a gas leak is suspected."
+    },
+    {
+      "id": "STRUCTURAL_LOAD",
+      "description": "Load-bearing walls, beams, foundations, and support columns require structural assessment.",
+      "category": "structural",
+      "keywords": ["load-bearing wall", "load bearing wall", "structural beam", "support column", "foundation"],
+      "min_risk_level": 5,
+      "score_boost": 8,
+      "warning": "Do not alter structural elements without approval from a qualified structural engineer."
+    },
+    {
+      "id": "DEMOLITION_WALL",
+      "description": "Wall demolition can involve structure, hidden utilities, dust, and permit requirements.",
+      "category": "masonry_demolition",
+      "keywords": ["demolition", "break a wall", "break wall", "remove wall", "knock down wall", "tear down wall"],
+      "min_risk_level": 4,
+      "score_boost": 8,
+      "warning": "Confirm the wall is non-load-bearing and scan for hidden electrical, plumbing, or gas services before demolition."
+    },
+    {
+      "id": "ROOF_WORK",
+      "description": "Roof repair adds fall risk and weather exposure.",
+      "category": "roofing",
+      "keywords": ["roof repair", "fix roof", "roof leak", "replace shingles", "gutter repair"],
+      "min_risk_level": 4,
+      "score_boost": 6,
+      "warning": "Avoid roof work without proper access, dry conditions, and fall protection."
+    },
+    {
+      "id": "WATER_EMERGENCY",
+      "description": "Active leaks can damage structures and create electrical hazards.",
+      "category": "plumbing",
+      "keywords": ["burst pipe", "active leak", "water flooding", "major leak", "water near outlet"],
+      "min_risk_level": 4,
+      "score_boost": 6,
+      "warning": "Shut off the water supply and keep water away from electrical outlets and appliances."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "electrical": ["voltage tester", "insulated screwdriver", "wire stripper", "drill", "stable ladder"],
+  "plumbing": ["pipe wrench", "adjustable wrench", "plumber tape", "bucket", "utility knife"],
+  "masonry_demolition": ["hammer", "chisel", "masonry drill", "stud finder", "utility knife", "dust collection bags"],
+  "painting": ["paint roller", "brush set", "paint tray", "painter tape", "drop cloth"],
+  "carpentry": ["drill", "level", "stud finder", "measuring tape", "screwdriver set"],
+  "roofing": ["extension ladder", "roofing hammer", "fall arrest kit", "work platform"],
+  "gas": ["gas leak detector", "adjustable wrench", "shutoff key"],
+  "structural": ["measuring tape", "stud finder", "temporary support equipment"],
+  "general": ["measuring tape", "utility knife", "screwdriver set", "work light"]
+}

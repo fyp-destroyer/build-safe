@@ -1,6 +1,16 @@
 {
   "rules": [
     {
+      "id": "ELEC_LIGHT_BULB_SWAP",
+      "description": "A like-for-like light bulb replacement is usually low risk if no wiring, fitting repair, or unsafe height access is involved.",
+      "category": "electrical",
+      "keywords": ["replace light bulb", "replace a light bulb", "change light bulb", "change a light bulb", "swap bulb", "replace bulb"],
+      "min_risk_level": 1,
+      "score_override": 12,
+      "score_boost": 0,
+      "warning": "Turn the light switch off, let the bulb cool, and use stable access if the fitting is overhead."
+    },
+    {
       "id": "ELEC_GENERAL",
       "description": "Electrical wiring, exposed wires, breakers, outlets, switches, fixtures, and ceiling fans can create shock or fire risk.",
       "category": "electrical",

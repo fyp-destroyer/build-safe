@@ -1,6 +1,29 @@
 # BuildSafe AI Backend
 
-FastAPI backend for a safety-first DIY and construction task assessment platform.
+This FastAPI backend powers the BuildSafe AI / ConstructMate MVP. It handles task-intent detection, Gemini-assisted follow-up planning, recommendation consistency checks, rule-based safety logic, and the final explainable risk-score breakdown.
+
+## Environment Setup
+
+Copy [`.env.example`](.env.example) to `.env` and configure:
+
+```env
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-flash-latest
+GEMINI_ENABLED=false
+DEBUG_TRACE_ENABLED=false
+```
+
+What each setting does:
+
+- `GEMINI_API_KEY`: Gemini API key for optional LLM augmentation
+- `GEMINI_MODEL`: Gemini model name, default `gemini-flash-latest`
+- `GEMINI_ENABLED`: enables Gemini-assisted task understanding, follow-up planning, and update parsing
+- `DEBUG_TRACE_ENABLED`: returns backend debug trace payloads for the frontend Developer Trace panel
+
+Fallback behavior:
+
+- If Gemini is disabled, missing, or fails, follow-up planning and update parsing fall back to deterministic rules.
+- The final risk level always remains under rule-engine control.
 
 ## Run Locally
 
@@ -18,57 +41,145 @@ Open the API docs:
 http://localhost:8000/docs
 ```
 
-## Endpoints
+## Run The Smoke Tests
 
-- `GET /health` returns service health.
-- `POST /api/assess-task` returns the risk report payload.
-- `GET /api/admin/seed-data` returns read-only MVP seed data for the frontend admin placeholder.
+```bash
+cd buildsafe-ai/backend
+python -m unittest discover -s tests -v
+```
 
-## Assess a Task
+The smoke suite includes [tests/test_demo_cases.py](tests/test_demo_cases.py) for the seven supervisor demo scenarios and [tests/test_update_assessment.py](tests/test_update_assessment.py) for update parsing, reassessment, and changed-vs-unchanged summaries.
+
+## Key Endpoints
+
+- `GET /health`: health check
+- `POST /api/llm/plan-followups`: task-intent detection plus up to 2 safety-critical follow-up questions
+- `POST /api/assess-task`: final assessment with explainable score, warnings, tools, PPE, and professional recommendation
+- `POST /api/update-assessment`: parse a new message against an existing completed assessment, merge changed context, rerun the risk engine, and return changed/unchanged sections
+- `GET /api/admin/seed-data`: read-only MVP seed data
+
+## Backend Safety Model
+
+`task_intent`
+
+- The backend resolves ambiguous natural-language tasks into a concrete intent such as `hanging_wall_decor`, `wall_painting`, `ceiling_fan_installation`, `wall_demolition`, or `plumbing_leak_repair`.
+
+Rule engine
+
+- The rule engine is the final authority.
+- It combines task keywords, category priors, follow-up answers, and explicit safety rules.
+- It also keeps high-risk tasks conservative, especially around structure, gas, water, and electricity.
+
+Gemini augmentation
+
+- Gemini can assist with follow-up planning, interpretation, and explanation language.
+- Gemini can also parse natural-language update messages when enabled.
+- If Gemini is unavailable, fallback rules detect common changes such as weight, wall material, attachment method, hidden utilities, tools, skill level, and damaged electrical items.
+- Gemini does not directly decide the final risk level.
+
+Recommendation consistency
+
+- The backend cleans recommendation mismatches for ambiguous phrasing.
+- Example: "hang a painting" must not return paint rollers, brushes, trays, wall paint, or drying-time language.
+
+## Explainable Risk Score Rubric
+
+The backend now returns `risk_score_breakdown` with:
+
+- `base_task_risk`: `0-30`
+- `hazard_severity`: `0-25`
+- `skill_mismatch`: `0-15`
+- `tools_ppe_readiness`: `0-15`
+- `environment_urgency_unknowns`: `0-15`
+- `total`: final score out of `100`
+- `threshold_label`: rubric-based tier before overrides
+- `safety_overrides_applied`: any hard safety escalations
+
+Risk thresholds:
+
+- `0-20`: Safe DIY
+- `21-40`: DIY with supervision
+- `41-60`: Professional recommended
+- `61-80`: Professional required
+- `81-100`: Dangerous / permit-required / do not attempt
+
+Safety overrides can lift the final risk tier above the threshold label for hazardous triggers such as:
+
+- gas line work
+- main electrical panel work
+- exposed wiring
+- load-bearing uncertainty
+- structural demolition
+- roof work at height
+- water leakage near electricity
+- unknown hidden utilities during demolition or drilling
+
+## Update Assessment Behavior
+
+`POST /api/update-assessment` is used after a final assessment already exists. It accepts the previous assessment, previous answers/context, and a new `update_message`.
+
+The endpoint returns:
+
+- `updated_assessment`
+- `change_summary.detected_updates`
+- `change_summary.changed_sections`
+- `change_summary.unchanged_sections`
+- risk score and risk level comparison
+- `debug_trace` showing whether Gemini or fallback parsing was used
+
+The update flow is impact-aware. For example, changing a painting from `1 kg` to `2 kg` may update risk score, materials, and safety warnings while preserving task intent, task category, and basic tools. Hidden wiring, exposed wires, gas, structural uncertainty, and water near electricity are reassessed conservatively.
+
+## Supervisor Demo Scenario Matrix
+
+| Scenario | What the backend should show |
+| --- | --- |
+| hang a new painting in my bedroom | `hanging_wall_decor`, wall-decor questions, no paint tools, low-risk output |
+| paint my bedroom | `wall_painting`, roller/brush/tray, paint/primer, drying time |
+| hang a heavy mirror on a tiled bathroom wall | still wall decor, no paint tools, higher risk than lightweight decor, anchor guidance |
+| install a ceiling fan | electrical category, voltage tester + insulated tools, electrician recommendation |
+| break a wall between rooms | demolition/structural caution, professional-only stance |
+| replace a light bulb | 0-1 follow-up question, no budget question, simple low-risk path |
+| fix a leaking pipe | asks about visible vs hidden leak and nearby electrical risk |
+
+## Example Curl Requests
+
+Plan follow-ups:
+
+```bash
+curl -X POST http://localhost:8000/api/llm/plan-followups ^
+  -H "Content-Type: application/json" ^
+  -d "{\"task_description\":\"I want to hang a new painting in my bedroom.\",\"known_answers\":{}}"
+```
+
+Assess a task:
 
 ```bash
 curl -X POST http://localhost:8000/api/assess-task ^
   -H "Content-Type: application/json" ^
-  -d "{\"task_description\":\"install a ceiling fan\",\"user_skill_level\":\"beginner\",\"available_tools\":[\"drill\",\"ladder\"],\"location_type\":\"house\",\"urgency\":\"medium\",\"budget_range\":\"$50-$100\",\"answers_to_followups\":{}}"
+  -d "{\"task_description\":\"I want to install a ceiling fan.\",\"user_skill_level\":\"beginner\",\"available_tools\":[\"voltage tester\",\"insulated screwdriver\",\"stable ladder\"],\"location_type\":\"house\",\"urgency\":\"low\",\"budget_range\":\"not specified\",\"answers_to_followups\":{\"Is there existing wiring and a fan-rated ceiling box already in place?\":\"yes\",\"What is your skill level with electrical work: beginner, intermediate, or expert?\":\"beginner\"}}"
 ```
 
-## Demo Task Matrix
+Update a completed assessment:
 
-These examples use the listed skill and urgency values with empty follow-up answers.
-
-| Task | Skill | Urgency | Expected risk |
-| --- | --- | --- | --- |
-| paint a room | beginner | low | Safe DIY |
-| install a shelf in a bedroom | beginner | low | Safe DIY |
-| replace air filter | beginner | low | Safe DIY |
-| install tiles on kitchen backsplash | intermediate | medium | DIY with supervision |
-| fix leaking pipe under sink | beginner | medium | Professional recommended |
-| paint exterior high wall | beginner | high | Professional recommended |
-| mount tv on drywall | beginner | medium | Professional recommended |
-| install a ceiling fan | beginner | medium | Professional required |
-| install ac unit | intermediate | high | Dangerous / permit-required / do not attempt |
-| break a wall between two rooms | intermediate | high | Dangerous / permit-required / do not attempt |
-| repair main electrical panel | expert | high | Dangerous / permit-required / do not attempt |
-| fix gas line leak | expert | emergency | Dangerous / permit-required / do not attempt |
-
-## MVP Logic
-
-The current risk engine is rule-based and reads seed rules from `app/data/safety_rules.json`.
-Categories covered include electrical, plumbing, masonry/demolition, painting, carpentry, tiling, HVAC, roofing, gas, structural, and general DIY.
-
-Input validation is handled through Pydantic enums and field validators. Invalid assessment payloads return:
-
-```json
-{
-  "message": "Invalid assessment input",
-  "details": []
-}
+```bash
+curl -X POST http://localhost:8000/api/update-assessment ^
+  -H "Content-Type: application/json" ^
+  -d "{\"session_id\":\"demo-session-1\",\"previous_assessment\":{\"risk_score\":28,\"risk_level\":\"Safe DIY\",\"recommended_tools\":[\"measuring tape\",\"level\",\"drill\"],\"recommended_materials\":[\"wall anchors\",\"screws\"],\"ppe\":[\"safety glasses\"],\"safety_warnings\":[],\"professional_recommendation\":\"Not required for a lightweight item if the wall condition is known.\"},\"task_description\":\"I want to hang a new painting in my bedroom.\",\"task_intent\":\"hanging_wall_decor\",\"task_category\":\"home_improvement\",\"previous_answers\":{\"weight\":\"1 kg\",\"attachment_method\":\"drilling\"},\"update_message\":\"Actually, it weighs 2 kg.\",\"current_user_context\":{\"user_skill_level\":\"beginner\",\"available_tools\":[\"measuring tape\",\"level\",\"drill\"],\"location_type\":\"bedroom\",\"urgency\":\"low\",\"budget_range\":\"not specified\"}}"
 ```
 
-## Roadmap TODOs
+## Known Limitations
 
-- ML classifier integration: replace or enhance keyword rules with a trained task classifier while keeping safety rules as guardrails.
-- PostgreSQL migration: move JSON seed files into normalized tables for categories, rules, tools, materials, PPE, and professional mappings.
-- Quote request system: create quote request records from high-risk assessments.
-- Professional marketplace: match users with verified electricians, plumbers, HVAC technicians, contractors, and engineers.
-- Photo upload: accept job-site images and extract visible hazard signals for the risk engine.
+- The backend uses heuristic task-intent and rule mappings rather than a trained production classifier.
+- Recommendations are seed-data driven and not yet connected to products, pricing, or availability.
+- No photo, document, or worksite image analysis is implemented yet.
+- Hidden conditions still depend on the quality of user-provided answers.
+
+## Future Work
+
+- RAG-based hardware and tool database
+- Product recommendations with brand and price
+- Professional marketplace integration
+- Quote request workflow
+- Image and photo upload
+- PostgreSQL migration
+- ML classifier training

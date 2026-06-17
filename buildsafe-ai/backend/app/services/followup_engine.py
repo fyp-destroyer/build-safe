@@ -2,8 +2,13 @@ from __future__ import annotations
 
 from typing import Any
 
+from app.schemas import TaskIntent
 
 QUESTION_BANK: dict[str, list[tuple[str, str]]] = {
+    "hanging_wall_decor": [
+        ("painting_weight", "How heavy is the artwork or frame, and does it need anchors into the wall?"),
+        ("wall_material", "What wall material are you fixing into, and will you drill or use adhesive hardware?"),
+    ],
     "electrical": [
         ("power_isolated", "Can the circuit be switched off and verified with a voltage tester?"),
         ("main_panel_involved", "Does the task involve the main electrical panel, breaker panel, or service line?"),
@@ -61,9 +66,19 @@ QUESTION_BANK: dict[str, list[tuple[str, str]]] = {
 }
 
 
-def get_follow_up_questions(category_key: str, answers: dict[str, Any]) -> list[str]:
-    questions = QUESTION_BANK.get(category_key, QUESTION_BANK["general"])
+def get_follow_up_questions(
+    task_intent: TaskIntent,
+    category_key: str,
+    answers: dict[str, Any],
+) -> list[str]:
+    if answers and not any(
+        str(value).strip().lower() in {"", "unknown", "not sure", "unsure"}
+        for value in answers.values()
+    ):
+        return []
+
+    questions = QUESTION_BANK.get(task_intent) or QUESTION_BANK.get(category_key, QUESTION_BANK["general"])
     answered_keys = {
         key for key, value in answers.items() if str(value).strip().lower() not in {"", "unknown", "not sure", "unsure"}
     }
-    return [question for key, question in questions if key not in answered_keys]
+    return [question for key, question in questions if key not in answered_keys][:2]

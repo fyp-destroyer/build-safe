@@ -17,13 +17,13 @@ export function DeveloperTracePanel({
   }
 
   return (
-    <section className="mt-4 rounded-[24px] border border-stone-200 bg-white p-5 shadow-sm">
+    <section className="mt-4 min-w-0 rounded-[22px] border border-stone-200 bg-white p-4 shadow-sm sm:rounded-[24px] sm:p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-stone-950 text-white">
             <Bug aria-hidden="true" className="h-4 w-4" />
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
               Development only
             </p>
@@ -31,20 +31,20 @@ export function DeveloperTracePanel({
           </div>
         </div>
 
-        <span className="inline-flex items-center gap-2 rounded-full border border-stone-200 bg-stone-50 px-3 py-2 text-xs font-semibold text-stone-700">
+        <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-stone-200 bg-stone-50 px-3 py-2 text-xs font-semibold text-stone-700">
           <Bot aria-hidden="true" className="h-4 w-4 text-amber-700" />
-          {getLlmAssistLabel(trace)}
+          <span className="min-w-0 break-words">{getLlmAssistLabel(trace)}</span>
         </span>
       </div>
 
-      <details className="mt-4 rounded-[20px] border border-stone-200 bg-stone-50 px-4 py-3" open>
+      <details className="mt-4 rounded-[20px] border border-stone-200 bg-stone-50 px-4 py-3">
         <summary className="cursor-pointer text-sm font-semibold text-stone-900">
           Developer Trace
         </summary>
 
         {trace ? (
-          <div className="mt-4 space-y-4">
-            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-4 min-w-0 space-y-4">
+            <div className="grid min-w-0 gap-3 md:grid-cols-2 xl:grid-cols-3">
               <TraceField label="Gemini enabled" value={toYesNo(trace.gemini_enabled)} />
               <TraceField label="Gemini used" value={toYesNo(trace.gemini_used)} />
               <TraceField label="Gemini model" value={trace.gemini_model} />
@@ -113,12 +113,12 @@ export function DeveloperTracePanel({
             />
 
             {trace.parsed_llm_response || trace.llm_response_text || trace.llm_prompt ? (
-              <details className="rounded-[18px] border border-stone-200 bg-white px-4 py-3">
+              <details className="min-w-0 rounded-[18px] border border-stone-200 bg-white px-4 py-3">
                 <summary className="cursor-pointer text-sm font-semibold text-stone-900">
                   Advanced LLM payload
                 </summary>
 
-                <div className="mt-4 space-y-4">
+                <div className="mt-4 min-w-0 space-y-4">
                   {trace.parsed_llm_response ? (
                     <TraceCodeBlock
                       title="Parsed LLM response"
@@ -174,7 +174,7 @@ function TraceField({
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
         {label}
       </p>
-      <p className="mt-2 text-sm font-semibold text-stone-900">{value}</p>
+      <p className="mt-2 break-words text-sm font-semibold text-stone-900">{value}</p>
     </div>
   );
 }
@@ -191,10 +191,10 @@ function TraceList({
   emptyLabel: string;
 }): JSX.Element {
   return (
-    <div className="rounded-[18px] border border-stone-200 bg-white p-4">
+    <div className="min-w-0 rounded-[18px] border border-stone-200 bg-white p-4">
       <div className="flex items-center gap-3">
         <Icon aria-hidden="true" className="h-4 w-4 text-amber-700" />
-        <h5 className="text-sm font-semibold text-stone-900">{title}</h5>
+        <h5 className="min-w-0 break-words text-sm font-semibold text-stone-900">{title}</h5>
       </div>
 
       {items.length > 0 ? (
@@ -202,7 +202,7 @@ function TraceList({
           {items.map((item) => (
             <li
               key={`${title}-${item}`}
-              className="rounded-2xl bg-stone-50 px-3 py-2 text-sm leading-6 text-stone-700"
+              className="break-words rounded-2xl bg-stone-50 px-3 py-2 text-sm leading-6 text-stone-700"
             >
               {item}
             </li>
@@ -223,11 +223,11 @@ function TraceCodeBlock({
   content: string;
 }): JSX.Element {
   return (
-    <div>
+    <div className="min-w-0">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
         {title}
       </p>
-      <pre className="mt-2 overflow-x-auto rounded-[18px] bg-stone-950 p-4 text-xs leading-6 text-stone-100">
+      <pre className="mt-2 max-w-full overflow-x-auto rounded-[18px] bg-stone-950 p-4 text-xs leading-6 text-stone-100">
         <code>{content}</code>
       </pre>
     </div>

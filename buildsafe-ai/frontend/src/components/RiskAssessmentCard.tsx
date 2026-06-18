@@ -116,16 +116,16 @@ export function RiskAssessmentCard({
   }
 
   return (
-    <article className="w-full overflow-hidden rounded-[28px] border border-stone-200 bg-[linear-gradient(180deg,#fffdf8_0%,#ffffff_44%,#f4efe7_100%)] text-left text-stone-900 shadow-sm">
+    <article className="w-full min-w-0 overflow-hidden rounded-[22px] border border-stone-200 bg-[linear-gradient(180deg,#fffdf8_0%,#ffffff_44%,#f4efe7_100%)] text-left text-stone-900 shadow-sm sm:rounded-[28px]">
       <div className="hazard-stripe h-2 w-full" />
 
-      <div className="p-5 sm:p-6">
+      <div className="min-w-0 p-4 sm:p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500 sm:text-xs sm:tracking-[0.22em]">
               Compact summary
             </p>
-            <h3 className="display-font mt-2 text-2xl leading-tight text-stone-950">
+            <h3 className="display-font mt-2 text-xl leading-tight text-stone-950 sm:text-2xl">
               Final risk assessment
             </h3>
           </div>
@@ -133,7 +133,7 @@ export function RiskAssessmentCard({
           <RiskBadge riskLevel={result.risk_level} />
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-5 grid min-w-0 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <SummaryTile
             icon={ShieldCheck}
             label="Risk score"
@@ -156,24 +156,24 @@ export function RiskAssessmentCard({
           />
         </div>
 
-        <div className="mt-5 rounded-[24px] border border-stone-200 bg-white p-4">
+        <div className="mt-5 min-w-0 rounded-[20px] border border-stone-200 bg-white p-4 sm:rounded-[24px]">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
             Decision summary
           </p>
-          <p className="mt-2 text-sm leading-7 text-stone-700">
+          <p className="mt-2 break-words text-sm leading-7 text-stone-700">
             <TypewriterText text={summary} animate={animate} />
           </p>
         </div>
 
-        <div className="mt-5 grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
-          <div className={`rounded-[22px] border px-4 py-3 ${actionButton.panelClassName}`}>
+        <div className="mt-5 grid min-w-0 gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
+          <div className={`min-w-0 rounded-[20px] border px-4 py-3 sm:rounded-[22px] ${actionButton.panelClassName}`}>
             {isPlanOutdated ? (
               <div className="mb-3 rounded-2xl border border-red-200 bg-white/80 px-3 py-2 text-sm leading-6 text-red-950">
                 <p className="font-semibold">
                   Your previous plan may no longer be valid because the risk assessment changed.
                 </p>
                 {actionPlanInvalidationReason ? (
-                  <p className="mt-1 text-xs font-medium">{actionPlanInvalidationReason}</p>
+                  <p className="mt-1 break-words text-xs font-medium">{actionPlanInvalidationReason}</p>
                 ) : null}
               </div>
             ) : isPlanActive ? (
@@ -193,7 +193,7 @@ export function RiskAssessmentCard({
                 type="button"
                 onClick={() => void handleActionPlanClick()}
                 disabled={isGeneratingPlan || !canGenerateActionPlan}
-                className={`inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-75 ${actionButton.buttonClassName}`}
+                className={`inline-flex min-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-75 sm:w-auto ${actionButton.buttonClassName}`}
               >
                 {isGeneratingPlan ? (
                   <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" />
@@ -213,7 +213,7 @@ export function RiskAssessmentCard({
           <button
             type="button"
             onClick={onOpenDetails}
-            className="inline-flex min-h-14 items-center justify-center gap-2 rounded-[22px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-950 transition hover:border-amber-300 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2"
+            className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-[20px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-950 transition hover:border-amber-300 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 sm:rounded-[22px] lg:w-auto"
           >
             View Full Assessment
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -308,12 +308,12 @@ function SummaryTile({
   value: string;
 }): JSX.Element {
   return (
-    <div className="rounded-[20px] border border-stone-200 bg-white p-4">
+    <div className="min-w-0 rounded-[20px] border border-stone-200 bg-white p-4">
       <Icon aria-hidden="true" className="h-4 w-4 text-amber-800" />
       <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
         {label}
       </p>
-      <p className="mt-2 text-sm font-bold leading-6 text-stone-950">{value}</p>
+      <p className="mt-2 break-words text-sm font-bold leading-6 text-stone-950">{value}</p>
     </div>
   );
 }

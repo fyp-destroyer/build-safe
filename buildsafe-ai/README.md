@@ -38,6 +38,58 @@ Open:
 http://127.0.0.1:5173
 ```
 
+## Deployment Connection Checklist
+
+Target deployment:
+
+- Backend on Heroku: `https://YOUR-HEROKU-BACKEND.herokuapp.com`
+- Frontend on Vercel: `https://YOUR-VERCEL-FRONTEND.vercel.app`
+
+Set frontend environment variables in Vercel Project Settings > Environment Variables:
+
+```env
+VITE_API_BASE_URL=https://YOUR-HEROKU-BACKEND.herokuapp.com
+```
+
+Set backend environment variables in Heroku Config Vars:
+
+```env
+GEMINI_API_KEY=your_key_here
+GEMINI_MODEL=gemini-flash-latest
+GEMINI_ENABLED=true
+FRONTEND_ORIGINS=https://YOUR-VERCEL-FRONTEND.vercel.app
+```
+
+After changing Vercel environment variables, redeploy the frontend. After changing Heroku config vars, restart or redeploy the backend if needed.
+
+Confirm the connection:
+
+1. Open the deployed Vercel frontend.
+2. Open browser DevTools > Network.
+3. Submit an assessment prompt.
+4. Confirm API requests go to `https://YOUR-HEROKU-BACKEND.herokuapp.com`, not `localhost:8000`.
+5. Open `https://YOUR-HEROKU-BACKEND.herokuapp.com/health` and confirm it returns `{"status":"ok","service":"BuildSafe AI Backend"}`.
+
+## Deployment Troubleshooting
+
+Frontend still calls `localhost:8000`:
+
+- Check `VITE_API_BASE_URL` in Vercel Project Settings > Environment Variables.
+- Redeploy the frontend after changing the env var.
+- Confirm frontend code uses `import.meta.env.VITE_API_BASE_URL` through `frontend/src/config/api.ts`.
+
+CORS blocked:
+
+- Add the exact Vercel URL to Heroku `FRONTEND_ORIGINS`.
+- Restart or redeploy the backend.
+- Do not include a trailing slash if the browser origin does not include one.
+
+Gemini fails:
+
+- Check `GEMINI_API_KEY` on Heroku.
+- Check `GEMINI_ENABLED=true`.
+- Check backend logs with `heroku logs --tail`.
+
 ## Gemini Configuration
 
 Create or update [backend/.env](backend/.env) from [backend/.env.example](backend/.env.example):

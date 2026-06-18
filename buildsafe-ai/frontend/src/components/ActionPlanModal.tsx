@@ -83,13 +83,13 @@ export function ActionPlanModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-stone-950/55 p-4 backdrop-blur-sm sm:p-6"
+      className="fixed inset-0 z-50 overflow-hidden bg-stone-950/55 p-0 backdrop-blur-sm sm:p-6"
       onClick={onClose}
       role="presentation"
     >
-      <div className="flex h-full items-start justify-center">
+      <div className="flex h-full min-w-0 items-stretch justify-center sm:items-start">
         <div
-          className="flex max-h-full w-full max-w-5xl flex-col overflow-hidden rounded-[32px] border border-stone-200 bg-[linear-gradient(180deg,#fffdf9_0%,#ffffff_28%,#f4efe6_100%)] shadow-[0_36px_120px_rgba(28,25,23,0.34)]"
+          className="flex h-full max-h-full w-full min-w-0 max-w-5xl flex-col overflow-hidden border border-stone-200 bg-[linear-gradient(180deg,#fffdf9_0%,#ffffff_28%,#f4efe6_100%)] shadow-[0_36px_120px_rgba(28,25,23,0.34)] sm:h-auto sm:rounded-[32px]"
           onClick={(event) => event.stopPropagation()}
           role="dialog"
           aria-modal="true"
@@ -97,28 +97,28 @@ export function ActionPlanModal({
         >
           <div className="hazard-stripe h-2 w-full" />
 
-          <header className="shrink-0 border-b border-stone-200 bg-white/90 px-5 py-5 sm:px-7">
+          <header className="shrink-0 border-b border-stone-200 bg-white/90 px-4 py-4 sm:px-7 sm:py-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-3">
                   <span
-                    className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-semibold ${style.badge}`}
+                    className={`inline-flex max-w-full items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-semibold ${style.badge}`}
                   >
                     <Icon aria-hidden="true" className="h-4 w-4" />
-                    {style.label}
+                    <span className="min-w-0 break-words">{style.label}</span>
                   </span>
-                  <span className="rounded-full border border-stone-200 bg-stone-50 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-stone-600">
+                  <span className="rounded-full border border-stone-200 bg-stone-50 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-stone-600 sm:tracking-[0.16em]">
                     {plan.allowed_to_show_steps ? "Steps allowed" : "Checklist only"}
                   </span>
                 </div>
 
                 <h2
                   id="action-plan-title"
-                  className="display-font mt-4 text-3xl leading-tight text-stone-950"
+                  className="display-font mt-4 break-words text-2xl leading-tight text-stone-950 sm:text-3xl"
                 >
                   {plan.title}
                 </h2>
-                <p className="mt-3 max-w-3xl text-sm leading-7 text-stone-600">
+                <p className="mt-3 max-w-3xl break-words text-sm leading-7 text-stone-600">
                   {plan.summary}
                 </p>
               </div>
@@ -141,8 +141,8 @@ export function ActionPlanModal({
             </div>
           </header>
 
-          <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
-            <div className="grid gap-4 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="min-w-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-7 sm:py-6">
+            <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
               <SectionCard icon={ListChecks} title="Before You Start" iconClassName={style.iconPanel}>
                 <ListBlock
                   items={plan.prerequisites}
@@ -151,7 +151,7 @@ export function ActionPlanModal({
               </SectionCard>
 
               <SectionCard icon={Wrench} title="Tools, Materials, and PPE" iconClassName={style.iconPanel}>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid min-w-0 gap-3 md:grid-cols-3">
                   <ChipGroup icon={Wrench} title="Tools" items={plan.tools_required} />
                   <ChipGroup icon={Package} title="Materials" items={plan.materials_required} />
                   <ChipGroup icon={HardHat} title="PPE" items={plan.ppe_required} />
@@ -171,7 +171,7 @@ export function ActionPlanModal({
               />
             </SectionCard>
 
-            <div className="mt-4 grid gap-4 xl:grid-cols-2">
+            <div className="mt-4 grid min-w-0 gap-4 xl:grid-cols-2">
               <SectionCard icon={ShieldAlert} title="Stop Immediately If" iconClassName="bg-red-100 text-red-900">
                 <ListBlock
                   items={plan.stop_conditions}
@@ -201,7 +201,7 @@ export function ActionPlanModal({
 
             {plan.debug_trace ? (
               <SectionCard icon={Info} title="Developer Trace" iconClassName="bg-stone-100 text-stone-700" className="mt-4">
-                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                <div className="grid min-w-0 gap-3 md:grid-cols-2 xl:grid-cols-4">
                   <TraceTile label="Generated" value={String(plan.debug_trace.action_plan_generated)} />
                   <TraceTile label="Plan type" value={plan.debug_trace.plan_type} />
                   <TraceTile label="LLM used" value={String(plan.debug_trace.llm_used_for_plan)} />
@@ -211,7 +211,7 @@ export function ActionPlanModal({
                   />
                 </div>
                 {plan.debug_trace.reason_if_steps_blocked ? (
-                  <p className="mt-4 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm leading-6 text-stone-700">
+                  <p className="mt-4 break-words rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm leading-6 text-stone-700">
                     {plan.debug_trace.reason_if_steps_blocked}
                   </p>
                 ) : null}
@@ -238,12 +238,12 @@ function SectionCard({
   className?: string;
 }): JSX.Element {
   return (
-    <section className={`rounded-[26px] border border-stone-200 bg-white p-5 shadow-sm ${className}`}>
+    <section className={`min-w-0 rounded-[22px] border border-stone-200 bg-white p-4 shadow-sm sm:rounded-[26px] sm:p-5 ${className}`}>
       <div className="flex items-center gap-3">
-        <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${iconClassName}`}>
+        <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${iconClassName}`}>
           <Icon aria-hidden="true" className="h-5 w-5" />
         </div>
-        <h3 className="text-lg font-bold text-stone-950">{title}</h3>
+        <h3 className="min-w-0 break-words text-lg font-bold text-stone-950">{title}</h3>
       </div>
       <div className="mt-4">{children}</div>
     </section>
@@ -260,7 +260,7 @@ function ChipGroup({
   items: string[];
 }): JSX.Element {
   return (
-    <div className="rounded-[22px] border border-stone-200 bg-stone-50 p-4">
+    <div className="min-w-0 rounded-[22px] border border-stone-200 bg-stone-50 p-4">
       <div className="flex items-center gap-2">
         <Icon aria-hidden="true" className="h-4 w-4 text-amber-800" />
         <h4 className="text-sm font-bold text-stone-950">{title}</h4>
@@ -271,7 +271,7 @@ function ChipGroup({
           {items.map((item) => (
             <span
               key={`${title}-${item}`}
-              className="rounded-full border border-stone-200 bg-white px-3 py-2 text-sm leading-5 text-stone-700"
+              className="max-w-full break-words rounded-full border border-stone-200 bg-white px-3 py-2 text-sm leading-5 text-stone-700"
             >
               {item}
             </span>
@@ -300,22 +300,22 @@ function StepList({
       {steps.map((step) => (
         <li
           key={`${prefix}-${step.step_number}-${step.title}`}
-          className="rounded-[22px] border border-stone-200 bg-stone-50 p-4"
+          className="min-w-0 rounded-[22px] border border-stone-200 bg-stone-50 p-4"
         >
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
                 {prefix} {step.step_number}
               </p>
-              <h4 className="mt-2 text-base font-bold text-stone-950">{step.title}</h4>
+              <h4 className="mt-2 break-words text-base font-bold text-stone-950">{step.title}</h4>
             </div>
-            <span className="inline-flex shrink-0 rounded-full border border-stone-200 bg-white px-3 py-1.5 text-xs font-semibold text-stone-600">
+            <span className="inline-flex max-w-full shrink-0 break-words rounded-full border border-stone-200 bg-white px-3 py-1.5 text-xs font-semibold text-stone-600">
               {step.estimated_time}
             </span>
           </div>
-          <p className="mt-3 text-sm leading-7 text-stone-700">{step.description}</p>
+          <p className="mt-3 break-words text-sm leading-7 text-stone-700">{step.description}</p>
           {step.safety_note ? (
-            <p className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold leading-6 text-amber-950">
+            <p className="mt-3 break-words rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold leading-6 text-amber-950">
               {step.safety_note}
             </p>
           ) : null}
@@ -351,7 +351,7 @@ function ListBlock({
           {items.map((item) => (
             <li
               key={`${title ?? "item"}-${item}`}
-              className={`rounded-2xl px-3 py-2 text-sm leading-6 ${
+              className={`break-words rounded-2xl px-3 py-2 text-sm leading-6 ${
                 tone === "danger"
                   ? "bg-red-50 text-red-900"
                   : "bg-stone-50 text-stone-700"
@@ -378,7 +378,7 @@ function TraceTile({
   value: string;
 }): JSX.Element {
   return (
-    <div className="rounded-[20px] border border-stone-200 bg-stone-50 p-4">
+    <div className="min-w-0 rounded-[20px] border border-stone-200 bg-stone-50 p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
         {label}
       </p>

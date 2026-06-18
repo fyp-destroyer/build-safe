@@ -34,10 +34,10 @@ export function RiskBadge({ riskLevel }: RiskBadgeProps): JSX.Element {
 
   return (
     <span
-      className={`inline-flex max-w-full items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-semibold shadow-sm ${riskStyles[riskLevel]}`}
+      className={`inline-flex max-w-full items-start gap-2 rounded-full border px-3.5 py-2 text-sm font-semibold leading-5 shadow-sm ${riskStyles[riskLevel]}`}
     >
-      <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />
-      <span className="break-words">{riskLevel}</span>
+      <Icon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+      <span className="min-w-0 whitespace-normal break-words">{riskLevel}</span>
     </span>
   );
 }

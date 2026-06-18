@@ -42,7 +42,7 @@ export function ChatInput({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="min-w-0 space-y-3">
       {options.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {options.map((option) => (
@@ -51,7 +51,7 @@ export function ChatInput({
               type="button"
               disabled={disabled}
               onClick={() => onSelectOption(option.value)}
-              className="rounded-full border border-stone-300 bg-stone-50 px-4 py-2 text-sm font-semibold text-stone-700 transition hover:border-stone-400 hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-60"
+              className="min-h-11 rounded-full border border-stone-300 bg-stone-50 px-4 py-2 text-sm font-semibold text-stone-700 transition hover:border-stone-400 hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {option.label}
             </button>
@@ -59,7 +59,7 @@ export function ChatInput({
         </div>
       ) : null}
 
-      <form onSubmit={handleSubmit} className="rounded-[28px] border border-stone-200 bg-stone-50 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
+      <form onSubmit={handleSubmit} className="min-w-0 rounded-[22px] border border-stone-200 bg-stone-50 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] sm:rounded-[28px] sm:p-3">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="min-w-0 flex-1">
             {rows > 1 ? (
@@ -70,7 +70,7 @@ export function ChatInput({
                 rows={rows}
                 disabled={disabled}
                 placeholder={placeholder}
-                className="min-h-[52px] w-full max-h-36 resize-none overflow-y-auto rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100 disabled:cursor-not-allowed disabled:bg-stone-100"
+                className="max-h-36 min-h-[52px] w-full resize-none overflow-y-auto rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition placeholder:text-stone-400 focus:border-amber-400 focus:ring-4 focus:ring-amber-100 disabled:cursor-not-allowed disabled:bg-stone-100"
               />
             ) : (
               <input
@@ -78,7 +78,7 @@ export function ChatInput({
                 onChange={(event) => onChange(event.target.value)}
                 disabled={disabled}
                 placeholder={placeholder}
-                className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100 disabled:cursor-not-allowed disabled:bg-stone-100"
+                className="min-h-[52px] w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition placeholder:text-stone-400 focus:border-amber-400 focus:ring-4 focus:ring-amber-100 disabled:cursor-not-allowed disabled:bg-stone-100"
               />
             )}
           </div>
@@ -86,7 +86,7 @@ export function ChatInput({
           <button
             type="submit"
             disabled={disabled}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-stone-950 px-5 text-sm font-semibold text-white transition hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-stone-950 px-5 text-sm font-semibold text-white transition hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             <SendHorizontal aria-hidden="true" className="h-4 w-4" />
             Send

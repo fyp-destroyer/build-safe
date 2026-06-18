@@ -573,29 +573,29 @@ export function HomePage(): JSX.Element {
     (chatState === "error" && errorStage === "assessing");
 
   return (
-    <div className="h-screen overflow-hidden px-4 py-5 text-stone-950 sm:px-6 lg:px-8">
-      <div className="mx-auto grid h-full max-w-7xl min-h-0 gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
-        <aside className="min-h-0 space-y-5 overflow-y-auto pr-1">
-          <section className="rounded-[28px] border border-white/70 bg-white/80 p-6 shadow-[0_24px_60px_rgba(66,44,16,0.08)] backdrop-blur">
+    <div className="min-h-dvh overflow-x-hidden px-3 py-3 text-stone-950 sm:px-5 sm:py-5 lg:h-dvh lg:overflow-hidden lg:px-8">
+      <div className="mx-auto grid min-h-0 w-full max-w-7xl gap-4 lg:h-full lg:grid-cols-[320px_minmax(0,1fr)] lg:gap-6">
+        <aside className="grid min-w-0 gap-4 md:grid-cols-3 lg:block lg:min-h-0 lg:space-y-5 lg:overflow-y-auto lg:pr-1">
+          <section className="min-w-0 rounded-[22px] border border-white/70 bg-white/80 p-4 shadow-[0_24px_60px_rgba(66,44,16,0.08)] backdrop-blur sm:rounded-[28px] sm:p-6 md:col-span-3 lg:col-span-1">
             <div className="flex items-start gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-stone-950 text-white shadow-lg shadow-amber-950/10">
-                <HardHat aria-hidden="true" className="h-7 w-7" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-stone-950 text-white shadow-lg shadow-amber-950/10 sm:h-14 sm:w-14">
+                <HardHat aria-hidden="true" className="h-6 w-6 sm:h-7 sm:w-7" />
               </div>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700 sm:text-xs sm:tracking-[0.24em]">
                   Supervisor Demo
                 </p>
-                <h1 className="display-font mt-2 text-3xl leading-tight text-stone-950">
+                <h1 className="display-font mt-1 text-2xl leading-tight text-stone-950 sm:mt-2 sm:text-3xl">
                   BuildSafe AI
                 </h1>
-                <p className="mt-3 text-sm leading-6 text-stone-600">
+                <p className="mt-2 text-sm leading-6 text-stone-600 sm:mt-3">
                   Safety-first construction triage with shorter follow-ups and
                   rule-based final decisions.
                 </p>
               </div>
             </div>
 
-            <div className="mt-6 rounded-3xl border border-amber-200/70 bg-gradient-to-br from-amber-100 via-amber-50 to-white p-4">
+            <div className="mt-4 hidden rounded-2xl border border-amber-200/70 bg-gradient-to-br from-amber-100 via-amber-50 to-white p-4 sm:mt-6 sm:rounded-3xl lg:block">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-900">
                 Updated flow
               </p>
@@ -608,33 +608,33 @@ export function HomePage(): JSX.Element {
             </div>
           </section>
 
-          <section className="rounded-[28px] border border-white/70 bg-white/80 p-6 shadow-[0_18px_48px_rgba(66,44,16,0.08)] backdrop-blur">
+          <section className="hidden min-w-0 rounded-[22px] border border-white/70 bg-white/80 p-4 shadow-[0_18px_48px_rgba(66,44,16,0.08)] backdrop-blur sm:rounded-[28px] sm:p-6 lg:block">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">
                   Risk legend
                 </p>
-                <h2 className="display-font mt-2 text-2xl text-stone-950">
+                <h2 className="display-font mt-2 text-xl text-stone-950 sm:text-2xl">
                   Decision tiers
                 </h2>
               </div>
               <ShieldCheck aria-hidden="true" className="h-5 w-5 text-teal-700" />
             </div>
 
-            <div className="mt-5 flex flex-col gap-3">
+            <div className="mt-4 flex flex-col gap-2 sm:mt-5 sm:gap-3">
               {riskLegend.map((riskLevel) => (
                 <RiskBadge key={riskLevel} riskLevel={riskLevel} />
               ))}
             </div>
           </section>
 
-          <section className="rounded-[28px] border border-white/70 bg-white/80 p-6 shadow-[0_18px_48px_rgba(66,44,16,0.08)] backdrop-blur">
+          <section className="hidden min-w-0 rounded-[22px] border border-white/70 bg-white/80 p-4 shadow-[0_18px_48px_rgba(66,44,16,0.08)] backdrop-blur sm:rounded-[28px] sm:p-6 lg:block">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">
                   Controls
                 </p>
-                <h2 className="display-font mt-2 text-2xl text-stone-950">
+                <h2 className="display-font mt-2 text-xl text-stone-950 sm:text-2xl">
                   Demo actions
                 </h2>
               </div>
@@ -663,28 +663,28 @@ export function HomePage(): JSX.Element {
               ) : null}
             </div>
 
-            <div className="mt-5 rounded-3xl border border-stone-200 bg-stone-50 p-4 text-sm leading-6 text-stone-600">
+            <div className="mt-5 rounded-2xl border border-stone-200 bg-stone-50 p-4 text-sm leading-6 text-stone-600 sm:rounded-3xl">
               Endpoints in use:{" "}
-              <code className="font-semibold text-stone-800">
+              <code className="break-all font-semibold text-stone-800">
                 POST /api/llm/plan-followups
               </code>{" "}
               and{" "}
-              <code className="font-semibold text-stone-800">
+              <code className="break-all font-semibold text-stone-800">
                 POST /api/assess-task
               </code>
               , and{" "}
-              <code className="font-semibold text-stone-800">
+              <code className="break-all font-semibold text-stone-800">
                 POST /api/action-plan
               </code>
               , plus{" "}
-              <code className="font-semibold text-stone-800">
+              <code className="break-all font-semibold text-stone-800">
                 POST /api/update-assessment
               </code>
             </div>
           </section>
         </aside>
 
-        <div className="min-h-0">
+        <div className="min-h-0 min-w-0 lg:h-full">
           <ChatWindow
             scrollRef={scrollRef}
             footer={
@@ -701,7 +701,7 @@ export function HomePage(): JSX.Element {
               />
             }
           >
-            <div className="space-y-5">
+            <div className="min-w-0 space-y-5">
               {messages.map((message) => {
                 if (message.kind === "text") {
                   return (
@@ -755,7 +755,7 @@ export function HomePage(): JSX.Element {
                       <button
                         type="button"
                         onClick={resetConversation}
-                        className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-semibold text-stone-800 transition hover:border-stone-400 hover:bg-stone-50"
+                        className="inline-flex min-h-11 items-center gap-2 rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-semibold text-stone-800 transition hover:border-stone-400 hover:bg-stone-50"
                       >
                         <RefreshCw aria-hidden="true" className="h-4 w-4" />
                         Start new assessment
@@ -796,11 +796,11 @@ export function HomePage(): JSX.Element {
 
 function FlowLine({ label, text }: { label: string; text: string }): JSX.Element {
   return (
-    <div className="flex items-start gap-3">
+    <div className="flex min-w-0 items-start gap-3">
       <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-stone-950 text-xs font-bold text-white">
         {label}
       </span>
-      <p>{text}</p>
+      <p className="min-w-0 break-words">{text}</p>
     </div>
   );
 }
@@ -819,7 +819,7 @@ function UpdateChangeSummaryCard({
   const riskLevelChange = summary.risk_level_change;
 
   return (
-    <section className="mt-4 rounded-[24px] border border-amber-200 bg-amber-50/70 p-4 text-stone-900">
+    <section className="mt-4 min-w-0 rounded-[22px] border border-amber-200 bg-amber-50/70 p-4 text-stone-900 sm:rounded-[24px]">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-800">
@@ -855,7 +855,7 @@ function UpdateChangeSummaryCard({
         ) : null}
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-2">
+      <div className="mt-4 grid min-w-0 gap-4 xl:grid-cols-2">
         <SummaryList
           title="What changed"
           items={changedItems}
@@ -881,14 +881,14 @@ function SummaryList({
   emptyLabel: string;
 }): JSX.Element {
   return (
-    <div className="rounded-[20px] border border-stone-200 bg-white p-4">
+    <div className="min-w-0 rounded-[20px] border border-stone-200 bg-white p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
         {title}
       </p>
       {items.length > 0 ? (
         <ul className="mt-3 space-y-2">
           {items.map((item) => (
-            <li key={`${title}-${item}`} className="text-sm leading-6 text-stone-700">
+            <li key={`${title}-${item}`} className="break-words text-sm leading-6 text-stone-700">
               {item}
             </li>
           ))}

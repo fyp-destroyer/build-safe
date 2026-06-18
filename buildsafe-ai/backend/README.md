@@ -11,6 +11,7 @@ GEMINI_API_KEY=
 GEMINI_MODEL=gemini-flash-latest
 GEMINI_ENABLED=false
 DEBUG_TRACE_ENABLED=false
+FRONTEND_ORIGINS=http://localhost:5173,http://localhost:5174
 ```
 
 What each setting does:
@@ -19,6 +20,7 @@ What each setting does:
 - `GEMINI_MODEL`: Gemini model name, default `gemini-flash-latest`
 - `GEMINI_ENABLED`: enables Gemini-assisted task understanding, follow-up planning, and update parsing
 - `DEBUG_TRACE_ENABLED`: returns backend debug trace payloads for the frontend Developer Trace panel
+- `FRONTEND_ORIGINS`: comma-separated list of deployed frontend origins allowed by CORS, such as Vercel or ngrok URLs
 
 Fallback behavior:
 
@@ -32,13 +34,107 @@ cd buildsafe-ai/backend
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 Open the API docs:
 
 ```text
 http://localhost:8000/docs
+```
+
+Check backend health:
+
+```text
+http://localhost:8000/health
+```
+
+Expected response:
+
+```json
+{
+  "status": "ok",
+  "service": "BuildSafe AI Backend"
+}
+```
+
+## CORS And Deployment
+
+The backend always allows local frontend development origins:
+
+- `http://localhost:5173`
+- `http://localhost:5174`
+- `http://localhost:3000`
+
+It also reads additional allowed frontend origins from `FRONTEND_ORIGINS`. Use a comma-separated list with no trailing path:
+
+```env
+FRONTEND_ORIGINS=https://buildsafe-ai.vercel.app,https://some-ngrok-url.ngrok-free.dev
+```
+
+For Heroku, Render, Railway, or similar platforms, configure these environment variables in the hosting dashboard:
+
+- `GEMINI_API_KEY`
+- `GEMINI_MODEL`
+- `GEMINI_ENABLED`
+- `FRONTEND_ORIGINS`
+- `DEBUG_TRACE_ENABLED` if you need local-style debug traces
+
+The included [`Procfile`](Procfile) runs:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+## Deploy On Heroku
+
+Use Heroku for the FastAPI backend. The backend has the required pieces for Heroku-style deployment:
+
+- [requirements.txt](requirements.txt) with `fastapi`, `uvicorn`, `python-dotenv`, and `httpx`
+- [Procfile](Procfile) with `web: uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+
+Create the Heroku app:
+
+```bash
+heroku create YOUR-HEROKU-BACKEND
+```
+
+Set config vars:
+
+```bash
+heroku config:set GEMINI_API_KEY=your_key_here
+heroku config:set GEMINI_MODEL=gemini-flash-latest
+heroku config:set GEMINI_ENABLED=true
+heroku config:set FRONTEND_ORIGINS=https://YOUR-VERCEL-FRONTEND.vercel.app
+```
+
+Do not include a trailing slash in `FRONTEND_ORIGINS`; it must be the exact browser origin.
+
+Deploy the backend. If your Git remote root is `buildsafe-ai`, push only the backend folder to Heroku:
+
+```bash
+git subtree push --prefix backend heroku main
+```
+
+If your Git remote root is already `buildsafe-ai/backend`, deploy normally:
+
+```bash
+git push heroku main
+```
+
+Test the deployed backend:
+
+```text
+https://YOUR-HEROKU-BACKEND.herokuapp.com/health
+```
+
+Expected response:
+
+```json
+{
+  "status": "ok",
+  "service": "BuildSafe AI Backend"
+}
 ```
 
 ## Run The Smoke Tests

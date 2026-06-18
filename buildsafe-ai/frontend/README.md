@@ -29,11 +29,19 @@ npm run dev
 
 ## Frontend Environment
 
-Use [`.env.example`](.env.example) for local configuration:
+Use [`.env`](.env) for local configuration. [`.env.example`](.env.example) documents the expected variables:
 
 ```env
 VITE_API_BASE_URL=http://localhost:8000
 VITE_SHOW_DEBUG_PANEL=false
+```
+
+`VITE_API_BASE_URL` is the single frontend setting that controls which FastAPI backend the app calls. The centralized frontend config lives in [`src/config/api.ts`](src/config/api.ts), and all backend calls go through [`src/services/api.ts`](src/services/api.ts).
+
+For deployment, set `VITE_API_BASE_URL` to the deployed backend origin before building the frontend, for example:
+
+```env
+VITE_API_BASE_URL=https://api.example.com
 ```
 
 Developer Trace rules:
@@ -46,6 +54,37 @@ Developer Trace rules:
 
 ```bash
 npm run build
+```
+
+The frontend package already includes the expected Vite scripts:
+
+- `npm run dev`: starts the local Vite dev server
+- `npm run build`: type-checks and builds the production bundle
+- `npm run preview`: previews the built frontend locally
+
+## Deploy On Vercel
+
+Use Vercel for the React/Vite frontend.
+
+Recommended project settings:
+
+- Root Directory: `frontend` if the Vercel project is connected to the `buildsafe-ai` repo root
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Install Command: `npm install`
+
+Set this in Vercel Project Settings > Environment Variables:
+
+```env
+VITE_API_BASE_URL=https://YOUR-HEROKU-BACKEND.herokuapp.com
+```
+
+Important: after changing Vercel environment variables, redeploy the frontend. Vite reads `VITE_` variables at build time, so an already-built deployment will keep the old backend URL.
+
+Local development still uses [`.env`](.env):
+
+```env
+VITE_API_BASE_URL=http://localhost:8000
 ```
 
 ## What The UI Demonstrates

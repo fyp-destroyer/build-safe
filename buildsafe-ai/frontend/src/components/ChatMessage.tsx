@@ -30,12 +30,12 @@ export function ChatMessage({
   const bubbleClass = toneClasses[role][tone];
 
   return (
-    <div className={`flex ${containerClass}`}>
+    <div className={`flex min-w-0 ${containerClass}`}>
       <div
-        className={`flex w-full max-w-[88%] gap-3 ${isAssistant ? "" : "flex-row-reverse"}`}
+        className={`flex w-full max-w-full gap-2 sm:max-w-[88%] sm:gap-3 ${isAssistant ? "" : "flex-row-reverse"}`}
       >
         <div
-          className={`mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${
+          className={`mt-1 hidden h-10 w-10 shrink-0 items-center justify-center rounded-2xl sm:flex ${
             isAssistant ? "bg-amber-100 text-amber-900" : "bg-stone-200 text-stone-900"
           }`}
         >
@@ -46,15 +46,15 @@ export function ChatMessage({
           )}
         </div>
 
-        <div className={`flex min-w-0 flex-col ${isAssistant ? "" : "items-end"}`}>
+        <div className={`flex min-w-0 flex-1 flex-col ${isAssistant ? "" : "items-end"}`}>
           <span className="mb-1 text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
             {isAssistant ? "BuildSafe AI" : "You"}
           </span>
 
           <div
-            className={`overflow-hidden rounded-[24px] border px-4 py-3 shadow-sm sm:px-5 sm:py-4 ${bubbleClass}`}
+            className={`max-w-full overflow-hidden rounded-[20px] border px-3 py-3 shadow-sm sm:rounded-[24px] sm:px-5 sm:py-4 ${bubbleClass}`}
           >
-            <div className="break-words whitespace-pre-line text-sm leading-7 sm:text-[15px]">
+            <div className="min-w-0 break-words whitespace-pre-line text-sm leading-7 sm:text-[15px]">
               {children}
             </div>
           </div>

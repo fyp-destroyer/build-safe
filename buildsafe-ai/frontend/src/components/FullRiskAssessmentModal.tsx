@@ -75,13 +75,13 @@ export function FullRiskAssessmentModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-stone-950/55 p-4 backdrop-blur-sm sm:p-6"
+      className="fixed inset-0 z-50 overflow-hidden bg-stone-950/55 p-0 backdrop-blur-sm sm:p-6"
       onClick={onClose}
       role="presentation"
     >
-      <div className="flex h-full items-start justify-center">
+      <div className="flex h-full min-w-0 items-stretch justify-center sm:items-start">
         <div
-          className="flex max-h-full w-full max-w-6xl flex-col overflow-hidden rounded-[32px] border border-stone-200 bg-[linear-gradient(180deg,#fffdf9_0%,#ffffff_24%,#f4efe6_100%)] shadow-[0_36px_120px_rgba(28,25,23,0.34)]"
+          className="flex h-full max-h-full w-full min-w-0 max-w-6xl flex-col overflow-hidden border border-stone-200 bg-[linear-gradient(180deg,#fffdf9_0%,#ffffff_24%,#f4efe6_100%)] shadow-[0_36px_120px_rgba(28,25,23,0.34)] sm:h-auto sm:rounded-[32px]"
           onClick={(event) => event.stopPropagation()}
           role="dialog"
           aria-modal="true"
@@ -89,19 +89,19 @@ export function FullRiskAssessmentModal({
         >
           <div className="hazard-stripe h-2 w-full" />
 
-          <header className="shrink-0 border-b border-stone-200 bg-white/90 px-5 py-5 sm:px-7">
+          <header className="shrink-0 border-b border-stone-200 bg-white/90 px-4 py-4 sm:px-7 sm:py-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-700">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-700 sm:text-xs sm:tracking-[0.2em]">
                   Full risk assessment
                 </p>
                 <h2
                   id="full-assessment-title"
-                  className="display-font mt-2 text-3xl leading-tight text-stone-950"
+                  className="display-font mt-2 break-words text-2xl leading-tight text-stone-950 sm:text-3xl"
                 >
                   {request.task_description}
                 </h2>
-                <p className="mt-3 max-w-3xl text-sm leading-7 text-stone-600">
+                <p className="mt-3 max-w-3xl break-words text-sm leading-7 text-stone-600">
                   {getDisplayText(result.explanation)}
                 </p>
               </div>
@@ -116,7 +116,7 @@ export function FullRiskAssessmentModal({
               </button>
             </div>
 
-            <div className="mt-5 flex flex-wrap items-center gap-3">
+            <div className="mt-4 flex flex-wrap items-center gap-2 sm:mt-5 sm:gap-3">
               <RiskBadge riskLevel={result.risk_level} />
               <HeaderStat label="Risk score" value={`${result.risk_score}/100`} />
               <HeaderStat label="Estimated time" value={getDisplayText(result.estimated_time)} />
@@ -128,10 +128,10 @@ export function FullRiskAssessmentModal({
             </div>
           </header>
 
-          <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
-            <div className="grid gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+          <div className="min-w-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-7 sm:py-6">
+            <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
               <SectionCard icon={ClipboardList} title="Header section">
-                <div className="grid gap-3 md:grid-cols-2">
+                <div className="grid min-w-0 gap-3 md:grid-cols-2">
                   <KeyValue label="Task intent" value={formatTaskIntent(result.task_intent)} />
                   <KeyValue label="Task category" value={getDisplayText(result.task_category)} />
                   <KeyValue label="Short explanation" value={decisionSummary} />
@@ -152,9 +152,9 @@ export function FullRiskAssessmentModal({
               </SectionCard>
             </div>
 
-            <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <div className="mt-4 grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
               <SectionCard icon={ShieldCheck} title="Decision section">
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid min-w-0 gap-3 md:grid-cols-3">
                   <KeyValue label="Final decision" value={result.risk_level} />
                   <KeyValue label="Why this task stands out" value={decisionSummary} />
                   <KeyValue label="What you should do next" value={nextSteps[0] ?? "Not available"} />
@@ -186,7 +186,7 @@ export function FullRiskAssessmentModal({
             </SectionCard>
 
             <SectionCard icon={Wrench} title="Tools and materials" className="mt-4">
-              <div className="grid gap-4 lg:grid-cols-3">
+              <div className="grid min-w-0 gap-4 lg:grid-cols-3">
                 <ChipSection title="Required tools" icon={Wrench} items={tools} emptyLabel="No tool list returned." />
                 <ChipSection
                   title="Required materials"
@@ -199,7 +199,7 @@ export function FullRiskAssessmentModal({
             </SectionCard>
 
             <SectionCard icon={MessageSquareMore} title="Follow-up questions and assumptions" className="mt-4">
-              <div className="grid gap-4 xl:grid-cols-2">
+              <div className="grid min-w-0 gap-4 xl:grid-cols-2">
                 <ListBlock
                   title="Risk factors"
                   items={riskFactors}
@@ -212,7 +212,7 @@ export function FullRiskAssessmentModal({
                 />
               </div>
 
-              <div className="mt-4 grid gap-4 xl:grid-cols-2">
+              <div className="mt-4 grid min-w-0 gap-4 xl:grid-cols-2">
                 <ListBlock
                   title="Questions asked"
                   items={askedQuestions}
@@ -233,7 +233,7 @@ export function FullRiskAssessmentModal({
             </SectionCard>
 
             <SectionCard icon={CircleHelp} title="Assessment signals" className="mt-4">
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              <div className="grid min-w-0 gap-3 md:grid-cols-2 xl:grid-cols-4">
                 <SignalTile icon={Clock3} label="Estimated time" value={getDisplayText(result.estimated_time)} />
                 <SignalTile icon={DollarSign} label="Estimated cost" value={getDisplayText(result.estimated_cost_range)} />
                 <SignalTile
@@ -269,12 +269,12 @@ function SectionCard({
   className?: string;
 }): JSX.Element {
   return (
-    <section className={`rounded-[26px] border border-stone-200 bg-white p-5 shadow-sm ${className}`}>
+    <section className={`min-w-0 rounded-[22px] border border-stone-200 bg-white p-4 shadow-sm sm:rounded-[26px] sm:p-5 ${className}`}>
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-900">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-900">
           <Icon aria-hidden="true" className="h-5 w-5" />
         </div>
-        <h3 className="text-lg font-bold text-stone-950">{title}</h3>
+        <h3 className="min-w-0 break-words text-lg font-bold text-stone-950">{title}</h3>
       </div>
       <div className="mt-4">{children}</div>
     </section>
@@ -289,11 +289,11 @@ function HeaderStat({
   value: string;
 }): JSX.Element {
   return (
-    <div className="rounded-full border border-stone-200 bg-stone-50 px-4 py-2">
+    <div className="min-w-0 rounded-2xl border border-stone-200 bg-stone-50 px-3 py-2 sm:rounded-full sm:px-4">
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
         {label}
       </p>
-      <p className="mt-1 text-sm font-bold text-stone-900">{value}</p>
+      <p className="mt-1 break-words text-sm font-bold text-stone-900">{value}</p>
     </div>
   );
 }
@@ -306,11 +306,11 @@ function KeyValue({
   value: string;
 }): JSX.Element {
   return (
-    <div className="rounded-[20px] border border-stone-200 bg-stone-50 p-4">
+    <div className="min-w-0 rounded-[20px] border border-stone-200 bg-stone-50 p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
         {label}
       </p>
-      <p className="mt-2 text-sm leading-6 text-stone-800">{value}</p>
+      <p className="mt-2 break-words text-sm leading-6 text-stone-800">{value}</p>
     </div>
   );
 }
@@ -327,7 +327,7 @@ function ChipSection({
   emptyLabel: string;
 }): JSX.Element {
   return (
-    <div className="rounded-[22px] border border-stone-200 bg-stone-50 p-4">
+    <div className="min-w-0 rounded-[22px] border border-stone-200 bg-stone-50 p-4">
       <div className="flex items-center gap-3">
         <Icon aria-hidden="true" className="h-4 w-4 text-amber-800" />
         <h4 className="text-sm font-bold text-stone-950">{title}</h4>
@@ -338,7 +338,7 @@ function ChipSection({
           {items.map((item) => (
             <span
               key={`${title}-${item}`}
-              className="rounded-full border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700"
+              className="max-w-full break-words rounded-full border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700"
             >
               {item}
             </span>
@@ -377,7 +377,7 @@ function ListBlock({
           {items.map((item) => (
             <li
               key={`${title ?? "item"}-${item}`}
-              className={`rounded-2xl px-3 py-2 text-sm leading-6 ${
+                className={`break-words rounded-2xl px-3 py-2 text-sm leading-6 ${
                 tone === "warning"
                   ? "bg-red-50 text-red-900"
                   : "bg-stone-50 text-stone-700"
@@ -414,10 +414,10 @@ function AnswerList({
           {entries.map(([question, answer]) => (
             <div
               key={question}
-              className="rounded-[20px] border border-stone-200 bg-stone-50 p-4"
+              className="min-w-0 rounded-[20px] border border-stone-200 bg-stone-50 p-4"
             >
-              <p className="text-sm font-semibold text-stone-900">{question}</p>
-              <p className="mt-2 text-sm leading-6 text-stone-700">
+              <p className="break-words text-sm font-semibold text-stone-900">{question}</p>
+              <p className="mt-2 break-words text-sm leading-6 text-stone-700">
                 {typeof answer === "string" ? answer : String(answer)}
               </p>
             </div>
@@ -440,12 +440,12 @@ function SignalTile({
   value: string;
 }): JSX.Element {
   return (
-    <div className="rounded-[20px] border border-stone-200 bg-stone-50 p-4">
+    <div className="min-w-0 rounded-[20px] border border-stone-200 bg-stone-50 p-4">
       <Icon aria-hidden="true" className="h-4 w-4 text-amber-800" />
       <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
         {label}
       </p>
-      <p className="mt-2 text-sm font-semibold leading-6 text-stone-900">{value}</p>
+      <p className="mt-2 break-words text-sm font-semibold leading-6 text-stone-900">{value}</p>
     </div>
   );
 }

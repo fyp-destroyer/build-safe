@@ -9,8 +9,22 @@ import type {
   UpdateAssessmentRequest,
   UpdateAssessmentResponse,
 } from "../types/assessment";
+import { API_BASE_URL } from "../config/api";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+type HealthCheckResponse = {
+  status: string;
+  service: string;
+};
+
+export async function healthCheck(signal?: AbortSignal): Promise<HealthCheckResponse> {
+  const response = await fetch(`${API_BASE_URL}/health`, { signal });
+
+  if (!response.ok) {
+    throw new Error(await getErrorMessage(response, "Backend health check failed"));
+  }
+
+  return response.json() as Promise<HealthCheckResponse>;
+}
 
 export async function assessTask(
   payload: AssessmentRequest,

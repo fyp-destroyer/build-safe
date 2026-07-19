@@ -5,17 +5,17 @@ A Risk-Aware Construction Task Assessment and Tool Recommendation Platform
 Version 1.0 | Prepared for: Final Year Project Supervisor | Status: Draft
 Conforms to IEEE 830-style SRS structure
 
-> **Note:** This SRS reflects the original project scope and requirements. Where §10 (Technology Stack) lists options still open at the time (e.g., "FastAPI or Node.js/NestJS"), `architecture.md` has since finalized those decisions — treat `architecture.md` as the source of truth for the actual tech stack in use.
+> **Note:** This SRS reflects the original project scope and requirements. Where §10 (Technology Stack) lists options still open at the time (e.g., "FastAPI or Node.js/NestJS"), `architecture.md` has since finalized those decisions — treat `architecture.md` as the source of truth for the actual tech stack in use. Scope has also since narrowed: the admin dashboard and professional/vendor accounts described in earlier drafts were cut (see `prd.md` §4, `phases.md` renumbering notes); this revision reflects that cut throughout.
 
 ## 1. Introduction
 
 ### 1.1 Purpose
 
-This Software Requirements Specification (SRS) defines the functional and non-functional requirements, system interfaces, data model, and constraints for BuildSafe AI, a web platform that assesses the safety risk of user-submitted DIY/construction tasks, recommends tools and materials, and escalates unsafe tasks to qualified professionals. It is intended for the development team, project supervisor, and evaluation panel.
+This Software Requirements Specification (SRS) defines the functional and non-functional requirements, system interfaces, data model, and constraints for BuildSafe AI, a web platform that assesses the safety risk of user-submitted DIY/construction tasks and recommends tools and materials, escalating unsafe tasks toward hiring a qualified professional as guidance rather than an in-app booking or quote flow. It is intended for the development team, project supervisor, and evaluation panel.
 
 ### 1.2 Scope
 
-BuildSafe AI will be delivered as a deployed web platform with three principal subsystems: (1) a user-facing task submission and risk-report interface, (2) a hybrid AI risk-classification and recommendation engine, and (3) an admin/professional management dashboard. The system classifies tasks into one of five risk levels, explains the classification, recommends tools/materials/PPE with cost and time estimates, and routes high-risk tasks toward a professional quote-request workflow. Payment processing, certified legal permit verification, and computer-vision structural diagnosis are explicitly excluded from this version (see §1.5).
+BuildSafe AI will be delivered as a deployed web platform with two principal subsystems: (1) a user-facing conversational task-intake, risk-report, and assessment-history interface, and (2) a hybrid AI risk-classification and recommendation engine. The system classifies tasks into one of five risk levels, explains the classification, and recommends tools/materials/PPE with cost and time estimates; for high-risk tasks it recommends hiring a licensed professional as guidance only — there is no in-app quote-request, professional accounts, or admin dashboard (see §1.5). Payment processing, certified legal permit verification, and computer-vision structural diagnosis are explicitly excluded from this version.
 
 ### 1.3 Definitions, Acronyms, and Abbreviations
 
@@ -29,7 +29,6 @@ BuildSafe AI will be delivered as a deployed web platform with three principal s
 | LLM | Large Language Model |
 | Risk Level | One of five system-assigned categories: Safe DIY, DIY with Supervision, Professional Recommended, Professional Required, Dangerous/Do Not Attempt |
 | Rule Engine | Deterministic component that enforces safety-critical overrides independent of the ML model |
-| Quote Request | A user-initiated request for a professional to provide a price/time estimate on a task |
 
 ### 1.4 References
 
@@ -44,6 +43,8 @@ BuildSafe AI will be delivered as a deployed web platform with three principal s
 - Computer-vision structural diagnosis from photographs
 - Real-time contractor location tracking
 - Any guarantee of professional work quality or legal/code compliance
+- Admin dashboard or any runtime-editable safety rules — the rule set is hardcoded in `ai/rule_engine/`, changed via code review and redeploy, never via a live admin UI (see §2.5, `rules.md` §4)
+- Professionals as app users — no professional accounts, dashboard, leads, or quote-routing/marketplace; the product's job ends at recommending the user hire a professional
 
 ## 2. Overall Description
 
@@ -53,22 +54,20 @@ BuildSafe AI is a new, standalone product. It is not an extension of an existing
 
 ### 2.2 Product Functions (Summary)
 
-- Account creation, authentication, and role-based access (user, professional, admin)
+- Account creation and authentication (single `user` role — no professional or admin roles)
 - Natural-language task submission with structured metadata
 - Dynamic follow-up questioning to close safety-relevant information gaps
 - Five-level risk classification via a hybrid ML + rule-engine pipeline
 - Human-readable, factor-based explanation of every classification
 - Tool, material, and PPE recommendation with cost/time/difficulty estimates
-- Professional-category recommendation and quote-request routing
-- Admin management of categories, safety rules, tools, materials, professionals, vendors, and audit logs
+- Professional-category recommendation as guidance only (no quote-routing or professional accounts)
+- User dashboard: assessment history and saved recommendations
 
 ### 2.3 User Classes and Characteristics
 
 | User Class | Technical Skill | Primary Use |
 |---|---|---|
-| End User (homeowner/tenant) | Low — no construction/electrical expertise assumed | Submit tasks, read risk reports, request quotes |
-| Professional | Domain expert, low-to-moderate software skill | Review and respond to quote requests |
-| Admin | Moderate software skill, platform owner/operator | Maintain rules, catalog data, and oversee logs |
+| End User (homeowner/tenant) | Low — no construction/electrical expertise assumed | Submit tasks, read risk reports, view assessment history |
 
 ### 2.4 Operating Environment
 
@@ -77,14 +76,13 @@ Modern desktop and mobile web browsers over HTTPS. Backend deployed as a contain
 ### 2.5 Design and Implementation Constraints
 
 - The final risk decision must never be determined by the ML/LLM component alone — the rule engine can only escalate risk, never lower it below the ML prediction (`final_risk = max(ML risk, rule risk)`)
-- All safety rules and catalog data (tools, materials, categories, professionals) must be editable by admins without a code deployment
+- All safety rules are hardcoded in the rule engine (`ai/rule_engine/`), version-controlled and code-reviewed — never admin-editable or LLM-editable at runtime; there is no `admin` role and no runtime-editable rules table by design (see `rules.md` §4, `architecture.md` §5)
 - Every risk classification must carry a machine-readable explanation (triggered rules and/or top model features), not free-text only
 
 ### 2.6 Assumptions and Dependencies
 
 - Users self-report skill level and task details honestly; the system has no independent means of verification
 - A labeled dataset of sufficient size and quality (see §7.3) can be produced within the project timeline
-- Professional/vendor records in the MVP are admin-entered and are not independently, legally verified
 
 ## 3. System Features — Use Case Overview
 
@@ -94,28 +92,21 @@ Modern desktop and mobile web browsers over HTTPS. Backend deployed as a contain
 | Answer Follow-Up Questions | End User | System detects missing safety-relevant info | Task context completed for classification |
 | Classify Risk | System (AI Engine) | Task context is complete | Risk level, confidence, hazard tags, explanation produced |
 | View Risk Report | End User | Classification complete | User sees risk level, explanation, recommendations |
-| Request Quote | End User | Task is Professional Recommended/Required/Dangerous | Quote request created and routed to professional category |
-| Respond to Quote | Professional | New quote request assigned to category | Price/time estimate submitted to user |
-| Manage Safety Rules | Admin | New hazard pattern identified | Rule created/edited/disabled, applied to future assessments |
-| Manage Catalog | Admin | Tool/material/professional data changes | Catalog updated; reflected in future recommendations |
-| Review AI Logs | Admin | Disputed or low-confidence classification | Admin inspects inputs, outputs, and triggered rules |
+| View Assessment History | End User | User opens their dashboard | Prior task assessments and saved recommendations displayed |
 
 ## 4. Functional Requirements
 
 | ID | Title | Requirement | Priority |
 |---|---|---|---|
-| FR-01 | User Registration and Login | The system shall allow users to register, log in, and access a role-appropriate dashboard (user, professional, or admin). | High |
+| FR-01 | User Registration and Login | The system shall allow users to register and log in under a single `user` role (no professional or admin roles exist). | High |
 | FR-02 | Task Submission | The system shall allow a user to submit a task with description, category, location, skill level, budget, urgency, and optional photos. | High |
 | FR-03 | Follow-Up Questions | The system shall generate follow-up questions specific to the task category and any risk factors not yet resolved (e.g., power isolation, load-bearing status). | High |
 | FR-04 | Risk Classification | The system shall classify each completed task into exactly one of five risk levels: Safe DIY, DIY with Supervision, Professional Recommended, Professional Required, Dangerous/Do Not Attempt. | High |
 | FR-05 | Risk Explanation | The system shall generate an explanation for every classification, listing the triggered safety factors and/or model rationale. | High |
 | FR-06 | Tool and Material Recommendation | The system shall recommend required and optional tools, materials, and PPE for the submitted task. | High |
 | FR-07 | Cost and Time Estimation | The system shall provide an estimated cost range, time range, and difficulty level for the task. | Medium |
-| FR-08 | Professional Recommendation | The system shall recommend an appropriate professional category when the risk level is Professional Recommended or higher. | High |
-| FR-09 | Quote Request | The system shall allow a user to create a quote request for a task classified as Professional Recommended or higher, and route it to matching professionals. | High |
-| FR-10 | Admin Dashboard | The system shall provide admins CRUD access to task categories, safety rules, tools, materials, professionals, vendors, and audit logs. | High |
-| FR-11 | Professional Dashboard | The system shall allow professionals to view quote requests assigned to their category and submit price/time estimates. | Medium |
-| FR-12 | Assessment History | The system shall allow a user to view their previous task assessments and saved recommendations. | Medium |
+| FR-08 | Professional Recommendation | The system shall recommend an appropriate professional category as guidance when the risk level is Professional Recommended or higher; this is informational only — there is no in-app quote request, professional accounts, or matching. | High |
+| FR-09 | Assessment History | The system shall allow a user to view their previous task assessments and saved recommendations. | Medium |
 
 ### 4.1 Detailed Requirement: FR-04 Risk Classification
 
@@ -127,27 +118,15 @@ Modern desktop and mobile web browsers over HTTPS. Backend deployed as a contain
 
 **Exception flow:** if required context is missing and cannot be resolved through follow-up questions, the system shall default to the higher of the two most severe plausible risk levels rather than assume safety.
 
-### 4.2 Detailed Requirement: FR-09 Quote Request
-
-**Preconditions:** task risk level is Professional Recommended, Professional Required, or Dangerous/Do Not Attempt.
-
-**Main flow:** user confirms intent to request a quote; system creates a `quote_requests` record linked to the job and the recommended `professional_category`; matching professionals are notified/listed.
-
-**Postconditions:** professional(s) can view the request and submit a `quotes` record with price, time, message, and status.
-
-**Exception flow:** if no professional exists for the required category, the system shall clearly inform the user rather than silently failing.
-
 ## 5. External Interface Requirements
 
 ### 5.1 User Interfaces
 
-- Responsive web UI covering: task submission form, follow-up question flow, risk report view, saved-jobs/history view, quote-request flow (end user)
-- Professional dashboard: assigned quote requests, estimate submission form
-- Admin dashboard: CRUD screens for categories, rules, tools, materials, professionals, vendors; read-only AI log viewer
+- Responsive web UI covering: conversational task intake, follow-up question flow, inline risk assessment card, tool/material/PPE recommendations, and an assessment history / saved-recommendations dashboard — a single user-facing app; there is no professional or admin dashboard
 
 ### 5.2 Software Interfaces
 
-- REST API between frontend and backend for all task, assessment, recommendation, admin, and quote operations
+- REST API between frontend and backend for all task, assessment, and recommendation operations
 - Database interface (PostgreSQL) for all persistent storage
 - Vector similarity interface (pgvector or equivalent) for semantic tool/material/task retrieval
 - Object storage interface for task photo upload and retrieval
@@ -163,21 +142,20 @@ All client-server communication over HTTPS. Authentication via token-based sessi
 
 | Entity | Purpose | Key Attributes |
 |---|---|---|
-| users | Users, admins, professionals, vendors with role-based access | id, role, name, contact, credentials |
+| users | Registered users — single role, no admin/professional roles | id, name, contact, credentials |
 | task_categories | Task category taxonomy | id, name (electrical, plumbing, carpentry, …) |
 | jobs | User-submitted task and its context | id, user_id, description, category_id, skill_level, urgency, budget |
 | job_photos | Uploaded task images | id, job_id, url, caption |
 | risk_assessments | Output of the classification engine | id, job_id, risk_level, confidence, explanation, hazard_tags, cost, time, difficulty |
-| safety_rules | Rule engine conditions and escalation actions | id, condition, resulting_risk_level, active |
-| tools / materials | Catalog of recommendable items | id, name, category, price_range, ppe_flag, vendor_id |
+| tools / materials | Catalog of recommendable items | id, name, category, price_range, ppe_flag |
 | job_tool_recommendations / job_material_recommendations | Link jobs to recommended items | job_id, item_id, required/optional |
-| professional_categories / professionals | Professional taxonomy and profiles | id, category, verification_status, service_area, rating |
-| quote_requests / quotes | Quote workflow | id, job_id, professional_id, price, time, status |
 | ai_logs | Auditability of AI inputs/outputs | id, job_id, model_input, model_output, triggered_rules, timestamp |
+
+Note: there is no `safety_rules` table. The hazard rule set is hardcoded in `ai/rule_engine/` (version-controlled, code-reviewed, LLM-assisted authoring) rather than admin-editable at runtime — `ai_logs` still records which rule IDs fired per assessment for audit purposes, it just reads from code constants instead of a DB row (see §2.5, `architecture.md` §5).
 
 ### 6.2 Data Retention and Auditability
 
-Every risk assessment shall retain the model input, model output, confidence, and any rules triggered in `ai_logs`, so that a disputed classification can be reconstructed and reviewed by an admin.
+Every risk assessment shall retain the model input, model output, confidence, and any rules triggered in `ai_logs`, so that a disputed classification can be reconstructed and reviewed by the engineering team.
 
 ## 7. Non-Functional Requirements
 
@@ -204,7 +182,7 @@ Every risk classification shall include the specific triggered safety factors or
 ### 7.4 Security
 
 - Authentication required for all non-public endpoints
-- Role-based access control enforced at the API layer (user / professional / admin)
+- Single `user` role — no elevated admin/professional access tiers exist in this product
 - Input validation on all task submission and follow-up fields
 - Secure, access-controlled storage for uploaded task images
 
@@ -214,11 +192,11 @@ Risk assessment results shall be returned within a response time acceptable for 
 
 ### 7.6 Maintainability
 
-Admins shall be able to add, edit, or disable task categories, safety rules, tools, materials, and professional categories without a code deployment.
+Task categories and catalog data (tools, materials) may be extended via standard code changes and migrations. Safety rules are intentionally **not** runtime-editable — they live in `ai/rule_engine/` and change only via code review and redeploy (see §2.5, `rules.md` §4); there is no admin UI for this by design.
 
 ### 7.7 Scalability
 
-The database and backend shall support adding new task categories, cities, vendors, and professional categories without schema-breaking changes.
+The database and backend shall support adding new task categories and cities without schema-breaking changes.
 
 ### 7.8 Usability
 
@@ -226,7 +204,7 @@ A non-expert user shall be able to submit a task and receive a risk report witho
 
 ## 8. System Architecture Overview
 
-The system follows a modular, layered architecture: a frontend web application; a backend API layer; an AI decision layer combining a supervised ML classifier with a deterministic safety rule engine; a recommendation layer for tools/materials/professionals; a PostgreSQL data layer with vector-search support; and a quotation/marketplace layer connecting users to professionals. The natural-language interface is a thin layer over this pipeline — it is not itself the source of the risk decision.
+The system follows a modular, layered architecture: a frontend web application; a backend API layer; an AI decision layer combining a supervised ML classifier with a deterministic safety rule engine; a recommendation layer for tools/materials; and a PostgreSQL data layer with vector-search support. The natural-language interface is a thin layer over this pipeline — it is not itself the source of the risk decision.
 
 ### 8.1 Hybrid Risk Decision Logic
 
@@ -234,7 +212,7 @@ The system follows a modular, layered architecture: a frontend web application; 
 final_risk = max( ML-predicted risk level, rule-engine risk level )
 ```
 
-The ML classifier operates on task text, category, user skill level, available tools/PPE, urgency, and follow-up answers. The rule engine evaluates the same context against admin-managed safety-critical conditions (e.g., electrical wiring + beginner user, gas connections, unknown load-bearing status, water near live electrical outlets) and can only escalate the final result upward on the five-level ordinal scale.
+The ML classifier operates on task text, category, user skill level, available tools/PPE, urgency, and follow-up answers. The rule engine evaluates the same context against hardcoded safety-critical conditions (e.g., electrical wiring + beginner user, gas connections, unknown load-bearing status, water near live electrical outlets) and can only escalate the final result upward on the five-level ordinal scale.
 
 ## 9. Safety Rule Catalog (Representative Set)
 
@@ -247,14 +225,14 @@ The ML classifier operates on task text, category, user skill level, available t
 | Roof work or height above safe threshold | Professional Recommended or Professional Required |
 | Water leak near an electrical outlet | Dangerous/Do Not Attempt; instruct isolating power first |
 
-Note: this is a representative starting set. The full rule catalog is admin-managed and expected to grow as the dataset and expert review process (§§6.2, 7.2) surface new hazard patterns.
+Note: this is a representative starting set. The full rule catalog is hardcoded in `ai/rule_engine/` — not admin-managed or runtime-editable (see §2.5) — and is expected to grow via code changes as the dataset and expert review process (§§6.2, 7.2) surface new hazard patterns.
 
 ## 10. Technology Stack
 
 | Layer | Technology | Purpose |
 |---|---|---|
-| Frontend | Next.js / React, Tailwind CSS | User, admin, and professional dashboards |
-| Backend | FastAPI or Node.js/NestJS | REST APIs for jobs, assessments, users, rules, tools, professionals, quotes |
+| Frontend | Next.js / React, Tailwind CSS | Conversational task-intake UI and assessment-history dashboard |
+| Backend | FastAPI or Node.js/NestJS | REST APIs for jobs, assessments, users, tools, materials |
 | Database | PostgreSQL | Structured storage for all core entities |
 | Vector Search | pgvector / sentence embeddings | Semantic retrieval for similar tasks, tools, materials |
 | ML Models | TF-IDF + Logistic Regression baseline; transformer/sentence-embedding classifier | Risk classification |
@@ -266,10 +244,9 @@ Note: this is a representative starting set. The full rule catalog is admin-mana
 
 - System correctly classifies each of the four demo scenarios in the proposal (Safe DIY, Professional Recommended, Professional Required, Dangerous/Do Not Attempt) with a matching explanation.
 - A safety-critical rule (e.g., gas line, live panel) escalates risk even when the ML model alone would predict a lower level.
-- Admin can add/edit a safety rule and see it take effect on the next assessment without a deployment.
-- A Professional-Required or higher task can be taken end-to-end through quote request to a professional response.
+- A user can view their assessment history and saved recommendations after completing one or more assessments.
 - Trained classifier achieves the agreed-upon recall target on high-risk classes on a held-out test set (target to be finalized with supervisor, see PRD §10).
-- All FR-01 through FR-12 requirements are implemented and demonstrable.
+- All FR-01 through FR-09 requirements are implemented and demonstrable.
 
 ## 12. Appendix — Example Data Record
 

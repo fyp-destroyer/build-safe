@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: buildsafe-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: buildsafe
+      POSTGRES_PASSWORD: buildsafe
+      POSTGRES_DB: buildsafe
+    ports:
+      - "5434:5432"
+    volumes:
+      - buildsafe-postgres-data:/var/lib/postgresql/data
+      - ./infra/postgres-initdb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U buildsafe -d buildsafe"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  buildsafe-postgres-data:

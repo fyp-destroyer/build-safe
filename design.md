@@ -959,18 +959,32 @@ export function DotMatrixReveal({
 
 ### 10.1 `Sidebar.tsx`
 
-Fixed 260px width, category-grouped history (not recency-grouped — see §1), solid-orange "New chat" CTA, active item marked with both a background wash and a left accent bar (not just a faint tint — needs to be unmistakable), name-in-bottom-left opens `SettingsModal`.
+**Revised 2026-07-19** (Phase 7 sidebar rework — see `memory.md`). Fixed 260px width, history split into two sections — **Favourites** (starred items) on top, **Chats** (everything else) below — each sorted by recency (most recent first), *not* grouped by category. Category rides along as a small icon + label caption under each item's title, both rendered in the accent orange (not the muted secondary text color, so the category reads as a tag rather than blending into the metadata line). Solid-orange "New chat" CTA, active item marked with both a background wash and a left accent bar (not just a faint tint — needs to be unmistakable), a star toggle (hidden until hover, solid orange when active) on each row moves an item into Favourites, name-in-bottom-left opens `SettingsModal`.
+
+This replaces the original category-grouped design (all items under a category header, ordered by `CATEGORY_ORDER`) — dropped per direct user feedback: recency ordering with an inline category tag reads better than trade-grouping, and a dedicated Favourites section covers the "save this one" need the original design didn't have. The full-page history dashboard concept from Phase 0 (see `memory.md`) was also dropped in favor of handling this need entirely within the sidebar.
 
 ```tsx
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
-import { useNavigate } from "react-router-dom";
-import { CATEGORY_ORDER, type HistoryItem, type TaskCategory } from "../../lib/chatData";
+import { type HistoryItem, type TaskCategory } from "@/lib/chatData";
 import {
-  IconPlus, IconLogOut, IconUser,
-  IconBolt, IconDroplet, IconHammer, IconBuilding, IconBrush, IconGrid, IconWind, IconWrench,
-} from "../../lib/icons";
-import { SettingsModal, type Profile } from "../settings/SettingsModal";
+  IconPlus,
+  IconLogOut,
+  IconUser,
+  IconStar,
+  IconBolt,
+  IconDroplet,
+  IconHammer,
+  IconBuilding,
+  IconBrush,
+  IconGrid,
+  IconWind,
+  IconWrench,
+} from "@/lib/icons";
+import { SettingsModal, type Profile } from "@/components/settings/SettingsModal";
 
 const CATEGORY_ICON: Record<TaskCategory, typeof IconBolt> = {
   Electrical: IconBolt,
@@ -984,23 +998,40 @@ const CATEGORY_ICON: Record<TaskCategory, typeof IconBolt> = {
   General: IconWrench,
 };
 
+// Fixed 260px width, recency-ordered history split into two sections —
+// Favourites (starred items, top) and Chats (everything else, bottom) —
+// solid-orange "New chat" CTA, active item marked with both a background
+// wash and a left accent bar so it's unmistakable — see design.md §10.1.
 export function Sidebar({
-  activeId, onNewChat, onSelectHistory, history, profile, onProfileChange,
-  onClearHistory, onExportHistory, onDeleteAccount,
+  activeId,
+  onNewChat,
+  onSelectHistory,
+  history,
+  onToggleFavourite,
+  profile,
+  onProfileChange,
+  onClearHistory,
+  onExportHistory,
+  onDeleteAccount,
 }: {
   activeId: string | null;
   onNewChat: () => void;
   onSelectHistory: (id: string) => void;
   history: HistoryItem[];
+  onToggleFavourite: (id: string) => void;
   profile: Profile;
   onProfileChange: (profile: Profile) => void;
   onClearHistory: () => void;
   onExportHistory: () => void;
   onDeleteAccount: () => void;
 }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const handleLogOut = () => navigate("/login");
+  const handleLogOut = () => router.push("/login");
+
+  const byRecency = (a: HistoryItem, b: HistoryItem) => b.createdAt - a.createdAt;
+  const favourites = history.filter((h) => h.favourite).sort(byRecency);
+  const chats = history.filter((h) => !h.favourite).sort(byRecency);
 
   return (
     <aside className="flex h-full w-[260px] shrink-0 flex-col gap-4 border-r border-[var(--color-border)] bg-[var(--color-bg-inset)] p-3">
@@ -1020,48 +1051,24 @@ export function Sidebar({
       </button>
 
       <nav className="flex-1 overflow-y-auto">
-        {CATEGORY_ORDER.map((category) => {
-          const items = history.filter((h) => h.category === category);
-          if (items.length === 0) return null;
-          const CategoryIcon = CATEGORY_ICON[category];
-          return (
-            <div key={category} className="mb-3">
-              <div className="flex items-center gap-1.5 px-2 pb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-secondary)]">
-                <CategoryIcon width={11} height={11} className="text-[var(--color-accent)]" />
-                {category}
-              </div>
-              <div className="flex flex-col gap-0.5">
-                {items.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => onSelectHistory(item.id)}
-                    className={`relative truncate rounded-lg py-1.5 pl-2.5 pr-2.5 text-left text-sm transition-colors ${
-                      activeId === item.id
-                        ? "font-medium text-[var(--color-text-primary)]"
-                        : "text-[var(--color-text-secondary)] hover:bg-[var(--color-border)]/40 hover:text-[var(--color-text-primary)]"
-                    }`}
-                  >
-                    {activeId === item.id && (
-                      <motion.div
-                        layoutId="active-history"
-                        className="absolute inset-0 rounded-lg bg-[var(--color-accent)]/15"
-                        transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                      />
-                    )}
-                    {activeId === item.id && (
-                      <motion.div
-                        layoutId="active-history-bar"
-                        className="absolute inset-y-1 left-0 w-[3px] rounded-full bg-[var(--color-accent)]"
-                        transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                      />
-                    )}
-                    <span className="relative">{item.title}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          );
-        })}
+        {favourites.length > 0 && (
+          <HistorySection
+            label="Favourites"
+            items={favourites}
+            activeId={activeId}
+            onSelectHistory={onSelectHistory}
+            onToggleFavourite={onToggleFavourite}
+          />
+        )}
+        {chats.length > 0 && (
+          <HistorySection
+            label="Chats"
+            items={chats}
+            activeId={activeId}
+            onSelectHistory={onSelectHistory}
+            onToggleFavourite={onToggleFavourite}
+          />
+        )}
         {history.length === 0 && (
           <div className="px-2.5 py-1.5 text-sm text-[var(--color-text-secondary)]">No saved conversations</div>
         )}
@@ -1095,7 +1102,86 @@ export function Sidebar({
     </aside>
   );
 }
+
+function HistorySection({
+  label,
+  items,
+  activeId,
+  onSelectHistory,
+  onToggleFavourite,
+}: {
+  label: string;
+  items: HistoryItem[];
+  activeId: string | null;
+  onSelectHistory: (id: string) => void;
+  onToggleFavourite: (id: string) => void;
+}) {
+  return (
+    <div className="mb-3">
+      <div className="px-2 pb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-secondary)]">
+        {label}
+      </div>
+      <div className="flex flex-col gap-0.5">
+        {items.map((item) => {
+          const CategoryIcon = CATEGORY_ICON[item.category];
+          return (
+            <div
+              key={item.id}
+              className={`group relative flex items-center gap-1 rounded-lg pl-2.5 pr-1.5 transition-colors ${
+                activeId === item.id ? "" : "hover:bg-[var(--color-border)]/40"
+              }`}
+            >
+              {activeId === item.id && (
+                <motion.div
+                  layoutId="active-history"
+                  className="absolute inset-0 rounded-lg bg-[var(--color-accent)]/15"
+                  transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                />
+              )}
+              {activeId === item.id && (
+                <motion.div
+                  layoutId="active-history-bar"
+                  className="absolute inset-y-1 left-0 w-[3px] rounded-full bg-[var(--color-accent)]"
+                  transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                />
+              )}
+              <button
+                onClick={() => onSelectHistory(item.id)}
+                className="relative min-w-0 flex-1 truncate py-1.5 text-left"
+              >
+                <div
+                  className={`truncate text-sm ${
+                    activeId === item.id ? "font-medium text-[var(--color-text-primary)]" : "text-[var(--color-text-secondary)]"
+                  }`}
+                >
+                  {item.title}
+                </div>
+                <div className="flex items-center gap-1 text-[11px] text-[var(--color-accent)]">
+                  <CategoryIcon width={10} height={10} />
+                  {item.category}
+                </div>
+              </button>
+              <button
+                onClick={() => onToggleFavourite(item.id)}
+                aria-label={item.favourite ? "Remove from favourites" : "Add to favourites"}
+                className={`relative shrink-0 cursor-pointer p-1 transition-colors ${
+                  item.favourite
+                    ? "text-[var(--color-accent)]"
+                    : "text-[var(--color-text-secondary)] opacity-0 group-hover:opacity-100 hover:text-[var(--color-accent)]"
+                }`}
+              >
+                <IconStar width={14} height={14} fill={item.favourite ? "currentColor" : "none"} />
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 ```
+
+`HistoryItem` (in `lib/chatData.ts`) carries `createdAt: number` and `favourite?: boolean` alongside `id`/`title`/`category` to support this — see `lib/chatData.ts` in the repo for the current shape. `IconStar` (filled polygon, `lib/icons.tsx`) is the only icon this design added beyond the original set.
 
 ### 10.2 `MessageBubble.tsx`
 

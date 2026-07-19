@@ -1,0 +1,23 @@
+# Node / frontend
+node_modules/
+.next/
+dist/
+build/
+
+# Python / backend
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Env files
+.env
+.env.local
+apps/backend/.env
+apps/frontend/.env.local
+
+# OS
+.DS_Store

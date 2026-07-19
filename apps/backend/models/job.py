@@ -1,0 +1,47 @@
+"""Job model — srs.md §6.1 `jobs` table (minimum viable subset).
+
+`category` is a plain string constrained at the schema layer to the 9
+categories locked in phases.md Phase 1 (electrical, plumbing, carpentry,
+masonry, painting, tiling, HVAC, roofing, general) rather than a separate
+`task_categories` table — that table is out of scope for this pass.
+
+`followup_answers` is free-form JSON until Phase 5 defines the real
+follow-up question schema per category.
+
+`status` is a plain string rather than a DB enum for now:
+  "pending_followup" | "ready_to_assess" | "assessed" | "failed"
+"""
+
+import uuid
+from datetime import datetime
+
+from sqlalchemy import JSON, DateTime, ForeignKey, String, Text, func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from models.base import Base
+
+
+class Job(Base):
+    """A user-submitted DIY/construction task and its context."""
+
+    __tablename__ = "jobs"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
+    description: Mapped[str] = mapped_column(Text, nullable=False)
+    category: Mapped[str] = mapped_column(String(50), nullable=False)
+    skill_level: Mapped[str] = mapped_column(String(50), nullable=False)
+    urgency: Mapped[str] = mapped_column(String(50), nullable=False)
+    followup_answers: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    status: Mapped[str] = mapped_column(String(30), nullable=False, default="pending_followup")
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    user: Mapped["User"] = relationship(back_populates="jobs")  # noqa: F821
+    risk_assessment: Mapped["RiskAssessment | None"] = relationship(  # noqa: F821
+        back_populates="job", uselist=False
+    )

@@ -51,5 +51,7 @@ The rule engine can only push risk *up*, never down. If in doubt, escalate — n
 
 ## 7. Open Questions (resolve before/while building)
 
-- Minimum acceptable dataset size and expert-review process for the classifier.
-- Acceptable false-negative rate (high-risk task misclassified as low-risk) for launch/demo.
+Both items below were originally scoped to require supervisor sign-off. With no supervisor available, they were resolved provisionally on 2026-07-19 so Phase 1 could proceed — see `phases.md` Phase 1 and `memory.md` for the decision log. Treat these as the working targets for Phases 2-4; revisit with the supervisor when available and update this section if they give a different answer.
+
+- **Minimum dataset size and expert-review process.** *Provisional (pending supervisor confirmation):* target ~150–300 labeled examples per risk class (~1,000–1,500 total) for the Phase 3 TF-IDF+Logistic Regression baseline, scaling up in Phase 4 if time allows — a defensible size for an FYP-scale 5-class text classifier, not a supervisor-set figure. In place of a live domain-expert review (none available), every labeled example and every hardcoded safety rule is instead cross-checked against written authoritative standards — OSHA's Focus Four (already cited in `srs.md` §1.4), local building/electrical codes, and manufacturer/PPE safety sheets — with the source documented inline in `rules.md`/`ai/rule_engine/` so a real expert can audit it in one pass later.
+- **Acceptable false-negative rate.** *Provisional (pending supervisor confirmation):* target **≥95% recall** on the two most severe classes (Professional Required, Dangerous/Do-Not-Attempt), measured in the Phase 3/4 eval report — consistent with §5's stated principle that a missed danger is worse than an over-cautious warning. Exact tolerance may be tightened once real evaluation data exists.

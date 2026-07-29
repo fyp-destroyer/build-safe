@@ -212,7 +212,7 @@ The system follows a modular, layered architecture: a frontend web application; 
 final_risk = max( ML-predicted risk level, rule-engine risk level )
 ```
 
-The ML classifier operates on task text, category, user skill level, available tools/PPE, urgency, and follow-up answers. The rule engine evaluates the same context against hardcoded safety-critical conditions (e.g., electrical wiring + beginner user, gas connections, unknown load-bearing status, water near live electrical outlets) and can only escalate the final result upward on the five-level ordinal scale.
+The ML classifier operates on task text, category, user skill level, available tools/PPE, and follow-up answers — urgency is collected for UX purposes only and has no bearing on the risk decision. The rule engine evaluates the same context against hardcoded safety-critical conditions (e.g., electrical wiring + beginner user, gas connections, unknown load-bearing status, water near live electrical outlets) and can only escalate the final result upward on the five-level ordinal scale.
 
 ## 9. Safety Rule Catalog (Representative Set)
 

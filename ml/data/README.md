@@ -9,6 +9,8 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
 
 **Never commit real user data or PII here** — every record must be synthetic/authored, matching the shape below.
 
+**Note on `urgency`:** the app still collects `urgency` on every job (`apps/backend/schemas/job.py`, required field) purely as a UX/conversational-flow input — it has no bearing on physical safety, so it is deliberately **not** part of the training schema below. (This narrows `srs.md` §8's original wording, which listed urgency as a classifier input; that line has been updated to match.)
+
 ## Record schema
 
 ```json
@@ -16,7 +18,6 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
   "task_text": "install a ceiling fan in my bedroom",
   "category": "electrical",
   "user_skill": "Beginner",
-  "urgency": "No rush",
   "tools_available": ["screwdriver", "ladder"],
   "hazards": ["electrical_shock", "fall_from_height"],
   "risk_level": 3,
@@ -31,7 +32,6 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
 | `task_text` | string | Free-text task description, written the way a real user would phrase it (casual, not textbook) |
 | `category` | string | One of the 9 locked categories below |
 | `user_skill` | string | One of `"Beginner"`, `"Some experience"`, `"Experienced"` — matches the frontend quick-reply values exactly (`apps/frontend/app/chat/page.tsx`) |
-| `urgency` | string | One of `"No rush"`, `"This week"`, `"Urgent"` — matches the frontend quick-reply values exactly |
 | `tools_available` | string[] | Tools/equipment the user says they have on hand; `[]` if none mentioned |
 | `hazards` | string[] | Zero or more tags from the hazard taxonomy below; `[]` if genuinely none |
 | `risk_level` | int 1–5 | Matches the backend's `risk_assessments.risk_level` column (`apps/backend/schemas/assessment.py`) — 1=safest, 5=most dangerous. **This is the field the classifier actually trains against.** |

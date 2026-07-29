@@ -54,6 +54,27 @@
     ]
   },
   {
+    "task_text": "install a ceiling fan in my bedroom - I can't get to the breaker panel (landlord keeps it locked), so I'll wear insulated gloves and use a non-contact voltage tester before touching any wires",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ]
+  },
+  {
     "task_text": "rewire the electrical subpanel in my garage",
     "category": "electrical",
     "user_skill": "Experienced",

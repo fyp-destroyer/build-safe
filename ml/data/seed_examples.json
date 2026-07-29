@@ -353,7 +353,7 @@
     "followup_questions": []
   },
   {
-    "task_text": "remove a wall between the kitchen and living room, not sure if it's load-bearing",
+    "task_text": "remove a wall between the kitchen and living room to create an open floor plan",
     "category": "carpentry",
     "user_skill": "Experienced",
     "tools_available": [
@@ -380,6 +380,27 @@
     ]
   },
   {
+    "task_text": "remove a wall between the kitchen and living room, not sure if it's load-bearing",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "sledgehammer",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
     "task_text": "remove a wall in my basement near the gas meter - not totally sure if it's load-bearing",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -400,11 +421,6 @@
       "work_gloves"
     ],
     "followup_questions": [
-      {
-        "field": "load_bearing_confirmed",
-        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
-        "answer": null
-      },
       {
         "field": "gas_line_present",
         "question": "Have you confirmed there is no gas line present near this work area?",

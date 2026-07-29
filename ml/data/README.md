@@ -79,7 +79,7 @@ Don't invent a `tool_available:<tool>` follow-up for every tool mentioned in eve
 2. **Isolation explicitly confirmed** in `task_text` → lower risk_level, shock-related PPE (`insulated_gloves`) dropped, non-electrical hazards like `fall_from_height` stay.
 3. **Isolation explicitly not possible** (e.g. locked panel, shared circuit, landlord-controlled) but PPE/tester used as the stated mitigation → risk_level stays at the same tier as case 1 (the hazard is still real), but `suggested_ppe` explicitly includes `insulated_gloves` + a tester, since that's the recommended fallback mitigation.
 
-See the three `"install a ceiling fan"` entries in `seed_examples.json` for this exact pattern — write more triples like this for other electrical/gas seeds during expansion. **This also matters for Phase 5**: the current Phase 6 placeholder rule engine (`ai/rule_engine/rules.py`'s `_SAFETY_CRITICAL_FOLLOWUPS`) only has a binary `power_isolated` true/false escalation — it can't yet express "isolation not possible, but mitigated via PPE" as a distinct, less-escalated outcome from "isolation simply unanswered." Worth designing for explicitly when Phase 5 replaces the placeholder (logged in `memory.md`).
+See the four `"install a ceiling fan"` entries in `seed_examples.json` for this pattern (risk_level/suggested_ppe vary across all four; only the "isolation not stated" and "tools unknown" variants also carry a `followup_questions` entry — the other two already state the answer in `task_text`, so per the redundancy rule above they correctly have `followup_questions: []`) — write more triples like this for other electrical/gas seeds during expansion. **This also matters for Phase 5**: the current Phase 6 placeholder rule engine (`ai/rule_engine/rules.py`'s `_SAFETY_CRITICAL_FOLLOWUPS`) only has a binary `power_isolated` true/false escalation — it can't yet express "isolation not possible, but mitigated via PPE" as a distinct, less-escalated outcome from "isolation simply unanswered." Worth designing for explicitly when Phase 5 replaces the placeholder (logged in `memory.md`).
 
 ### 9 locked task categories
 
@@ -94,6 +94,8 @@ See the three `"install a ceiling fan"` entries in `seed_examples.json` for this
 | 3 | `professional_recommended` | Professional Recommended — a competent DIYer *could* do it, but a pro is advisable |
 | 4 | `professional_required` | Professional Required — should not be attempted without a licensed professional |
 | 5 | `dangerous` | Dangerous / Do Not Attempt |
+
+**`risk_level: 5` examples should always have `suggested_ppe: []`.** At this tier the correct action is "stop and call a professional / emergency services," not "here's the PPE to handle it yourself" — recommending PPE for an active emergency (e.g. a sparking live wire) could be read as encouraging hands-on mitigation, which contradicts the do-not-attempt framing. Keep `hazards`/`professional_category` populated as normal; only `suggested_ppe` is forced empty at this tier.
 
 ### Hazard taxonomy (extend if a real seed example needs a tag not listed)
 

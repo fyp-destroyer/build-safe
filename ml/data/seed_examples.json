@@ -172,9 +172,7 @@
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "electrician",
-    "suggested_ppe": [
-      "insulated_gloves"
-    ],
+    "suggested_ppe": [],
     "followup_questions": []
   },
   {

@@ -541,10 +541,11 @@
     "hazards": [
       "fall_from_height"
     ],
-    "risk_level": 2,
-    "risk_label": "diy_with_supervision",
-    "professional_category": null,
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
     "suggested_ppe": [
+      "safety_harness",
       "safety_glasses"
     ],
     "followup_questions": []
@@ -1125,8 +1126,7 @@
       "voltage tester"
     ],
     "hazards": [
-      "electrical_shock",
-      "water_damage"
+      "electrical_shock"
     ],
     "risk_level": 3,
     "risk_label": "professional_recommended",

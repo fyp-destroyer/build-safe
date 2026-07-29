@@ -6,7 +6,8 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
 
 - `seed_examples.json` — **256 hand-written seed examples**, covering all 9 categories and all 5 risk levels. Authoritative and hand-judged; nothing downstream ever relabels these. Each carries a stable `id` (`seed-0001`…) so generated variants can reference their parent.
 - `generated_examples.json` — **299 machine-generated variants** (555 total), each carrying `variant_of` (parent seed id) and `generation_rule`. Produced by `../generate_variations.py`; see "Template variation and weak labeling" below.
-- `train.json` / `val.json` / `test.json` — final split, generated later (70/15/15). **Not created yet.** See the grouping warning below — splitting naively will leak.
+- `train.json` / `val.json` / `test.json` — the split (387 / 86 / 82 rows = 69.7 / 15.5 / 14.8%). Built by `../make_splits.py`; each row gains `source` (`seed`/`generated`) and `group_id`. See "The split" below.
+- `REVIEW.md` — label-quality audit against published safety standards, with its limitations stated plainly. Produced by `../review_high_risk.py`.
 - `../validate_dataset.py` — **run `python ml/validate_dataset.py` after every change.** It mechanically enforces every rule documented here (risk/label agreement, the `risk_level: 5` PPE rule, the unanswered-follow-up escalation rule, canonical question wording, enum validity, duplicate detection, and — for generated rows — that each weak-labeling rule did what it claims). Several of these rules exist because a real mistake was caught in review; the validator is what stops them recurring at scale.
 - `../generate_variations.py` — regenerates `generated_examples.json` from the seeds. Deterministic: same seeds in, same variants out.
 
@@ -24,9 +25,32 @@ Weak labeling can quietly produce *wrong safety labels* at scale, and padding to
 
 **Deliberately not automated: de-escalation.** Injecting a confirmation into a seed (which would *lower* risk) is the direction where a wrong label is dangerous, so those variants stay hand-written seeds only.
 
-**Splitting warning.** A variant and its parent share almost all their text. Group by `variant_of` (treating each seed and all its variants as one unit) and split by group, or the same task appears in both train and test and the metrics become meaningless. The three deliberate near-duplicate *seed* pairs noted below need the same treatment.
+## The split
 
-**Evaluate on hand-written data.** Hand-written and generated rows are kept in separate files (and generated rows carry `generation_rule`) precisely so the test set can be restricted to seeds. Reporting headline metrics on weakly-labeled rows would be measuring the generator, not the task.
+`python ml/make_splits.py` (deterministic — no RNG, ordering is by id).
+
+| | rows | % | hand-written | generated |
+|---|---|---|---|---|
+| train | 387 | 69.7 | 172 | 215 |
+| val | 86 | 15.5 | 43 | 43 |
+| test | 82 | 14.8 | 41 | 41 |
+
+All five risk levels appear in all three splits, in both the full and hand-written-only views.
+
+**Grouping is the entire point of this script.** A variant shares almost all its text with its parent, so rows are grouped and assigned to splits atomically: 555 rows → 250 groups. Grouping combines two things:
+
+1. `variant_of` — every generated variant travels with its parent seed.
+2. Seed-to-seed relatedness — the deliberate contrast sets (same task, differing only in what the user states) are merged so they cannot straddle a split.
+
+Relatedness needs **both** a sequence-similarity test and a token-containment test. Similarity alone silently misses the most important case: the contrast sets are built by *adding* a clause, and `"install a ceiling fan in my bedroom"` vs the same text plus a long confirmation clause scores only ~0.41 despite one wholly containing the other. Containment catches that shape. With similarity alone the four-example ceiling-fan set was split across train and test.
+
+The script fails rather than writing files if any group spans splits, any class is missing, any split lacks hand-written rows, or any cross-split leak is detected.
+
+**The leak check runs on seed texts only, deliberately.** A generated row cannot leak independently — it is always in its parent's split. Comparing generated text directly also produces false alarms, since every rephrase shares a template wrapper (`"I was going to … from an extension ladder"`), which inflates the similarity of two genuinely different underlying tasks.
+
+**Evaluate on hand-written data.** Rows carry `source`, and hand-written vs generated are kept in separate source files, precisely so the test set can be restricted to seeds. Reporting headline metrics over weakly-labeled rows would measure the generator, not the task.
+
+⚠️ **The hand-written test set is small per class** — 41 rows, roughly 10/7/6/6/12 across risk 1–5. `prd.md` §7's ≥95% recall target applies to the two most severe classes, i.e. **18 test examples**; a single misclassification moves recall by ~5 points. Treat per-class recall as indicative, report confidence intervals rather than bare point estimates, and consider k-fold cross-validation over the grouped data instead of relying on this single split.
 
 **Never commit real user data or PII here** — every record must be synthetic/authored, matching the shape below.
 

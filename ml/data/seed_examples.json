@@ -239,7 +239,7 @@
       "pipe cutter"
     ],
     "hazards": [
-      "gas_leak"
+      "buried_utility_strike"
     ],
     "risk_level": 3,
     "risk_label": "professional_recommended",
@@ -315,13 +315,7 @@
       "safety_glasses",
       "work_gloves"
     ],
-    "followup_questions": [
-      {
-        "field": "load_bearing_confirmed",
-        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
-        "answer": null
-      }
-    ]
+    "followup_questions": []
   },
   {
     "task_text": "remove a wall between the kitchen and living room, not sure if it's load-bearing",
@@ -439,13 +433,7 @@
       "safety_glasses",
       "dust_mask"
     ],
-    "followup_questions": [
-      {
-        "field": "load_bearing_confirmed",
-        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
-        "answer": null
-      }
-    ]
+    "followup_questions": []
   },
   {
     "task_text": "remove a load-bearing brick wall in the basement to open up the space",

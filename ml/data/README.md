@@ -54,7 +54,7 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
 Currently-established `field` values (matching the live placeholder's hardcoded fields — extend this set once Phase 5's real catalog covers more hazards, e.g. a fall-height/stable-footing confirmation for roofing):
 
 - `power_isolated` — relevant whenever `electrical_shock` is a hazard, regardless of the task's `category` (e.g. it applies to the HVAC thermostat-wiring example and the tiling-near-outlets example too, not just `category: "electrical"` — hazard-driven, not category-driven)
-- `load_bearing_confirmed` — relevant whenever `structural_collapse` is a hazard (wall/structure removal or alteration)
+- `load_bearing_confirmed` — the question ("confirmed the wall or structure involved is NOT load-bearing?") only makes sense when the task is actually **deciding whether to remove/demolish** a wall or structural element whose load-bearing status is genuinely in question. It does **not** apply just because `structural_collapse` is present as a hazard tag — a foundation-wall crack *repair* (not removal) and a new deck *build* (not a removal decision at all) both have `structural_collapse` as a hazard but no "is this load-bearing?" question to resolve, since nothing is being evaluated for removal. Both correctly have `followup_questions: []`; only genuine wall/structure-removal examples (e.g. `"remove a wall between the kitchen and living room..."`) use this field.
 - `gas_line_present` — relevant only when gas proximity is genuinely **uncertain** (e.g. digging a trench, drilling into a wall where a line might be routed unseen) — a *preventive* check. It does **not** apply when the task's premise already states a gas hazard is present/active (a leaking water heater, an already-cracked heat exchanger, installing a new gas appliance) — "confirmed there is no gas line present" is a non-sequitur once gas is already an established fact in `task_text`, not an open question to resolve. Those examples correctly have `followup_questions: []` — the risk level comes straight from the `gas_leak`/`fire` hazard tags, no follow-up needed. See `"dig a small trench in my backyard..."` for the correctly-scoped usage.
 
 `answer` is `true`, `false`, or `null` — **the distinction matters and mirrors a real bug that was found and fixed in the backend** (see `memory.md`, 2026-07-19 safety-gate bug): `null` means the question was never actually answered (the ambiguous/default case — never assume safety), while `false` means the user explicitly answered in the unsafe direction (e.g. "no, I haven't isolated the power" or "no, it's not possible right now"). Both should escalate risk, but they are not the same state, and a real implementation must not conflate "answered unsafely" with "never answered."
@@ -84,7 +84,9 @@ See the three `"install a ceiling fan"` entries in `seed_examples.json` for this
 
 ### Hazard taxonomy (extend if a real seed example needs a tag not listed)
 
-`electrical_shock`, `fall_from_height`, `structural_collapse`, `gas_leak`, `fire`, `chemical_exposure`, `cuts_lacerations`, `respiratory_hazard`, `water_damage`, `burns`, `none`
+`electrical_shock`, `fall_from_height`, `structural_collapse`, `gas_leak`, `buried_utility_strike`, `fire`, `chemical_exposure`, `cuts_lacerations`, `respiratory_hazard`, `water_damage`, `burns`, `none`
+
+Note: `gas_leak` means gas is actually present/leaking/being connected (an active hazard, stated as fact in `task_text`). `buried_utility_strike` means the risk is *accidentally hitting* an unknown buried line (digging, trenching) — proximity is uncertain, nothing has actually leaked. Don't conflate the two: an active leak and the risk of causing one someday are different hazards with different urgency.
 
 ### Professional categories
 

@@ -28,7 +28,7 @@ Each phase has a clear deliverable and an exit check. Don't start a phase until 
 
 **Deliverable:** labeled dataset, hazard taxonomy, tool mappings, train/val/test split.
 
-- [ ] 200–300 hand-written seed examples across categories
+- [x] 200–300 hand-written seed examples across categories — **256 in `ml/data/seed_examples.json`** (2026-07-29), all 9 categories (25–36 each) and all 5 risk levels (44–62 each). Schema, scoping rules, and labelling conventions documented in `ml/data/README.md`; `ml/validate_dataset.py` mechanically enforces them.
 - [ ] Template-based task variation generation
 - [ ] Weak-labeling rules for obvious cases
 - [ ] Expert review of a sample of high-risk-labeled examples

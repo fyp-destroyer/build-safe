@@ -4,8 +4,9 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
 
 ## Files
 
-- `seed_examples.json` — hand-written seed examples, **the file to review/expand right now**. Currently a small scaffold (a handful of examples per category, spanning multiple risk levels) — needs to grow to 200–300 hand-written examples before template expansion/weak-labeling.
+- `seed_examples.json` — **256 hand-written seed examples**, covering all 9 categories and all 5 risk levels. This satisfies `phases.md` Phase 2's "200–300 hand-written seed examples" item; template variation and weak-labeling build on top of it to reach the ≥500 exit check.
 - `train.json` / `val.json` / `test.json` — final split, generated later (70/15/15) once the full ≥500-example dataset exists. **Not created yet.**
+- `../validate_dataset.py` — **run `python ml/validate_dataset.py` after every change to the dataset.** It mechanically enforces every rule documented below (risk/label agreement, the `risk_level: 5` PPE rule, the unanswered-follow-up escalation rule, canonical question wording, enum validity, duplicate detection). Several of these rules exist because a real mistake was caught in review — the validator is what stops them recurring at scale.
 
 **Never commit real user data or PII here** — every record must be synthetic/authored, matching the shape below.
 
@@ -63,7 +64,7 @@ The general "not sure what tools I have on hand" wording is treated differently 
 
 Currently-established `field` values (matching the live placeholder's hardcoded fields — extend this set once Phase 5's real catalog covers more hazards, e.g. a fall-height/stable-footing confirmation for roofing):
 
-- `power_isolated` — relevant whenever `electrical_shock` is a hazard, regardless of the task's `category` (e.g. it applies to the HVAC thermostat-wiring example and the tiling-near-outlets example too, not just `category: "electrical"` — hazard-driven, not category-driven)
+- `power_isolated` — relevant whenever the task involves **working on or cutting into fixed wiring/circuits**, regardless of the task's `category` (e.g. it applies to the HVAC thermostat-wiring and tiling wall-chasing examples too, not just `category: "electrical"` — hazard-driven, not category-driven). It is **not** triggered merely by using a corded power tool near water or by any incidental `electrical_shock` risk: "isolate the circuit at the breaker" is a meaningless instruction when the shock risk comes from a wet tile saw's own supply rather than from a circuit you're about to touch. Tasks like that carry their own hazards (`cuts_lacerations`, `hearing_damage`) without this follow-up.
 - `load_bearing_confirmed` — the question ("confirmed the wall or structure involved is NOT load-bearing?") only makes sense when the task is actually **deciding whether to remove/demolish** a wall or structural element whose load-bearing status is genuinely in question, *and* `task_text` doesn't already address that status one way or another (see the redundancy rule above — "not sure if it's load-bearing" already answers it, so that example correctly has `followup_questions: []` too, not just the confirmed-yes/no ones). It does **not** apply just because `structural_collapse` is present as a hazard tag — a foundation-wall crack *repair* (not removal) and a new deck *build* (not a removal decision at all) both have `structural_collapse` as a hazard but no "is this load-bearing?" question to resolve, since nothing is being evaluated for removal. See `"remove a wall between the kitchen and living room to create an open floor plan"` (load-bearing status never mentioned at all) for the one seed example that actually keeps this follow-up.
 - `gas_line_present` — relevant only when gas proximity is genuinely **uncertain** (e.g. digging a trench, drilling into a wall where a line might be routed unseen) — a *preventive* check. It does **not** apply when the task's premise already states a gas hazard is present/active (a leaking water heater, an already-cracked heat exchanger, installing a new gas appliance) — "confirmed there is no gas line present" is a non-sequitur once gas is already an established fact in `task_text`, not an open question to resolve. Those examples correctly have `followup_questions: []` — the risk level comes straight from the `gas_leak`/`fire` hazard tags, no follow-up needed. See `"dig a small trench in my backyard..."` for the correctly-scoped usage.
 
@@ -109,28 +110,55 @@ See the four `"install a ceiling fan"` entries in `seed_examples.json` for this 
 
 ### Hazard taxonomy (extend if a real seed example needs a tag not listed)
 
-`electrical_shock`, `fall_from_height`, `structural_collapse`, `gas_leak`, `buried_utility_strike`, `fire`, `chemical_exposure`, `cuts_lacerations`, `respiratory_hazard`, `water_damage`, `burns`, `none`
+`electrical_shock`, `fall_from_height`, `structural_collapse`, `gas_leak`, `buried_utility_strike`, `fire`, `chemical_exposure`, `cuts_lacerations`, `respiratory_hazard`, `asbestos_exposure`, `water_damage`, `burns`, `heavy_object_handling`, `hearing_damage`, `confined_space`, `none`
+
+`none` is exclusive — it cannot be combined with any other tag (the validator enforces this).
 
 Note: `gas_leak` means gas is actually present/leaking/being connected (an active hazard, stated as fact in `task_text`). `buried_utility_strike` means the risk is *accidentally hitting* an unknown buried line (digging, trenching) — proximity is uncertain, nothing has actually leaked. Don't conflate the two: an active leak and the risk of causing one someday are different hazards with different urgency.
+
+`asbestos_exposure` is tracked separately from the general `respiratory_hazard` tag because it drives a different recommendation (licensed removal, not just a dust mask) — typically pair the two.
+
+### PPE vocabulary
+
+`safety_glasses`, `work_gloves`, `insulated_gloves`, `rubber_gloves`, `dust_mask`, `respirator_mask`, `safety_harness`, `hearing_protection`, `knee_pads`, `steel_toe_boots`, `hard_hat`
+
+Use `dust_mask` for nuisance dust and `respirator_mask` where the hazard is a vapour, solvent, fibre, or asbestos — they are not interchangeable. Extend this list if a real example needs an item not covered, and update `ml/validate_dataset.py` to match.
 
 ### Professional categories
 
 `electrician`, `plumber`, `carpenter`, `mason`, `structural_engineer`, `roofer`, `hvac_technician`, `general_contractor`, `null` (for risk levels 1–2, no professional needed)
 
-## What "review" means for the seed scaffold
+Levels 1–2 must have `null`; levels 3–5 must name one (both enforced by the validator). Use `structural_engineer` rather than a trade whenever the core question is whether the structure can safely be altered at all, and `general_contractor` when the task spans trades or has no single obvious specialist.
 
-For each example in `seed_examples.json`:
-1. Does `risk_level`/`risk_label` actually match how a competent tradesperson would judge this task? (Cross-check against `srs.md` §9's rule catalog for the safety-critical ones — gas, live electrical, load-bearing, height, water+electricity.)
-2. Are `hazards` complete — not missing an obvious one?
-3. Is `task_text` phrased naturally, the way a real non-expert user would type it (not a textbook description)?
+## Current composition
 
-Then: **write 15–30 more examples per category** (aim for good spread across all 5 risk levels within each category, not just the extremes) until the file has 200–300 total. Category+risk-level combinations that don't make physical sense (e.g. `painting` at `risk_level 5`) can be left thin or skipped — don't force artificial examples just to fill a grid cell.
+256 examples. `python ml/validate_dataset.py` prints the live breakdown; as of the expansion:
 
-## Next steps after seed review
+| Category | n | | `risk_level` | n |
+|---|---|---|---|---|
+| electrical | 36 | | 1 — safe_diy | 62 |
+| plumbing | 32 | | 2 — diy_with_supervision | 52 |
+| carpentry | 30 | | 3 — professional_recommended | 53 |
+| general | 30 | | 4 — professional_required | 45 |
+| hvac | 28 | | 5 — dangerous | 44 |
+| masonry / painting / roofing / tiling | 25 each | | | |
+
+No class is smaller than ~17% of the largest, so no resampling should be needed for the Phase 3 baseline. 21 examples carry a `followup_questions` entry (22 questions total).
+
+Deliberate near-duplicates: three pairs of examples share a base task and differ only in what `task_text` states (the `"install a ceiling fan"` set, the two `"remove a wall between the kitchen and living room"` variants, the two `"light switch cover plate"` variants). These exist specifically to teach the model that the *stated information* — not the task type — drives the follow-up and risk outcome. Preserve them through the train/val/test split by keeping each pair in the same split, or they will leak.
+
+## Reviewing an example
+
+1. Does `risk_level`/`risk_label` match how a competent tradesperson would judge it? (Cross-check `srs.md` §9's rule catalog for the safety-critical ones — gas, live electrical, load-bearing, height, water+electricity.)
+2. Are `hazards` complete — not missing an obvious one, and not over-tagged with one that doesn't fit (see the `gas_leak` vs `buried_utility_strike` note above)?
+3. Is `task_text` phrased naturally, the way a real non-expert would type it (not a textbook description)?
+4. Does each `followup_questions` entry survive all three scoping rules — genuinely unaddressed in `task_text`, the right field for the situation, and the question's wording actually answerable for this task?
+
+## Next steps
 
 1. Template-based variation generation (paraphrase/parameterize seeds to multiply coverage)
 2. Weak-labeling rules for obvious cases (auto-label unambiguous template variants)
 3. Standards-based review of a sample of high-risk-labeled examples (OSHA Focus Four, electrical/building codes, PPE sheets — see `memory.md`'s provisional Phase 1 resolution, no live supervisor available)
-4. Train/val/test split → `train.json` / `val.json` / `test.json`
+4. Train/val/test split → `train.json` / `val.json` / `test.json` (keep the deliberate near-duplicate pairs above in the same split)
 
 Exit check (`phases.md` Phase 2): ≥500 labeled examples total, reviewed sample shows acceptable label quality with a documented agreement rate.

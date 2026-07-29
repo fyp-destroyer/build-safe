@@ -228,11 +228,31 @@
     "risk_label": "dangerous",
     "professional_category": "plumber",
     "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "task_text": "dig a small trench in my backyard to run a new water line for a garden faucet",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "shovel",
+      "pipe cutter"
+    ],
+    "hazards": [
+      "gas_leak"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
     "followup_questions": [
       {
         "field": "gas_line_present",
         "question": "Have you confirmed there is no gas line present near this work area?",
-        "answer": false
+        "answer": null
       }
     ]
   },
@@ -635,13 +655,7 @@
       "safety_glasses",
       "work_gloves"
     ],
-    "followup_questions": [
-      {
-        "field": "gas_line_present",
-        "question": "Have you confirmed there is no gas line present near this work area?",
-        "answer": false
-      }
-    ]
+    "followup_questions": []
   },
   {
     "task_text": "the furnace heat exchanger is cracked and I think it's leaking carbon monoxide",
@@ -657,13 +671,7 @@
     "risk_label": "dangerous",
     "professional_category": "hvac_technician",
     "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "gas_line_present",
-        "question": "Have you confirmed there is no gas line present near this work area?",
-        "answer": false
-      }
-    ]
+    "followup_questions": []
   },
   {
     "task_text": "replace a few loose shingles on a single-story roof",

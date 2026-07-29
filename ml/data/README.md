@@ -23,7 +23,7 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
   "risk_level": 3,
   "risk_label": "professional_recommended",
   "professional_category": "electrician",
-  "required_ppe": ["insulated_gloves", "safety_glasses"]
+  "suggested_ppe": ["insulated_gloves", "safety_glasses"]
 }
 ```
 
@@ -37,7 +37,11 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
 | `risk_level` | int 1–5 | Matches the backend's `risk_assessments.risk_level` column (`apps/backend/schemas/assessment.py`) — 1=safest, 5=most dangerous. **This is the field the classifier actually trains against.** |
 | `risk_label` | string | Human-readable mirror of `risk_level`, one of the 5 below — kept for readability only, must always agree with `risk_level` |
 | `professional_category` | string \| null | One of the professional-category tags below, or `null` if risk level doesn't warrant one (typically levels 1–2) |
-| `required_ppe` | string[] | PPE items a competent person would use for this task; `[]` only for genuinely no-PPE tasks |
+| `suggested_ppe` | string[] | PPE items a competent person would use for this task; `[]` only for genuinely no-PPE tasks. **Dataset-only naming** — the live backend/frontend still use `required_ppe` (see note below) |
+
+**Note on `required_ppe` vs `suggested_ppe`:** the dataset schema uses `suggested_ppe` (softer framing — the app recommends, it can't enforce PPE use). The already-built backend model/API/frontend (`apps/backend/models/risk_assessment.py`, `schemas/recommendation.py`, `RiskCard.tsx`, etc.) still use `required_ppe` — that's a deliberate scope decision, not an oversight: renaming the live DB column/API contract/frontend types is a separate cross-stack change, not done as part of this dataset work. Revisit consistency (rename one way or the other) as a dedicated task later.
+
+**Note on PPE vs. confirmed power/gas isolation:** don't hardcode "electrical/gas work never needs PPE once isolated" as a blanket rule — the system is deliberately built to never assume safety absent explicit confirmation (`rules.md` §4, the `power_isolated` follow-up question). Instead, capture this as **paired examples**: a default variant where isolation is *not* stated (higher risk_level, full PPE, `electrical_shock`/`gas_leak` hazard present) and an explicit variant where `task_text` states isolation was confirmed (lower risk_level, shock/gas-related PPE dropped, but non-electrical hazards like `fall_from_height` stay). See the two `"install a ceiling fan"` entries in `seed_examples.json` for the pattern — write more paired examples like this for other electrical/gas seeds during expansion.
 
 ### 9 locked task categories
 

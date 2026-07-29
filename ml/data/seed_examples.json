@@ -12,7 +12,7 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "required_ppe": []
+    "suggested_ppe": []
   },
   {
     "task_text": "install a ceiling fan in my bedroom",
@@ -29,8 +29,27 @@
     "risk_level": 3,
     "risk_label": "professional_recommended",
     "professional_category": "electrician",
-    "required_ppe": [
+    "suggested_ppe": [
       "insulated_gloves",
+      "safety_glasses"
+    ]
+  },
+  {
+    "task_text": "install a ceiling fan in my bedroom - I already switched off the breaker for that circuit and checked it's dead with a voltage tester",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
       "safety_glasses"
     ]
   },
@@ -48,7 +67,7 @@
     "risk_level": 4,
     "risk_label": "professional_required",
     "professional_category": "electrician",
-    "required_ppe": [
+    "suggested_ppe": [
       "insulated_gloves",
       "safety_glasses"
     ]
@@ -66,7 +85,7 @@
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "electrician",
-    "required_ppe": [
+    "suggested_ppe": [
       "insulated_gloves"
     ]
   },
@@ -83,7 +102,7 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "rubber_gloves"
     ]
   },
@@ -100,7 +119,7 @@
     "risk_level": 2,
     "risk_label": "diy_with_supervision",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "rubber_gloves"
     ]
   },
@@ -118,7 +137,7 @@
     "risk_level": 3,
     "risk_label": "professional_recommended",
     "professional_category": "plumber",
-    "required_ppe": [
+    "suggested_ppe": [
       "rubber_gloves"
     ]
   },
@@ -136,7 +155,7 @@
     "risk_level": 4,
     "risk_label": "professional_required",
     "professional_category": "plumber",
-    "required_ppe": [
+    "suggested_ppe": [
       "rubber_gloves",
       "safety_glasses"
     ]
@@ -153,7 +172,7 @@
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "plumber",
-    "required_ppe": []
+    "suggested_ppe": []
   },
   {
     "task_text": "build a simple wooden bookshelf for the living room",
@@ -169,7 +188,7 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses"
     ]
   },
@@ -187,7 +206,7 @@
     "risk_level": 2,
     "risk_label": "diy_with_supervision",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
     ]
@@ -208,7 +227,7 @@
     "risk_level": 3,
     "risk_label": "professional_recommended",
     "professional_category": "carpenter",
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
     ]
@@ -227,7 +246,7 @@
     "risk_level": 4,
     "risk_label": "professional_required",
     "professional_category": "structural_engineer",
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses",
       "dust_mask",
       "work_gloves"
@@ -246,7 +265,7 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
     ]
@@ -265,7 +284,7 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "work_gloves"
     ]
   },
@@ -283,7 +302,7 @@
     "risk_level": 3,
     "risk_label": "professional_recommended",
     "professional_category": "mason",
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses",
       "dust_mask"
     ]
@@ -301,7 +320,7 @@
     "risk_level": 4,
     "risk_label": "professional_required",
     "professional_category": "structural_engineer",
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses",
       "dust_mask",
       "work_gloves"
@@ -321,7 +340,7 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "required_ppe": []
+    "suggested_ppe": []
   },
   {
     "task_text": "paint the exterior of a two-story house using an extension ladder",
@@ -338,7 +357,7 @@
     "risk_level": 2,
     "risk_label": "diy_with_supervision",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses"
     ]
   },
@@ -355,7 +374,7 @@
     "risk_level": 2,
     "risk_label": "diy_with_supervision",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "respirator_mask",
       "safety_glasses"
     ]
@@ -374,7 +393,7 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
     ]
@@ -394,7 +413,7 @@
     "risk_level": 2,
     "risk_label": "diy_with_supervision",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
     ]
@@ -414,7 +433,7 @@
     "risk_level": 3,
     "risk_label": "professional_recommended",
     "professional_category": "general_contractor",
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
     ]
@@ -430,7 +449,7 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "required_ppe": []
+    "suggested_ppe": []
   },
   {
     "task_text": "install a new thermostat wired directly to the furnace",
@@ -446,7 +465,7 @@
     "risk_level": 3,
     "risk_label": "professional_recommended",
     "professional_category": "hvac_technician",
-    "required_ppe": [
+    "suggested_ppe": [
       "insulated_gloves"
     ]
   },
@@ -465,7 +484,7 @@
     "risk_level": 4,
     "risk_label": "professional_required",
     "professional_category": "hvac_technician",
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
     ]
@@ -483,7 +502,7 @@
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "hvac_technician",
-    "required_ppe": []
+    "suggested_ppe": []
   },
   {
     "task_text": "replace a few loose shingles on a single-story roof",
@@ -499,7 +518,7 @@
     "risk_level": 3,
     "risk_label": "professional_recommended",
     "professional_category": "roofer",
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_harness",
       "work_gloves"
     ]
@@ -520,7 +539,7 @@
     "risk_level": 4,
     "risk_label": "professional_required",
     "professional_category": "roofer",
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_harness",
       "work_gloves"
     ]
@@ -538,7 +557,7 @@
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "roofer",
-    "required_ppe": []
+    "suggested_ppe": []
   },
   {
     "task_text": "assemble a flat-pack wardrobe from an instruction manual",
@@ -554,7 +573,7 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "required_ppe": []
+    "suggested_ppe": []
   },
   {
     "task_text": "hang a picture frame on a drywall wall",
@@ -570,7 +589,7 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "required_ppe": []
+    "suggested_ppe": []
   },
   {
     "task_text": "mount a heavy TV on a wall using a stud finder",
@@ -587,7 +606,7 @@
     "risk_level": 2,
     "risk_label": "diy_with_supervision",
     "professional_category": null,
-    "required_ppe": [
+    "suggested_ppe": [
       "safety_glasses"
     ]
   },
@@ -605,7 +624,7 @@
     "risk_level": 3,
     "risk_label": "professional_recommended",
     "professional_category": "general_contractor",
-    "required_ppe": [
+    "suggested_ppe": [
       "work_gloves"
     ]
   }

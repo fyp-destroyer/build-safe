@@ -12,7 +12,8 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "suggested_ppe": []
+    "suggested_ppe": [],
+    "followup_questions": []
   },
   {
     "task_text": "install a ceiling fan in my bedroom",
@@ -32,6 +33,13 @@
     "suggested_ppe": [
       "insulated_gloves",
       "safety_glasses"
+    ],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
     ]
   },
   {
@@ -51,6 +59,13 @@
     "professional_category": null,
     "suggested_ppe": [
       "safety_glasses"
+    ],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": true
+      }
     ]
   },
   {
@@ -72,6 +87,13 @@
     "suggested_ppe": [
       "insulated_gloves",
       "safety_glasses"
+    ],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": false
+      }
     ]
   },
   {
@@ -91,6 +113,13 @@
     "suggested_ppe": [
       "insulated_gloves",
       "safety_glasses"
+    ],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
     ]
   },
   {
@@ -108,7 +137,8 @@
     "professional_category": "electrician",
     "suggested_ppe": [
       "insulated_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "unclog a bathroom sink drain with a plunger",
@@ -125,7 +155,8 @@
     "professional_category": null,
     "suggested_ppe": [
       "rubber_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "replace a leaking faucet aerator and washer",
@@ -142,7 +173,8 @@
     "professional_category": null,
     "suggested_ppe": [
       "rubber_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "install a new toilet in the guest bathroom",
@@ -160,7 +192,8 @@
     "professional_category": "plumber",
     "suggested_ppe": [
       "rubber_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "reroute the main water shutoff valve and copper piping",
@@ -179,7 +212,8 @@
     "suggested_ppe": [
       "rubber_gloves",
       "safety_glasses"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "my gas water heater is hissing and I smell gas near it",
@@ -193,7 +227,14 @@
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "plumber",
-    "suggested_ppe": []
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": false
+      }
+    ]
   },
   {
     "task_text": "build a simple wooden bookshelf for the living room",
@@ -211,7 +252,8 @@
     "professional_category": null,
     "suggested_ppe": [
       "safety_glasses"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "install a new interior door and frame",
@@ -230,7 +272,8 @@
     "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "build a raised deck attached to the back of the house",
@@ -251,6 +294,13 @@
     "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
+    ],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
     ]
   },
   {
@@ -271,6 +321,46 @@
       "safety_glasses",
       "dust_mask",
       "work_gloves"
+    ],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "task_text": "remove a wall in my basement near the gas meter - not totally sure if it's load-bearing",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "sledgehammer",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "gas_leak"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "work_gloves"
+    ],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      },
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": null
+      }
     ]
   },
   {
@@ -289,7 +379,8 @@
     "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "build a small brick planter box in the garden",
@@ -307,7 +398,8 @@
     "professional_category": null,
     "suggested_ppe": [
       "work_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "repair a cracked section of the foundation wall in the basement",
@@ -326,6 +418,13 @@
     "suggested_ppe": [
       "safety_glasses",
       "dust_mask"
+    ],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
     ]
   },
   {
@@ -345,6 +444,13 @@
       "safety_glasses",
       "dust_mask",
       "work_gloves"
+    ],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": false
+      }
     ]
   },
   {
@@ -361,7 +467,8 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "suggested_ppe": []
+    "suggested_ppe": [],
+    "followup_questions": []
   },
   {
     "task_text": "paint the exterior of a two-story house using an extension ladder",
@@ -380,7 +487,8 @@
     "professional_category": null,
     "suggested_ppe": [
       "safety_glasses"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "spray paint a ceiling with oil-based paint in a small closed room",
@@ -398,7 +506,8 @@
     "suggested_ppe": [
       "respirator_mask",
       "safety_glasses"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "retile a small bathroom backsplash above the sink",
@@ -417,7 +526,8 @@
     "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "tile a shower floor including the waterproofing membrane",
@@ -437,7 +547,8 @@
     "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "tile a large kitchen floor including cutting tiles near electrical outlets",
@@ -457,6 +568,13 @@
     "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
+    ],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
     ]
   },
   {
@@ -470,7 +588,8 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "suggested_ppe": []
+    "suggested_ppe": [],
+    "followup_questions": []
   },
   {
     "task_text": "install a new thermostat wired directly to the furnace",
@@ -488,6 +607,13 @@
     "professional_category": "hvac_technician",
     "suggested_ppe": [
       "insulated_gloves"
+    ],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
     ]
   },
   {
@@ -508,6 +634,13 @@
     "suggested_ppe": [
       "safety_glasses",
       "work_gloves"
+    ],
+    "followup_questions": [
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": false
+      }
     ]
   },
   {
@@ -523,7 +656,14 @@
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "hvac_technician",
-    "suggested_ppe": []
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": false
+      }
+    ]
   },
   {
     "task_text": "replace a few loose shingles on a single-story roof",
@@ -542,7 +682,8 @@
     "suggested_ppe": [
       "safety_harness",
       "work_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "repair a large damaged section of roof on a steep two-story house",
@@ -563,7 +704,8 @@
     "suggested_ppe": [
       "safety_harness",
       "work_gloves"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "go up on a wet, steep roof during the rain to fix a leak right now",
@@ -578,7 +720,8 @@
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "roofer",
-    "suggested_ppe": []
+    "suggested_ppe": [],
+    "followup_questions": []
   },
   {
     "task_text": "assemble a flat-pack wardrobe from an instruction manual",
@@ -594,7 +737,8 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "suggested_ppe": []
+    "suggested_ppe": [],
+    "followup_questions": []
   },
   {
     "task_text": "hang a picture frame on a drywall wall",
@@ -610,7 +754,8 @@
     "risk_level": 1,
     "risk_label": "safe_diy",
     "professional_category": null,
-    "suggested_ppe": []
+    "suggested_ppe": [],
+    "followup_questions": []
   },
   {
     "task_text": "mount a heavy TV on a wall using a stud finder",
@@ -629,7 +774,8 @@
     "professional_category": null,
     "suggested_ppe": [
       "safety_glasses"
-    ]
+    ],
+    "followup_questions": []
   },
   {
     "task_text": "clear out clogged gutters using a ladder at a two-story house",
@@ -647,6 +793,7 @@
     "professional_category": "general_contractor",
     "suggested_ppe": [
       "work_gloves"
-    ]
+    ],
+    "followup_questions": []
   }
 ]

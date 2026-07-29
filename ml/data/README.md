@@ -23,7 +23,14 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
   "risk_level": 3,
   "risk_label": "professional_recommended",
   "professional_category": "electrician",
-  "suggested_ppe": ["insulated_gloves", "safety_glasses"]
+  "suggested_ppe": ["insulated_gloves", "safety_glasses"],
+  "followup_questions": [
+    {
+      "field": "power_isolated",
+      "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+      "answer": null
+    }
+  ]
 }
 ```
 
@@ -38,6 +45,19 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
 | `risk_label` | string | Human-readable mirror of `risk_level`, one of the 5 below — kept for readability only, must always agree with `risk_level` |
 | `professional_category` | string \| null | One of the professional-category tags below, or `null` if risk level doesn't warrant one (typically levels 1–2) |
 | `suggested_ppe` | string[] | PPE items a competent person would use for this task; `[]` only for genuinely no-PPE tasks. **Dataset-only naming** — the live backend/frontend still use `required_ppe` (see note below) |
+| `followup_questions` | object[] | **Variable-length** — zero or more `{field, question, answer}` objects, one per safety-critical follow-up relevant to this task. Mirrors the backend's real `field`/`question` shape (`schemas/job.py`'s `FollowupPrompt`) and default phrasing (`ai/rule_engine/llm_assist.py`'s `_DEFAULT_FOLLOWUP_QUESTIONS`). See below for `field`/`answer` semantics. |
+
+### `followup_questions` — field and answer semantics
+
+**Not every example needs the same number of entries** — most have 0, some have 1, and a task that touches multiple hazards (e.g. a wall removal near a gas line) can have 2+. Don't pad examples with irrelevant follow-ups just to make the list non-empty, and don't force every category to have exactly one.
+
+Currently-established `field` values (matching the live placeholder's hardcoded fields — extend this set once Phase 5's real catalog covers more hazards, e.g. a fall-height/stable-footing confirmation for roofing):
+
+- `power_isolated` — relevant whenever `electrical_shock` is a hazard, regardless of the task's `category` (e.g. it applies to the HVAC thermostat-wiring example and the tiling-near-outlets example too, not just `category: "electrical"` — hazard-driven, not category-driven)
+- `load_bearing_confirmed` — relevant whenever `structural_collapse` is a hazard (wall/structure removal or alteration)
+- `gas_line_present` — relevant whenever `gas_leak` is a hazard
+
+`answer` is `true`, `false`, or `null` — **the distinction matters and mirrors a real bug that was found and fixed in the backend** (see `memory.md`, 2026-07-19 safety-gate bug): `null` means the question was never actually answered (the ambiguous/default case — never assume safety), while `false` means the user explicitly answered in the unsafe direction (e.g. "no, I haven't isolated the power" or "no, it's not possible right now"). Both should escalate risk, but they are not the same state, and a real implementation must not conflate "answered unsafely" with "never answered."
 
 **Note on `required_ppe` vs `suggested_ppe`:** the dataset schema uses `suggested_ppe` (softer framing — the app recommends, it can't enforce PPE use). The already-built backend model/API/frontend (`apps/backend/models/risk_assessment.py`, `schemas/recommendation.py`, `RiskCard.tsx`, etc.) still use `required_ppe` — that's a deliberate scope decision, not an oversight: renaming the live DB column/API contract/frontend types is a separate cross-stack change, not done as part of this dataset work. Revisit consistency (rename one way or the other) as a dedicated task later.
 

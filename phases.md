@@ -29,11 +29,11 @@ Each phase has a clear deliverable and an exit check. Don't start a phase until 
 **Deliverable:** labeled dataset, hazard taxonomy, tool mappings, train/val/test split.
 
 - [x] 200–300 hand-written seed examples across categories — **256 in `ml/data/seed_examples.json`** (2026-07-29), all 9 categories (25–36 each) and all 5 risk levels (44–62 each). Schema, scoping rules, and labelling conventions documented in `ml/data/README.md`; `ml/validate_dataset.py` mechanically enforces them.
-- [ ] Template-based task variation generation
-- [ ] Weak-labeling rules for obvious cases
+- [x] Template-based task variation generation — **299 variants via `ml/generate_variations.py`** (2026-07-29): conversational rephrasing (256) + risk-neutral room substitution (26) + confirmation-stripping (17). Deterministic and re-runnable.
+- [x] Weak-labeling rules for obvious cases — three rules, all constrained so none can lower a risk level (`rules.md` §4.2): label-preserving inheritance for rephrase/room-swap, escalation-only for confirmation-stripping. De-escalation is deliberately **not** automated. Enforced by `ml/validate_dataset.py`.
 - [ ] Expert review of a sample of high-risk-labeled examples
-- [ ] Final split committed to `ml/data/` (never commit PII/real user data here)
-  **Exit check:** ≥500 labeled examples, reviewed sample shows acceptable label quality (agreement rate documented).
+- [ ] Final split committed to `ml/data/` (never commit PII/real user data here) — **must group by `variant_of`**: a variant shares nearly all its text with its parent, so a naive split leaks train into test.
+  **Exit check:** ≥500 labeled examples, reviewed sample shows acceptable label quality (agreement rate documented). — **555 labeled examples (256 hand-written + 299 generated) as of 2026-07-29, so the count half is met.** The reviewed-sample/agreement-rate half is still outstanding.
 
 ## Phase 3 — Baseline ML Model
 

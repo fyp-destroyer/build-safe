@@ -1,5 +1,6 @@
 [
   {
+    "id": "seed-0001",
     "task_text": "replace a light switch cover plate in the hallway",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -16,6 +17,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0002",
     "task_text": "replace a light switch cover plate in the hallway, not sure what tools I have on hand",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -36,6 +38,7 @@
     ]
   },
   {
+    "id": "seed-0003",
     "task_text": "install a ceiling fan in my bedroom",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -60,6 +63,7 @@
     ]
   },
   {
+    "id": "seed-0004",
     "task_text": "install a ceiling fan in my bedroom - I already switched off the breaker for that circuit and checked it's dead with a voltage tester",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -80,6 +84,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0005",
     "task_text": "install a ceiling fan in my bedroom - I can't get to the breaker panel (landlord keeps it locked), so I'll wear insulated gloves and use a non-contact voltage tester before touching any wires",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -102,6 +107,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0006",
     "task_text": "install a ceiling fan in my bedroom, not sure what tools I have on hand",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -128,6 +134,7 @@
     ]
   },
   {
+    "id": "seed-0007",
     "task_text": "rewire the electrical subpanel in my garage",
     "category": "electrical",
     "user_skill": "Experienced",
@@ -151,6 +158,7 @@
     ]
   },
   {
+    "id": "seed-0008",
     "task_text": "there's a live wire sparking near a water leak in my basement",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -167,6 +175,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0009",
     "task_text": "unclog a bathroom sink drain with a plunger",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -185,6 +194,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0010",
     "task_text": "replace a leaking faucet aerator and washer",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -203,6 +213,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0011",
     "task_text": "install a new toilet in the guest bathroom",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -222,6 +233,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0012",
     "task_text": "reroute the main water shutoff valve and copper piping",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -242,6 +254,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0013",
     "task_text": "my gas water heater is hissing and I smell gas near it",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -257,6 +270,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0014",
     "task_text": "dig a small trench in my backyard to run a new water line for a garden faucet",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -280,6 +294,7 @@
     ]
   },
   {
+    "id": "seed-0015",
     "task_text": "build a simple wooden bookshelf for the living room",
     "category": "carpentry",
     "user_skill": "Beginner",
@@ -299,6 +314,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0016",
     "task_text": "install a new interior door and frame",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -319,6 +335,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0017",
     "task_text": "build a raised deck attached to the back of the house",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -341,6 +358,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0018",
     "task_text": "remove a wall between the kitchen and living room to create an open floor plan",
     "category": "carpentry",
     "user_skill": "Experienced",
@@ -364,6 +382,7 @@
     ]
   },
   {
+    "id": "seed-0019",
     "task_text": "remove a wall between the kitchen and living room, not sure if it's load-bearing",
     "category": "carpentry",
     "user_skill": "Experienced",
@@ -385,6 +404,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0020",
     "task_text": "remove a wall in my basement near the gas meter - not totally sure if it's load-bearing",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -409,6 +429,7 @@
     ]
   },
   {
+    "id": "seed-0021",
     "task_text": "repoint the mortar on a small garden wall",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -428,6 +449,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0022",
     "task_text": "build a small brick planter box in the garden",
     "category": "masonry",
     "user_skill": "Beginner",
@@ -447,6 +469,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0023",
     "task_text": "repair a cracked section of the foundation wall in the basement",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -467,6 +490,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0024",
     "task_text": "remove a load-bearing brick wall in the basement to open up the space",
     "category": "masonry",
     "user_skill": "Experienced",
@@ -487,6 +511,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0025",
     "task_text": "paint a bedroom wall a new color with a roller",
     "category": "painting",
     "user_skill": "Beginner",
@@ -504,6 +529,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0026",
     "task_text": "paint the exterior of a two-story house using an extension ladder",
     "category": "painting",
     "user_skill": "Some experience",
@@ -524,6 +550,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0027",
     "task_text": "spray paint a ceiling with oil-based paint in a small closed room",
     "category": "painting",
     "user_skill": "Beginner",
@@ -543,6 +570,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0028",
     "task_text": "retile a small bathroom backsplash above the sink",
     "category": "tiling",
     "user_skill": "Beginner",
@@ -563,6 +591,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0029",
     "task_text": "tile a shower floor including the waterproofing membrane",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -584,6 +613,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0030",
     "task_text": "tile a large kitchen floor including cutting tiles near electrical outlets",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -608,6 +638,7 @@
     ]
   },
   {
+    "id": "seed-0031",
     "task_text": "clean or replace the air filter on my HVAC unit",
     "category": "hvac",
     "user_skill": "Beginner",
@@ -622,6 +653,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0032",
     "task_text": "install a new thermostat wired directly to the furnace",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -645,6 +677,7 @@
     ]
   },
   {
+    "id": "seed-0033",
     "task_text": "install a new gas furnace unit in the basement",
     "category": "hvac",
     "user_skill": "Experienced",
@@ -666,6 +699,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0034",
     "task_text": "the furnace heat exchanger is cracked and I think it's leaking carbon monoxide",
     "category": "hvac",
     "user_skill": "Beginner",
@@ -682,6 +716,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0035",
     "task_text": "replace a few loose shingles on a single-story roof",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -702,6 +737,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0036",
     "task_text": "repair a large damaged section of roof on a steep two-story house",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -724,6 +760,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0037",
     "task_text": "go up on a wet, steep roof during the rain to fix a leak right now",
     "category": "roofing",
     "user_skill": "Beginner",
@@ -740,6 +777,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0038",
     "task_text": "assemble a flat-pack wardrobe from an instruction manual",
     "category": "general",
     "user_skill": "Beginner",
@@ -757,6 +795,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0039",
     "task_text": "hang a picture frame on a drywall wall",
     "category": "general",
     "user_skill": "Beginner",
@@ -774,6 +813,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0040",
     "task_text": "mount a heavy TV on a wall using a stud finder",
     "category": "general",
     "user_skill": "Some experience",
@@ -794,6 +834,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0041",
     "task_text": "clear out clogged gutters using a ladder at a two-story house",
     "category": "general",
     "user_skill": "Some experience",
@@ -813,6 +854,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0042",
     "task_text": "change a burnt out light bulb in my kitchen ceiling fixture",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -829,6 +871,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0043",
     "task_text": "swap the 9V battery in my smoke detector",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -843,6 +886,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0044",
     "task_text": "reset the breaker that tripped when I ran the kettle and microwave at once",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -857,6 +901,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0045",
     "task_text": "plug a new surge protector in behind the TV",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -871,6 +916,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0046",
     "task_text": "replace the fabric shade on my floor lamp",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -885,6 +931,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0047",
     "task_text": "install a plug-in smart outlet adapter for my lamps",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -899,6 +946,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0048",
     "task_text": "rewire a table lamp with a frayed cord - it stays unplugged the entire time",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -918,6 +966,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0049",
     "task_text": "mount plug-in LED strip lighting under the kitchen cabinets",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -937,6 +986,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0050",
     "task_text": "replace a worn out wall outlet in the living room - I have switched the breaker off and confirmed it is dead with a tester",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -956,6 +1006,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0051",
     "task_text": "swap a light switch for a dimmer, breaker is off and I verified no voltage at the switch",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -975,6 +1026,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0052",
     "task_text": "replace a ceiling light fixture in the hallway - breaker off and verified dead with a tester",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -996,6 +1048,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0053",
     "task_text": "install a hardwired under-cabinet light off an existing junction box, power confirmed off",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -1017,6 +1070,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0054",
     "task_text": "replace a bathroom extractor fan wired into the lighting circuit, breaker off and tested",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -1039,6 +1093,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0055",
     "task_text": "install an outdoor motion sensor floodlight above the garage door, power isolated and verified",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -1061,6 +1116,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0056",
     "task_text": "replace a faulty GFCI outlet in the bathroom - breaker is off and confirmed dead",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -1082,6 +1138,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0057",
     "task_text": "move a light switch to the other side of the doorway, cutting into the wall - circuit isolated and tested",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -1104,6 +1161,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0058",
     "task_text": "add a new outlet on the garage wall - I do not know which breaker controls that circuit",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -1124,6 +1182,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0059",
     "task_text": "run a new dedicated circuit from the panel for an electric oven, I know the panel bus stays live even with the main breaker off",
     "category": "electrical",
     "user_skill": "Experienced",
@@ -1145,6 +1204,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0060",
     "task_text": "upgrade the fuse box to a modern consumer unit with RCDs, aware the service head stays live",
     "category": "electrical",
     "user_skill": "Experienced",
@@ -1166,6 +1226,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0061",
     "task_text": "install an EV charging point on the outside wall wired back to the consumer unit - board is off and locked out",
     "category": "electrical",
     "user_skill": "Experienced",
@@ -1188,6 +1249,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0062",
     "task_text": "replace the aluminium wiring in a 1970s house with copper, power confirmed off at the main",
     "category": "electrical",
     "user_skill": "Experienced",
@@ -1209,6 +1271,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0063",
     "task_text": "rewire the lighting circuit on the whole first floor, power is off at the consumer unit and verified",
     "category": "electrical",
     "user_skill": "Experienced",
@@ -1230,6 +1293,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0064",
     "task_text": "replace a wall outlet in the bedroom",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -1252,6 +1316,7 @@
     ]
   },
   {
+    "id": "seed-0065",
     "task_text": "install a hardwired dimmer switch in the dining room",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -1274,6 +1339,7 @@
     ]
   },
   {
+    "id": "seed-0066",
     "task_text": "run new wiring for an outdoor socket on the patio",
     "category": "electrical",
     "user_skill": "Some experience",
@@ -1298,6 +1364,7 @@
     ]
   },
   {
+    "id": "seed-0067",
     "task_text": "my breaker keeps tripping when I plug in the heater and now there is a burning smell from the panel",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -1313,6 +1380,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0068",
     "task_text": "water is dripping onto the fuse box from a pipe above it",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -1329,6 +1397,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0069",
     "task_text": "there are exposed wires hanging out of the ceiling where the old light was, and I am not sure if they are live",
     "category": "electrical",
     "user_skill": "Beginner",
@@ -1343,6 +1412,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0070",
     "task_text": "replace the flapper valve in my toilet tank",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -1359,6 +1429,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0071",
     "task_text": "swap out a worn shower head for a new one",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -1375,6 +1446,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0072",
     "task_text": "clear hair out of the shower drain with a drain snake",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -1393,6 +1465,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0073",
     "task_text": "replace the silicone sealant around the bath",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1412,6 +1485,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0074",
     "task_text": "fit a new toilet seat",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -1428,6 +1502,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0075",
     "task_text": "install a water filter attachment on the kitchen tap",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -1442,6 +1517,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0076",
     "task_text": "replace the flexible supply hose under the bathroom sink, water shut off at the isolation valve",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1460,6 +1536,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0077",
     "task_text": "fit a new kitchen mixer tap, mains water turned off at the stopcock",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1479,6 +1556,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0078",
     "task_text": "replace the leaking trap under the kitchen sink",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1498,6 +1576,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0079",
     "task_text": "plumb a washing machine into the existing hot and cold valves",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1518,6 +1597,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0080",
     "task_text": "replace the fill valve inside the toilet cistern, supply isolated first",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1536,6 +1616,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0081",
     "task_text": "install a new outdoor tap through the exterior wall",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1556,6 +1637,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0082",
     "task_text": "replace a leaking section of copper pipe under the floorboards using soldered joints",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1578,6 +1660,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0083",
     "task_text": "fit a new shower mixer valve into the tiled wall",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1598,6 +1681,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0084",
     "task_text": "move the kitchen sink to the other side of the room, extending the waste pipe",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1618,6 +1702,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0085",
     "task_text": "install a garden irrigation system, digging shallow trenches - I had the utility company mark the buried lines first",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1638,6 +1723,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0086",
     "task_text": "replace the hot water cylinder in the airing cupboard",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1660,6 +1746,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0087",
     "task_text": "replace the lead water main from the street into the house - the utility company has marked the buried services",
     "category": "plumbing",
     "user_skill": "Experienced",
@@ -1682,6 +1769,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0088",
     "task_text": "reroute the soil stack for a new upstairs bathroom",
     "category": "plumbing",
     "user_skill": "Experienced",
@@ -1704,6 +1792,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0089",
     "task_text": "install a whole new bathroom suite including moving the waste connections",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1726,6 +1815,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0090",
     "task_text": "connect a new gas hob to the existing gas supply pipe",
     "category": "plumbing",
     "user_skill": "Experienced",
@@ -1747,6 +1837,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0091",
     "task_text": "replace the pressure relief valve on a sealed central heating system",
     "category": "plumbing",
     "user_skill": "Experienced",
@@ -1767,6 +1858,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0092",
     "task_text": "dig a soakaway pit in the back garden for a new drain run",
     "category": "plumbing",
     "user_skill": "Some experience",
@@ -1790,6 +1882,7 @@
     ]
   },
   {
+    "id": "seed-0093",
     "task_text": "I can smell gas in the kitchen near the cooker connection",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -1805,6 +1898,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0094",
     "task_text": "sewage is backing up through the shower drain and there is standing waste water in the bathroom",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -1821,6 +1915,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0095",
     "task_text": "a pipe burst in the ceiling and water is pouring down onto the light fitting below",
     "category": "plumbing",
     "user_skill": "Beginner",
@@ -1839,6 +1934,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0096",
     "task_text": "put up a set of floating shelves in the alcove",
     "category": "carpentry",
     "user_skill": "Beginner",
@@ -1858,6 +1954,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0097",
     "task_text": "build a small planter box out of decking offcuts",
     "category": "carpentry",
     "user_skill": "Beginner",
@@ -1878,6 +1975,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0098",
     "task_text": "fit new handles on the kitchen cabinet doors",
     "category": "carpentry",
     "user_skill": "Beginner",
@@ -1894,6 +1992,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0099",
     "task_text": "sand and refinish a wooden coffee table",
     "category": "carpentry",
     "user_skill": "Beginner",
@@ -1913,6 +2012,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0100",
     "task_text": "replace a broken fence panel between the existing posts",
     "category": "carpentry",
     "user_skill": "Beginner",
@@ -1932,6 +2032,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0101",
     "task_text": "hang a solid wood internal door on its existing hinges",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -1953,6 +2054,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0102",
     "task_text": "build fitted wardrobes into the bedroom alcove",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -1976,6 +2078,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0103",
     "task_text": "lay laminate flooring in the living room, not sure what tools I have in the garage",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -1999,6 +2102,7 @@
     ]
   },
   {
+    "id": "seed-0104",
     "task_text": "fit skirting boards around a newly plastered room",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -2019,6 +2123,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0105",
     "task_text": "build a garden bench from treated timber",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -2039,6 +2144,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0106",
     "task_text": "build a timber garden shed on an existing concrete base",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -2062,6 +2168,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0107",
     "task_text": "replace rotten floor joists under the bathroom floor",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -2084,6 +2191,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0108",
     "task_text": "cut a new doorway through an internal stud partition - I checked the plans and it is a non load-bearing partition",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -2106,6 +2214,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0109",
     "task_text": "build a loft storage platform across the ceiling joists",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -2128,6 +2237,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0110",
     "task_text": "fit a loft hatch and drop-down ladder into the ceiling",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -2149,6 +2259,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0111",
     "task_text": "install a new staircase between the ground and first floor",
     "category": "carpentry",
     "user_skill": "Experienced",
@@ -2172,6 +2283,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0112",
     "task_text": "cut a large opening for bifold doors in the rear wall - a structural engineer has specified the steel lintel",
     "category": "carpentry",
     "user_skill": "Experienced",
@@ -2195,6 +2307,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0113",
     "task_text": "convert the loft into a bedroom, cutting into the roof trusses for a dormer",
     "category": "carpentry",
     "user_skill": "Experienced",
@@ -2218,6 +2331,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0114",
     "task_text": "remove the chimney breast in the bedroom but leave the stack above supported",
     "category": "carpentry",
     "user_skill": "Experienced",
@@ -2241,6 +2355,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0115",
     "task_text": "replace rotten timbers in the flat roof structure over the garage",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -2263,6 +2378,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0116",
     "task_text": "take down the stud wall between the two back bedrooms",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -2286,6 +2402,7 @@
     ]
   },
   {
+    "id": "seed-0117",
     "task_text": "knock through the wall under the stairs to make more storage space",
     "category": "carpentry",
     "user_skill": "Beginner",
@@ -2308,6 +2425,7 @@
     ]
   },
   {
+    "id": "seed-0118",
     "task_text": "remove a wall in a 1930s house - I have been told there might be asbestos in the old panelling",
     "category": "carpentry",
     "user_skill": "Some experience",
@@ -2332,6 +2450,7 @@
     ]
   },
   {
+    "id": "seed-0119",
     "task_text": "the floor upstairs feels bouncy and a crack is appearing along the ceiling below it",
     "category": "carpentry",
     "user_skill": "Beginner",
@@ -2346,6 +2465,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0120",
     "task_text": "fill a small crack in the render on the garden wall",
     "category": "masonry",
     "user_skill": "Beginner",
@@ -2365,6 +2485,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0121",
     "task_text": "point a few loose bricks on the front garden wall",
     "category": "masonry",
     "user_skill": "Beginner",
@@ -2385,6 +2506,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0122",
     "task_text": "lay a gravel path with edging stones along the side of the house",
     "category": "masonry",
     "user_skill": "Beginner",
@@ -2404,6 +2526,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0123",
     "task_text": "clean moss off the brick patio with a pressure washer",
     "category": "masonry",
     "user_skill": "Beginner",
@@ -2423,6 +2546,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0124",
     "task_text": "fill hairline cracks in the concrete garage floor",
     "category": "masonry",
     "user_skill": "Beginner",
@@ -2442,6 +2566,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0125",
     "task_text": "lay a small paved patio on a compacted sand base",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2464,6 +2589,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0126",
     "task_text": "build a low garden retaining wall two courses high",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2484,6 +2610,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0127",
     "task_text": "render a small section of exterior wall where the old render fell off",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2505,6 +2632,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0128",
     "task_text": "lay a concrete base for a garden shed",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2528,6 +2656,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0129",
     "task_text": "cut a new window opening in a single skin garage wall - confirmed it is a non structural garage partition",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2552,6 +2681,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0130",
     "task_text": "rebuild the top few courses of a chimney stack from a scaffold tower",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2574,6 +2704,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0131",
     "task_text": "repoint the whole front elevation of a two storey house from scaffolding",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2598,6 +2729,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0132",
     "task_text": "build a 1.8m high brick boundary wall along the garden edge",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2621,6 +2753,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0133",
     "task_text": "replace crumbling bricks in a spalled section of the exterior wall",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2643,6 +2776,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0134",
     "task_text": "underpin a section of foundation where the house has settled",
     "category": "masonry",
     "user_skill": "Experienced",
@@ -2666,6 +2800,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0135",
     "task_text": "install a steel lintel over a widened window opening in a solid brick wall",
     "category": "masonry",
     "user_skill": "Experienced",
@@ -2689,6 +2824,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0136",
     "task_text": "repair a bulging Victorian brick retaining wall holding back a raised garden",
     "category": "masonry",
     "user_skill": "Experienced",
@@ -2711,6 +2847,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0137",
     "task_text": "rebuild a leaning garden wall that has cracked along the mortar line",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2733,6 +2870,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0138",
     "task_text": "a large diagonal crack is running through the brickwork above the front door and it keeps getting wider",
     "category": "masonry",
     "user_skill": "Beginner",
@@ -2747,6 +2885,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0139",
     "task_text": "knock out part of the basement wall to fit a bigger window",
     "category": "masonry",
     "user_skill": "Some experience",
@@ -2770,6 +2909,7 @@
     ]
   },
   {
+    "id": "seed-0140",
     "task_text": "the garden retaining wall is bulging and leaning towards the neighbour's shed after the heavy rain",
     "category": "masonry",
     "user_skill": "Beginner",
@@ -2784,6 +2924,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0141",
     "task_text": "check the roof for missing tiles using binoculars from the garden",
     "category": "roofing",
     "user_skill": "Beginner",
@@ -2800,6 +2941,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0142",
     "task_text": "clear moss and debris from the gutter of a single storey porch at ground level",
     "category": "roofing",
     "user_skill": "Beginner",
@@ -2818,6 +2960,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0143",
     "task_text": "sweep leaves off a low flat garage roof I can reach from a step ladder",
     "category": "roofing",
     "user_skill": "Beginner",
@@ -2837,6 +2980,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0144",
     "task_text": "clear the gutters on a single storey extension from a step ladder",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -2855,6 +2999,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0145",
     "task_text": "fit gutter guards along a single storey rear extension, not sure what access equipment I have",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -2877,6 +3022,7 @@
     ]
   },
   {
+    "id": "seed-0146",
     "task_text": "seal a small crack in the felt roof of a low garden outbuilding",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -2898,6 +3044,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0147",
     "task_text": "replace a cracked ridge tile on a single storey bungalow roof",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -2918,6 +3065,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0148",
     "task_text": "reseal the flashing around the chimney on a single storey roof",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -2938,6 +3086,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0149",
     "task_text": "replace a section of guttering on a two storey house from a ladder",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -2957,6 +3106,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0150",
     "task_text": "apply a new layer of torch-on felt to the flat garage roof",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -2980,6 +3130,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0151",
     "task_text": "install a roof vent tile on a single storey extension",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -3000,6 +3151,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0152",
     "task_text": "strip and re-tile the entire roof of a two storey house",
     "category": "roofing",
     "user_skill": "Experienced",
@@ -3023,6 +3175,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0153",
     "task_text": "fit two velux windows into the pitched roof slope",
     "category": "roofing",
     "user_skill": "Experienced",
@@ -3045,6 +3198,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0154",
     "task_text": "replace rotten roof battens and underfelt across the rear slope",
     "category": "roofing",
     "user_skill": "Experienced",
@@ -3067,6 +3221,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0155",
     "task_text": "rebuild a sagging section of roof where a purlin has failed",
     "category": "roofing",
     "user_skill": "Experienced",
@@ -3089,6 +3244,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0156",
     "task_text": "clear a blocked valley gutter between two roof slopes on a three storey house",
     "category": "roofing",
     "user_skill": "Experienced",
@@ -3110,6 +3266,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0157",
     "task_text": "remove the old asbestos cement corrugated sheets from the garage roof",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -3126,6 +3283,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0158",
     "task_text": "get up on the roof to fix a leak while it is still icy from last night's frost",
     "category": "roofing",
     "user_skill": "Beginner",
@@ -3142,6 +3300,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0159",
     "task_text": "the roof is sagging visibly in the middle and I can see daylight through the ceiling upstairs",
     "category": "roofing",
     "user_skill": "Beginner",
@@ -3157,6 +3316,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0160",
     "task_text": "climb onto the third floor roof to reattach a satellite dish, I do not have a harness",
     "category": "roofing",
     "user_skill": "Some experience",
@@ -3174,6 +3334,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0161",
     "task_text": "a large tree branch has come through the roof in the storm and tiles are still falling off",
     "category": "roofing",
     "user_skill": "Beginner",
@@ -3189,6 +3350,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0162",
     "task_text": "walk across the fragile perspex roof panels on the conservatory to clean them",
     "category": "roofing",
     "user_skill": "Beginner",
@@ -3203,6 +3365,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0163",
     "task_text": "touch up scuffs on the hallway wall with leftover emulsion",
     "category": "painting",
     "user_skill": "Beginner",
@@ -3219,6 +3382,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0164",
     "task_text": "paint the inside of a wardrobe with water based paint",
     "category": "painting",
     "user_skill": "Beginner",
@@ -3236,6 +3400,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0165",
     "task_text": "repaint a wooden garden gate with exterior paint",
     "category": "painting",
     "user_skill": "Beginner",
@@ -3255,6 +3420,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0166",
     "task_text": "paint a radiator with radiator enamel once it has gone cold",
     "category": "painting",
     "user_skill": "Beginner",
@@ -3273,6 +3439,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0167",
     "task_text": "fill and sand small nail holes before repainting the living room",
     "category": "painting",
     "user_skill": "Beginner",
@@ -3292,6 +3459,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0168",
     "task_text": "paint a feature wall behind the sofa",
     "category": "painting",
     "user_skill": "Beginner",
@@ -3309,6 +3477,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0169",
     "task_text": "whitewash the inside of a garden shed",
     "category": "painting",
     "user_skill": "Beginner",
@@ -3325,6 +3494,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0170",
     "task_text": "paint the stairwell walls including the high section above the stairs from a ladder",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3344,6 +3514,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0171",
     "task_text": "strip old wallpaper with a steamer before painting",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3364,6 +3535,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0172",
     "task_text": "sand back and repaint the exterior window frames on the ground floor",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3384,6 +3556,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0173",
     "task_text": "apply gloss paint to the skirting and door frames throughout the house",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3403,6 +3576,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0174",
     "task_text": "paint the living room ceiling from a step ladder",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3422,6 +3596,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0175",
     "task_text": "use a paint sprayer on the garden fence outdoors",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3442,6 +3617,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0176",
     "task_text": "paint the exterior render on the first floor from an extension ladder",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3462,6 +3638,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0177",
     "task_text": "strip lead paint from the window frames of a Victorian house",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3485,6 +3662,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0178",
     "task_text": "apply anti-mould paint in the bathroom after treating the mould with a bleach solution",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3507,6 +3685,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0179",
     "task_text": "paint the soffits and fascias along the roofline of a two storey house",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3527,6 +3706,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0180",
     "task_text": "spray paint the whole interior of an empty house with an airless sprayer",
     "category": "painting",
     "user_skill": "Some experience",
@@ -3548,6 +3728,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0181",
     "task_text": "paint the exterior of a three storey townhouse from scaffolding",
     "category": "painting",
     "user_skill": "Experienced",
@@ -3569,6 +3750,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0182",
     "task_text": "remove flaking lead paint from the whole exterior of a listed Georgian house",
     "category": "painting",
     "user_skill": "Experienced",
@@ -3592,6 +3774,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0183",
     "task_text": "apply a solvent based epoxy floor coating in a closed garage",
     "category": "painting",
     "user_skill": "Experienced",
@@ -3615,6 +3798,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0184",
     "task_text": "spray solvent based paint in a sealed basement with no ventilation while the gas boiler is running in there",
     "category": "painting",
     "user_skill": "Beginner",
@@ -3634,6 +3818,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0185",
     "task_text": "regrout a small area of tiles above the bathroom sink",
     "category": "tiling",
     "user_skill": "Beginner",
@@ -3653,6 +3838,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0186",
     "task_text": "replace a single cracked floor tile in the hallway",
     "category": "tiling",
     "user_skill": "Beginner",
@@ -3673,6 +3859,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0187",
     "task_text": "seal the grout lines in the kitchen with grout sealer",
     "category": "tiling",
     "user_skill": "Beginner",
@@ -3691,6 +3878,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0188",
     "task_text": "stick self adhesive vinyl tiles on the utility room floor",
     "category": "tiling",
     "user_skill": "Beginner",
@@ -3709,6 +3897,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0189",
     "task_text": "clean off and reseal the silicone joint between the tiles and the bath",
     "category": "tiling",
     "user_skill": "Beginner",
@@ -3728,6 +3917,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0190",
     "task_text": "tile a small splashback behind the bathroom basin",
     "category": "tiling",
     "user_skill": "Beginner",
@@ -3748,6 +3938,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0191",
     "task_text": "tile the kitchen wall between the worktop and the wall units",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3768,6 +3959,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0192",
     "task_text": "lay ceramic floor tiles in the downstairs toilet",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3789,6 +3981,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0193",
     "task_text": "tile the hallway floor with porcelain tiles cut on a wet saw",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3811,6 +4004,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0194",
     "task_text": "remove old wall tiles from the bathroom with a hammer and chisel",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3833,6 +4027,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0195",
     "task_text": "tile around the window reveal in the kitchen",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3853,6 +4048,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0196",
     "task_text": "lay an underfloor heating mat and tile over it - the electrician is wiring the thermostat separately",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3873,6 +4069,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0197",
     "task_text": "tile a wet room floor including the tanking membrane and forming the fall to the drain",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3895,6 +4092,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0198",
     "task_text": "tile a large open plan kitchen diner floor with large format porcelain slabs",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3918,6 +4116,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0199",
     "task_text": "strip tiles stuck to plasterboard and re-board the whole bathroom wall",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3940,6 +4139,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0200",
     "task_text": "tile a conservatory floor over an existing screed with movement joints",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3960,6 +4160,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0201",
     "task_text": "cut and tile around the kitchen sockets - I had the circuit isolated at the board and verified dead",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -3981,6 +4182,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0202",
     "task_text": "lift old floor tiles that may have asbestos backing in a 1960s kitchen",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -4001,6 +4203,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0203",
     "task_text": "tile a swimming pool surround and the pool tank itself",
     "category": "tiling",
     "user_skill": "Experienced",
@@ -4024,6 +4227,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0204",
     "task_text": "re-tile a balcony floor including replacing the failed waterproofing over the living space below",
     "category": "tiling",
     "user_skill": "Experienced",
@@ -4047,6 +4251,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0205",
     "task_text": "chase a channel into the kitchen wall for new pipework before tiling over it",
     "category": "tiling",
     "user_skill": "Some experience",
@@ -4071,6 +4276,7 @@
     ]
   },
   {
+    "id": "seed-0206",
     "task_text": "grind off old tile adhesive in a 1960s bathroom where the vinyl underneath may be asbestos backed",
     "category": "tiling",
     "user_skill": "Beginner",
@@ -4088,6 +4294,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0207",
     "task_text": "vacuum the dust off the radiator fins in the bedroom",
     "category": "hvac",
     "user_skill": "Beginner",
@@ -4104,6 +4311,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0208",
     "task_text": "bleed the upstairs radiators because they are cold at the top",
     "category": "hvac",
     "user_skill": "Beginner",
@@ -4122,6 +4330,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0209",
     "task_text": "change the schedule on my smart thermostat app",
     "category": "hvac",
     "user_skill": "Beginner",
@@ -4136,6 +4345,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0210",
     "task_text": "replace the batteries in the wireless thermostat",
     "category": "hvac",
     "user_skill": "Beginner",
@@ -4150,6 +4360,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0211",
     "task_text": "clean the filter on a portable air conditioning unit",
     "category": "hvac",
     "user_skill": "Beginner",
@@ -4164,6 +4375,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0212",
     "task_text": "fit reflective foil panels behind the radiators",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4183,6 +4395,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0213",
     "task_text": "replace the plastic head on a thermostatic radiator valve, leaving the valve body in place",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4197,6 +4410,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0214",
     "task_text": "install a plug-in extractor fan in the bathroom window",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4215,6 +4429,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0215",
     "task_text": "top up the pressure on the combi boiler using the filling loop",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4229,6 +4444,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0216",
     "task_text": "clean the condenser coils on the outdoor heat pump unit, switched off at the isolator first",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4248,6 +4464,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0217",
     "task_text": "swap a radiator for a larger one on the same pipework, system drained down first",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4269,6 +4486,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0218",
     "task_text": "install a bathroom extractor fan ducted through the external wall - lighting circuit isolated and verified",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4292,6 +4510,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0219",
     "task_text": "fit a wired room thermostat to replace the old one, power off at the boiler isolator and confirmed dead",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4312,6 +4531,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0220",
     "task_text": "power flush the central heating system to clear sludge from the radiators",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4332,6 +4552,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0221",
     "task_text": "add two new radiators onto the existing central heating circuit",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4352,6 +4573,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0222",
     "task_text": "install a full air source heat pump system including the refrigerant lines",
     "category": "hvac",
     "user_skill": "Experienced",
@@ -4374,6 +4596,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0223",
     "task_text": "recharge the refrigerant in a split system air conditioner",
     "category": "hvac",
     "user_skill": "Experienced",
@@ -4394,6 +4617,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0224",
     "task_text": "install ducted air conditioning through the loft with a new electrical supply",
     "category": "hvac",
     "user_skill": "Experienced",
@@ -4417,6 +4641,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0225",
     "task_text": "replace the flue on a gas boiler where it passes through the external wall",
     "category": "hvac",
     "user_skill": "Experienced",
@@ -4437,6 +4662,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0226",
     "task_text": "move the gas boiler from the kitchen to the utility room, extending the gas supply pipe",
     "category": "hvac",
     "user_skill": "Experienced",
@@ -4459,6 +4685,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0227",
     "task_text": "service the gas boiler myself including opening the sealed combustion chamber",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4477,6 +4704,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0228",
     "task_text": "the carbon monoxide alarm keeps going off near the boiler",
     "category": "hvac",
     "user_skill": "Beginner",
@@ -4492,6 +4720,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0229",
     "task_text": "the gas fire is burning with a yellow lazy flame instead of blue and there are black marks around the surround",
     "category": "hvac",
     "user_skill": "Beginner",
@@ -4508,6 +4737,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0230",
     "task_text": "replace the immersion heater element in the hot water cylinder",
     "category": "hvac",
     "user_skill": "Some experience",
@@ -4532,6 +4762,7 @@
     ]
   },
   {
+    "id": "seed-0231",
     "task_text": "put together a flat pack chest of drawers",
     "category": "general",
     "user_skill": "Beginner",
@@ -4549,6 +4780,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0232",
     "task_text": "hang a mirror on the wall using picture hooks",
     "category": "general",
     "user_skill": "Beginner",
@@ -4565,6 +4797,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0233",
     "task_text": "fit draught excluder strips around the front door",
     "category": "general",
     "user_skill": "Beginner",
@@ -4581,6 +4814,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0234",
     "task_text": "put up a curtain pole above the living room window",
     "category": "general",
     "user_skill": "Beginner",
@@ -4600,6 +4834,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0235",
     "task_text": "change the lock barrel on the front door",
     "category": "general",
     "user_skill": "Beginner",
@@ -4616,6 +4851,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0236",
     "task_text": "fit self adhesive weather stripping around a draughty window",
     "category": "general",
     "user_skill": "Beginner",
@@ -4632,6 +4868,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0237",
     "task_text": "assemble and put up a garden parasol",
     "category": "general",
     "user_skill": "Beginner",
@@ -4646,6 +4883,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0238",
     "task_text": "install a battery powered doorbell",
     "category": "general",
     "user_skill": "Beginner",
@@ -4663,6 +4901,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0239",
     "task_text": "mount floating shelves on a plasterboard wall using heavy duty anchors",
     "category": "general",
     "user_skill": "Some experience",
@@ -4682,6 +4921,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0240",
     "task_text": "assemble a large wardrobe and secure it to the wall with an anti-tip bracket",
     "category": "general",
     "user_skill": "Some experience",
@@ -4701,6 +4941,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0241",
     "task_text": "put up a trampoline in the back garden",
     "category": "general",
     "user_skill": "Beginner",
@@ -4719,6 +4960,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0242",
     "task_text": "lay decking boards onto an existing frame",
     "category": "general",
     "user_skill": "Some experience",
@@ -4740,6 +4982,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0243",
     "task_text": "fit a stair gate at the top of the stairs",
     "category": "general",
     "user_skill": "Some experience",
@@ -4758,6 +5001,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0244",
     "task_text": "move a heavy wardrobe up to the first floor",
     "category": "general",
     "user_skill": "Some experience",
@@ -4777,6 +5021,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0245",
     "task_text": "cut down a small tree in the back garden with a chainsaw",
     "category": "general",
     "user_skill": "Some experience",
@@ -4800,6 +5045,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0246",
     "task_text": "clear out a loft full of old insulation and boxes",
     "category": "general",
     "user_skill": "Some experience",
@@ -4820,6 +5066,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0247",
     "task_text": "install loft insulation between and over the joists",
     "category": "general",
     "user_skill": "Some experience",
@@ -4842,6 +5089,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0248",
     "task_text": "dig out and level a large area of the garden for a patio - the utility lines were marked out beforehand",
     "category": "general",
     "user_skill": "Some experience",
@@ -4863,6 +5111,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0249",
     "task_text": "clear a badly blocked chimney flue before using the fireplace again",
     "category": "general",
     "user_skill": "Some experience",
@@ -4883,6 +5132,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0250",
     "task_text": "shift a large amount of renovation rubble into a skip with a wheelbarrow",
     "category": "general",
     "user_skill": "Some experience",
@@ -4904,6 +5154,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0251",
     "task_text": "fell a large mature tree close to the house and the neighbour's fence",
     "category": "general",
     "user_skill": "Experienced",
@@ -4928,6 +5179,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0252",
     "task_text": "dig out and repair a collapsed garden soakaway, working down in a deep pit",
     "category": "general",
     "user_skill": "Experienced",
@@ -4949,6 +5201,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0253",
     "task_text": "scrape off the artex ceiling coating in a 1970s house that may contain asbestos",
     "category": "general",
     "user_skill": "Some experience",
@@ -4969,6 +5222,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0254",
     "task_text": "demolish the old brick garage at the bottom of the garden",
     "category": "general",
     "user_skill": "Experienced",
@@ -4992,6 +5246,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0255",
     "task_text": "go into the crawl space under the floor where there is standing water and a musty smell to check the joists",
     "category": "general",
     "user_skill": "Beginner",
@@ -5010,6 +5265,7 @@
     "followup_questions": []
   },
   {
+    "id": "seed-0256",
     "task_text": "burn a pile of old treated timber and painted offcuts in the back garden",
     "category": "general",
     "user_skill": "Beginner",

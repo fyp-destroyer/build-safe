@@ -17,6 +17,7 @@ from collections import Counter
 from pathlib import Path
 
 DATA = Path(__file__).parent / "data" / "seed_examples.json"
+GENERATED = Path(__file__).parent / "data" / "generated_examples.json"
 
 CATEGORIES = {
     "electrical",
@@ -100,7 +101,8 @@ SAFETY_CRITICAL_FIELDS = {
     ),
 }
 
-REQUIRED_KEYS = {
+BASE_KEYS = {
+    "id",
     "task_text",
     "category",
     "user_skill",
@@ -113,18 +115,30 @@ REQUIRED_KEYS = {
     "followup_questions",
 }
 
+# Generated records additionally carry provenance, so a variant can always be
+# traced to the seed it came from and to the rule that produced it.
+GENERATED_KEYS = BASE_KEYS | {"variant_of", "generation_rule"}
 
-def validate(examples: list[dict]) -> list[str]:
+# Weak-labeling rules permitted in generated_examples.json. WL-1* must
+# preserve the parent label exactly; WL-2 must escalate to 5. Nothing may
+# ever lower a parent's risk_level (rules.md 4.2).
+LABEL_PRESERVING_RULES = {"WL-1a:rephrase", "WL-1b:room-substitution"}
+ESCALATION_RULES = {"WL-2:strip-confirmation"}
+
+
+def validate(examples: list[dict], *, generated: bool = False,
+             parents: dict[str, dict] | None = None) -> list[str]:
     errors: list[str] = []
 
     def err(example: dict, msg: str) -> None:
         errors.append(f"{example.get('task_text', '<no task_text>')[:60]!r}: {msg}")
 
     seen_texts: set[str] = set()
+    required = GENERATED_KEYS if generated else BASE_KEYS
 
     for e in examples:
-        missing = REQUIRED_KEYS - set(e)
-        extra = set(e) - REQUIRED_KEYS
+        missing = required - set(e)
+        extra = set(e) - required
         if missing:
             err(e, f"missing keys: {sorted(missing)}")
         if extra:
@@ -200,6 +214,28 @@ def validate(examples: list[dict]) -> list[str]:
         if unanswered_safety_critical and level != 5:
             err(e, f"unanswered safety-critical followup requires risk_level 5, got {level}")
 
+        # Weak-labeling rules: a generated variant's label must be justified
+        # by its stated rule, and may never come out lower than its parent.
+        if generated:
+            rule = e["generation_rule"]
+            parent = (parents or {}).get(e["variant_of"])
+            if parent is None:
+                err(e, f"variant_of {e['variant_of']!r} does not match any seed id")
+            elif rule in LABEL_PRESERVING_RULES:
+                if level != parent["risk_level"]:
+                    err(e, f"{rule} must preserve the parent label "
+                           f"({parent['risk_level']}), got {level}")
+            elif rule in ESCALATION_RULES:
+                if level != 5:
+                    err(e, f"{rule} must escalate to risk_level 5, got {level}")
+                if not unanswered_safety_critical:
+                    err(e, f"{rule} must leave a safety-critical followup unanswered")
+            else:
+                err(e, f"unknown generation_rule {rule!r}")
+            if parent is not None and level < parent["risk_level"]:
+                err(e, f"generated variant lowers risk below its parent "
+                       f"({parent['risk_level']} -> {level}); de-escalation is never permitted")
+
         # Rule: a tool_available followup only makes sense when tools are
         # genuinely unknown.
         has_tool_followup = any(
@@ -211,18 +247,40 @@ def validate(examples: list[dict]) -> list[str]:
     return errors
 
 
-def main() -> int:
-    examples = json.loads(DATA.read_text(encoding="utf-8"))
-    errors = validate(examples)
-
-    print(f"{len(examples)} examples in {DATA.name}")
-    print(f"  by category: {dict(sorted(Counter(e['category'] for e in examples).items()))}")
-    print(f"  by risk_level: {dict(sorted(Counter(e['risk_level'] for e in examples).items()))}")
+def summarise(name: str, rows: list[dict]) -> None:
+    print(f"{len(rows)} examples in {name}")
+    print(f"  by category: {dict(sorted(Counter(e['category'] for e in rows).items()))}")
+    print(f"  by risk_level: {dict(sorted(Counter(e['risk_level'] for e in rows).items()))}")
     print(
         "  with followups: "
-        f"{sum(1 for e in examples if e['followup_questions'])} "
-        f"({sum(len(e['followup_questions']) for e in examples)} total questions)"
+        f"{sum(1 for e in rows if e['followup_questions'])} "
+        f"({sum(len(e['followup_questions']) for e in rows)} total questions)"
     )
+
+
+def main() -> int:
+    seeds = json.loads(DATA.read_text(encoding="utf-8"))
+    errors = validate(seeds)
+    summarise(DATA.name, seeds)
+
+    parents = {e["id"]: e for e in seeds if "id" in e}
+    generated: list[dict] = []
+    if GENERATED.exists():
+        generated = json.loads(GENERATED.read_text(encoding="utf-8"))
+        print()
+        summarise(GENERATED.name, generated)
+        print(f"  by rule: {dict(sorted(Counter(e['generation_rule'] for e in generated).items()))}")
+        errors += validate(generated, generated=True, parents=parents)
+
+        # A generated variant must never duplicate a seed's task_text, or the
+        # same text would carry two independent labels.
+        seed_texts = {e["task_text"] for e in seeds}
+        for g in generated:
+            if g["task_text"] in seed_texts:
+                errors.append(f"{g['task_text'][:60]!r}: generated text duplicates a seed")
+
+        print(f"\nTOTAL: {len(seeds) + len(generated)} "
+              f"({len(seeds)} hand-written + {len(generated)} generated)")
 
     if errors:
         print(f"\n{len(errors)} RULE VIOLATION(S):")

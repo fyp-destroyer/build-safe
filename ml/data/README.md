@@ -4,9 +4,29 @@ This directory holds the labeled dataset used to train the Phase 3/4 ML risk cla
 
 ## Files
 
-- `seed_examples.json` — **256 hand-written seed examples**, covering all 9 categories and all 5 risk levels. This satisfies `phases.md` Phase 2's "200–300 hand-written seed examples" item; template variation and weak-labeling build on top of it to reach the ≥500 exit check.
-- `train.json` / `val.json` / `test.json` — final split, generated later (70/15/15) once the full ≥500-example dataset exists. **Not created yet.**
-- `../validate_dataset.py` — **run `python ml/validate_dataset.py` after every change to the dataset.** It mechanically enforces every rule documented below (risk/label agreement, the `risk_level: 5` PPE rule, the unanswered-follow-up escalation rule, canonical question wording, enum validity, duplicate detection). Several of these rules exist because a real mistake was caught in review — the validator is what stops them recurring at scale.
+- `seed_examples.json` — **256 hand-written seed examples**, covering all 9 categories and all 5 risk levels. Authoritative and hand-judged; nothing downstream ever relabels these. Each carries a stable `id` (`seed-0001`…) so generated variants can reference their parent.
+- `generated_examples.json` — **299 machine-generated variants** (555 total), each carrying `variant_of` (parent seed id) and `generation_rule`. Produced by `../generate_variations.py`; see "Template variation and weak labeling" below.
+- `train.json` / `val.json` / `test.json` — final split, generated later (70/15/15). **Not created yet.** See the grouping warning below — splitting naively will leak.
+- `../validate_dataset.py` — **run `python ml/validate_dataset.py` after every change.** It mechanically enforces every rule documented here (risk/label agreement, the `risk_level: 5` PPE rule, the unanswered-follow-up escalation rule, canonical question wording, enum validity, duplicate detection, and — for generated rows — that each weak-labeling rule did what it claims). Several of these rules exist because a real mistake was caught in review; the validator is what stops them recurring at scale.
+- `../generate_variations.py` — regenerates `generated_examples.json` from the seeds. Deterministic: same seeds in, same variants out.
+
+## Template variation and weak labeling
+
+**Template variation** produces surface-form variants of a hand-written seed so the classifier learns the *task* rather than the exact string. **Weak labeling** assigns those variants a label from a rule instead of hand-judging each one.
+
+Weak labeling can quietly produce *wrong safety labels* at scale, and padding to 500 with near-duplicates would pass the exit check while making eval look better than the model is. So the rules here are deliberately constrained — **no rule may ever lower a risk level** (`rules.md` §4.2), and the validator enforces that:
+
+| Rule | n | What it does | Why the label is safe |
+|---|---|---|---|
+| `WL-1a:rephrase` | 256 | Wraps the task in conversational framing — `"I want to …"`, `"can I … myself?"`, `"… — is that a DIY job?"`, and for problem-report seeds `"… what should I do?"` | Content is unchanged, so the parent label is inherited verbatim. Genuine coverage, not filler: seeds are uniformly bare imperatives, but real chat input is hedged and question-shaped. |
+| `WL-1b:room-substitution` | 26 | Swaps one risk-neutral room for another (`bedroom` ↔ `hallway` ↔ `living room` ↔ `dining room` ↔ `spare room`) | Restricted to rooms that carry no safety signal, and skipped entirely where a `water_damage` / `confined_space` / `asbestos_exposure` hazard is present. `bathroom`, `basement`, `loft`, `garage` are never substituted — the room *is* part of the hazard there. `landing` is excluded for reading badly ("an outlet in the landing"). |
+| `WL-2:strip-confirmation` | 17 | Removes a stated safety confirmation (`"…, breaker off and verified dead"` → `"…"`), which makes the condition unaddressed → the follow-up returns and `risk_level` becomes 5 | **Escalation only.** Each stripped text is hand-written, not regex-derived, because it changes a safety label. These are the most informative variants in the set: same task, one fact removed, different outcome. |
+
+**Deliberately not automated: de-escalation.** Injecting a confirmation into a seed (which would *lower* risk) is the direction where a wrong label is dangerous, so those variants stay hand-written seeds only.
+
+**Splitting warning.** A variant and its parent share almost all their text. Group by `variant_of` (treating each seed and all its variants as one unit) and split by group, or the same task appears in both train and test and the metrics become meaningless. The three deliberate near-duplicate *seed* pairs noted below need the same treatment.
+
+**Evaluate on hand-written data.** Hand-written and generated rows are kept in separate files (and generated rows carry `generation_rule`) precisely so the test set can be restricted to seeds. Reporting headline metrics on weakly-labeled rows would be measuring the generator, not the task.
 
 **Never commit real user data or PII here** — every record must be synthetic/authored, matching the shape below.
 

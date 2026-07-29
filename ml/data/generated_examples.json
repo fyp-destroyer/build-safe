@@ -1,0 +1,6873 @@
+[
+  {
+    "id": "gen-0001",
+    "variant_of": "seed-0050",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "replace a worn out wall outlet in the living room",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0002",
+    "variant_of": "seed-0051",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "swap a light switch for a dimmer",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0003",
+    "variant_of": "seed-0052",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "replace a ceiling light fixture in the hallway",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0004",
+    "variant_of": "seed-0053",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "install a hardwired under-cabinet light off an existing junction box",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "wire strippers",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0005",
+    "variant_of": "seed-0054",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "replace a bathroom extractor fan wired into the lighting circuit",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0006",
+    "variant_of": "seed-0055",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "install an outdoor motion sensor floodlight above the garage door",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0007",
+    "variant_of": "seed-0056",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "replace a faulty GFCI outlet in the bathroom",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "water_damage"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0008",
+    "variant_of": "seed-0057",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "move a light switch to the other side of the doorway, cutting into the wall",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drywall saw",
+      "wire strippers",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0009",
+    "variant_of": "seed-0062",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "replace the aluminium wiring in a 1970s house with copper",
+    "category": "electrical",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "wire strippers",
+      "multimeter"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0010",
+    "variant_of": "seed-0063",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "rewire the lighting circuit on the whole first floor",
+    "category": "electrical",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "wire strippers",
+      "multimeter"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0011",
+    "variant_of": "seed-0201",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "cut and tile around the kitchen sockets",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "tile cutter",
+      "voltage tester"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0012",
+    "variant_of": "seed-0218",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "install a bathroom extractor fan ducted through the external wall",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "core bit",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0013",
+    "variant_of": "seed-0219",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "fit a wired room thermostat to replace the old one",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0014",
+    "variant_of": "seed-0108",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "cut a new doorway through an internal stud partition",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "reciprocating saw",
+      "drill"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0015",
+    "variant_of": "seed-0129",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "cut a new window opening in a single skin garage wall",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "angle grinder",
+      "chisel"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "respiratory_hazard",
+      "hearing_damage"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0016",
+    "variant_of": "seed-0087",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "replace the lead water main from the street into the house",
+    "category": "plumbing",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "pipe cutter",
+      "shovel"
+    ],
+    "hazards": [
+      "water_damage",
+      "buried_utility_strike"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0017",
+    "variant_of": "seed-0248",
+    "generation_rule": "WL-2:strip-confirmation",
+    "task_text": "dig out and level a large area of the garden for a patio",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "shovel",
+      "wheelbarrow"
+    ],
+    "hazards": [
+      "heavy_object_handling",
+      "buried_utility_strike"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0018",
+    "variant_of": "seed-0001",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to replace a light switch cover plate in the hallway",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0019",
+    "variant_of": "seed-0002",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to replace a light switch cover plate in the hallway, not sure what tools I have on hand this weekend",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "tool_available:screwdriver",
+        "question": "Do you have a screwdriver available for this task?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0020",
+    "variant_of": "seed-0003",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to install a ceiling fan in my bedroom",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver",
+      "ladder"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0021",
+    "variant_of": "seed-0004",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I install a ceiling fan in my bedroom - I already switched off the breaker for that circuit and checked it's dead with a voltage tester myself?",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0022",
+    "variant_of": "seed-0005",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to install a ceiling fan in my bedroom - I can't get to the breaker panel (landlord keeps it locked), so I'll wear insulated gloves and use a non-contact voltage tester before touching any wires?",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0023",
+    "variant_of": "seed-0006",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to install a ceiling fan in my bedroom, not sure what tools I have on hand - any reason not to?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      },
+      {
+        "field": "tool_available:voltage_tester",
+        "question": "Do you have a voltage tester available for this task?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0024",
+    "variant_of": "seed-0007",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to rewire the electrical subpanel in my garage?",
+    "category": "electrical",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "multimeter",
+      "wire strippers"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0025",
+    "variant_of": "seed-0008",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "there's a live wire sparking near a water leak in my basement, how urgent is this?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "electrical_shock",
+      "water_damage",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0026",
+    "variant_of": "seed-0009",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "unclog a bathroom sink drain with a plunger, is that a DIY job?",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "plunger"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0027",
+    "variant_of": "seed-0010",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "replace a leaking faucet aerator and washer - do I need to get someone in?",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "adjustable wrench"
+    ],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0028",
+    "variant_of": "seed-0011",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to install a new toilet in the guest bathroom",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "wrench",
+      "plunger"
+    ],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0029",
+    "variant_of": "seed-0012",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to reroute the main water shutoff valve and copper piping this weekend",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "pipe cutter"
+    ],
+    "hazards": [
+      "water_damage",
+      "cuts_lacerations"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "rubber_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0030",
+    "variant_of": "seed-0013",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "my gas water heater is hissing and I smell gas near it, how urgent is this?",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "gas_leak",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0031",
+    "variant_of": "seed-0014",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I dig a small trench in my backyard to run a new water line for a garden faucet myself?",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "shovel",
+      "pipe cutter"
+    ],
+    "hazards": [
+      "buried_utility_strike"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0032",
+    "variant_of": "seed-0015",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to build a simple wooden bookshelf for the living room?",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver",
+      "hammer"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0033",
+    "variant_of": "seed-0016",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to install a new interior door and frame - any reason not to?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "chisel"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0034",
+    "variant_of": "seed-0017",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to build a raised deck attached to the back of the house?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "circular saw",
+      "level"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "structural_collapse"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "carpenter",
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0035",
+    "variant_of": "seed-0018",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "remove a wall between the kitchen and living room to create an open floor plan - is this something I can handle on my own?",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "sledgehammer",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0036",
+    "variant_of": "seed-0019",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "remove a wall between the kitchen and living room, not sure if it's load-bearing, is that a DIY job?",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "sledgehammer",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0037",
+    "variant_of": "seed-0020",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to remove a wall in my basement near the gas meter - not totally sure if it's load-bearing - any reason not to?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "sledgehammer",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "gas_leak"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0038",
+    "variant_of": "seed-0021",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to repoint the mortar on a small garden wall",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "trowel"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0039",
+    "variant_of": "seed-0022",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to build a small brick planter box in the garden this weekend",
+    "category": "masonry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "trowel",
+      "level"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0040",
+    "variant_of": "seed-0023",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to repair a cracked section of the foundation wall in the basement",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "trowel",
+      "chisel"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "mason",
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0041",
+    "variant_of": "seed-0024",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I remove a load-bearing brick wall in the basement to open up the space myself?",
+    "category": "masonry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "sledgehammer"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0042",
+    "variant_of": "seed-0025",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to paint a bedroom wall a new color with a roller?",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "roller",
+      "paint tray"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0043",
+    "variant_of": "seed-0026",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to paint the exterior of a two-story house using an extension ladder - any reason not to?",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "extension ladder",
+      "roller",
+      "brush"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0044",
+    "variant_of": "seed-0027",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to spray paint a ceiling with oil-based paint in a small closed room?",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "spray gun"
+    ],
+    "hazards": [
+      "respiratory_hazard"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "respirator_mask",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0045",
+    "variant_of": "seed-0028",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "retile a small bathroom backsplash above the sink - is this something I can handle on my own?",
+    "category": "tiling",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "tile adhesive",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0046",
+    "variant_of": "seed-0029",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "tile a shower floor including the waterproofing membrane, is that a DIY job?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "tile cutter",
+      "trowel"
+    ],
+    "hazards": [
+      "water_damage",
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0047",
+    "variant_of": "seed-0030",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "tile a large kitchen floor including cutting tiles near electrical outlets - do I need to get someone in?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "tile cutter",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0048",
+    "variant_of": "seed-0031",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to clean or replace the air filter on my HVAC unit",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0049",
+    "variant_of": "seed-0032",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to install a new thermostat wired directly to the furnace this weekend",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "wire strippers"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0050",
+    "variant_of": "seed-0033",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to install a new gas furnace unit in the basement",
+    "category": "hvac",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "wrench",
+      "pipe sealant"
+    ],
+    "hazards": [
+      "gas_leak",
+      "fire"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0051",
+    "variant_of": "seed-0034",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "the furnace heat exchanger is cracked and I think it's leaking carbon monoxide - can I sort this out myself?",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "gas_leak",
+      "fire",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0052",
+    "variant_of": "seed-0035",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to replace a few loose shingles on a single-story roof?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder",
+      "hammer"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0053",
+    "variant_of": "seed-0036",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to repair a large damaged section of roof on a steep two-story house - any reason not to?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder",
+      "hammer",
+      "tarp"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "structural_collapse"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0054",
+    "variant_of": "seed-0037",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to go up on a wet, steep roof during the rain to fix a leak right now?",
+    "category": "roofing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "ladder"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "roofer",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0055",
+    "variant_of": "seed-0038",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "assemble a flat-pack wardrobe from an instruction manual - is this something I can handle on my own?",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver",
+      "allen key"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0056",
+    "variant_of": "seed-0039",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "hang a picture frame on a drywall wall, is that a DIY job?",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "hammer",
+      "nail"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0057",
+    "variant_of": "seed-0040",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "mount a heavy TV on a wall using a stud finder - do I need to get someone in?",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "stud finder",
+      "level"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0058",
+    "variant_of": "seed-0041",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to clear out clogged gutters using a ladder at a two-story house",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder",
+      "gloves"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0059",
+    "variant_of": "seed-0042",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to change a burnt out light bulb in my kitchen ceiling fixture this weekend",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "step stool"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0060",
+    "variant_of": "seed-0043",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to swap the 9V battery in my smoke detector",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0061",
+    "variant_of": "seed-0044",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I reset the breaker that tripped when I ran the kettle and microwave at once myself?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0062",
+    "variant_of": "seed-0045",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to plug a new surge protector in behind the TV?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0063",
+    "variant_of": "seed-0046",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to replace the fabric shade on my floor lamp - any reason not to?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0064",
+    "variant_of": "seed-0047",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to install a plug-in smart outlet adapter for my lamps?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0065",
+    "variant_of": "seed-0048",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to rewire a table lamp with a frayed cord - it stays unplugged the entire time - any reason not to?",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "wire strippers",
+      "screwdriver"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0066",
+    "variant_of": "seed-0049",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "mount plug-in LED strip lighting under the kitchen cabinets, is that a DIY job?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "drill",
+      "screwdriver"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0067",
+    "variant_of": "seed-0050",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to replace a worn out wall outlet in the living room - I have switched the breaker off and confirmed it is dead with a tester",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0068",
+    "variant_of": "seed-0051",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to swap a light switch for a dimmer, breaker is off and I verified no voltage at the switch",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0069",
+    "variant_of": "seed-0052",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to replace a ceiling light fixture in the hallway - breaker off and verified dead with a tester",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0070",
+    "variant_of": "seed-0053",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to install a hardwired under-cabinet light off an existing junction box, power confirmed off",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "wire strippers",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0071",
+    "variant_of": "seed-0054",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I replace a bathroom extractor fan wired into the lighting circuit, breaker off and tested myself?",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0072",
+    "variant_of": "seed-0055",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to install an outdoor motion sensor floodlight above the garage door, power isolated and verified?",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0073",
+    "variant_of": "seed-0056",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to replace a faulty GFCI outlet in the bathroom - breaker is off and confirmed dead?",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "water_damage"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0074",
+    "variant_of": "seed-0057",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to move a light switch to the other side of the doorway, cutting into the wall - circuit isolated and tested",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drywall saw",
+      "wire strippers",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses",
+      "dust_mask"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0075",
+    "variant_of": "seed-0058",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to add a new outlet on the garage wall - I do not know which breaker controls that circuit this weekend",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "drill",
+      "wire strippers"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0076",
+    "variant_of": "seed-0059",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "run a new dedicated circuit from the panel for an electric oven, I know the panel bus stays live even with the main breaker off, is that a DIY job?",
+    "category": "electrical",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "wire strippers",
+      "multimeter"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0077",
+    "variant_of": "seed-0060",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "upgrade the fuse box to a modern consumer unit with RCDs, aware the service head stays live - do I need to get someone in?",
+    "category": "electrical",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "multimeter",
+      "wire strippers"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0078",
+    "variant_of": "seed-0061",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to install an EV charging point on the outside wall wired back to the consumer unit - board is off and locked out?",
+    "category": "electrical",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "drill",
+      "wire strippers",
+      "multimeter"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0079",
+    "variant_of": "seed-0062",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to replace the aluminium wiring in a 1970s house with copper, power confirmed off at the main this weekend",
+    "category": "electrical",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "wire strippers",
+      "multimeter"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0080",
+    "variant_of": "seed-0063",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to rewire the lighting circuit on the whole first floor, power is off at the consumer unit and verified",
+    "category": "electrical",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "wire strippers",
+      "multimeter"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0081",
+    "variant_of": "seed-0064",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I replace a wall outlet in the bedroom myself?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0082",
+    "variant_of": "seed-0065",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to install a hardwired dimmer switch in the dining room?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0083",
+    "variant_of": "seed-0066",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to run new wiring for an outdoor socket on the patio - any reason not to?",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "wire strippers"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0084",
+    "variant_of": "seed-0067",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "my breaker keeps tripping when I plug in the heater and now there is a burning smell from the panel. is this something I need to worry about?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0085",
+    "variant_of": "seed-0068",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "water is dripping onto the fuse box from a pipe above it, how urgent is this?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "electrical_shock",
+      "water_damage",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0086",
+    "variant_of": "seed-0069",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "there are exposed wires hanging out of the ceiling where the old light was, and I am not sure if they are live - can I sort this out myself?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0087",
+    "variant_of": "seed-0070",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "replace the flapper valve in my toilet tank - do I need to get someone in?",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0088",
+    "variant_of": "seed-0071",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to swap out a worn shower head for a new one",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "adjustable wrench"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0089",
+    "variant_of": "seed-0072",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to clear hair out of the shower drain with a drain snake this weekend",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "drain snake"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0090",
+    "variant_of": "seed-0073",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to replace the silicone sealant around the bath",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "caulking gun",
+      "scraper"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0091",
+    "variant_of": "seed-0074",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I fit a new toilet seat myself?",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0092",
+    "variant_of": "seed-0075",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to install a water filter attachment on the kitchen tap?",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0093",
+    "variant_of": "seed-0076",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to replace the flexible supply hose under the bathroom sink, water shut off at the isolation valve - any reason not to?",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "adjustable wrench"
+    ],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0094",
+    "variant_of": "seed-0077",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to fit a new kitchen mixer tap, mains water turned off at the stopcock?",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "basin wrench",
+      "adjustable wrench"
+    ],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0095",
+    "variant_of": "seed-0078",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "replace the leaking trap under the kitchen sink - is this something I can handle on my own?",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "adjustable wrench",
+      "bucket"
+    ],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0096",
+    "variant_of": "seed-0079",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "plumb a washing machine into the existing hot and cold valves, is that a DIY job?",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "adjustable wrench"
+    ],
+    "hazards": [
+      "water_damage",
+      "heavy_object_handling"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0097",
+    "variant_of": "seed-0080",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "replace the fill valve inside the toilet cistern, supply isolated first - do I need to get someone in?",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "adjustable wrench"
+    ],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0098",
+    "variant_of": "seed-0081",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to install a new outdoor tap through the exterior wall",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "pipe cutter"
+    ],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0099",
+    "variant_of": "seed-0082",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to replace a leaking section of copper pipe under the floorboards using soldered joints this weekend",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "pipe cutter",
+      "blowtorch"
+    ],
+    "hazards": [
+      "water_damage",
+      "burns",
+      "fire"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0100",
+    "variant_of": "seed-0083",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to fit a new shower mixer valve into the tiled wall",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "pipe cutter",
+      "drill"
+    ],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0101",
+    "variant_of": "seed-0084",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I move the kitchen sink to the other side of the room, extending the waste pipe myself?",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "pipe cutter",
+      "saw"
+    ],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "rubber_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0102",
+    "variant_of": "seed-0085",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to install a garden irrigation system, digging shallow trenches - I had the utility company mark the buried lines first",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "shovel",
+      "pipe cutter"
+    ],
+    "hazards": [
+      "buried_utility_strike"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0103",
+    "variant_of": "seed-0086",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to replace the hot water cylinder in the airing cupboard - any reason not to?",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "adjustable wrench",
+      "pipe cutter"
+    ],
+    "hazards": [
+      "water_damage",
+      "burns",
+      "heavy_object_handling"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0104",
+    "variant_of": "seed-0087",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to replace the lead water main from the street into the house - the utility company has marked the buried services",
+    "category": "plumbing",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "pipe cutter",
+      "shovel"
+    ],
+    "hazards": [
+      "water_damage",
+      "buried_utility_strike"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0105",
+    "variant_of": "seed-0088",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "reroute the soil stack for a new upstairs bathroom - is this something I can handle on my own?",
+    "category": "plumbing",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "saw",
+      "pipe cutter"
+    ],
+    "hazards": [
+      "water_damage",
+      "respiratory_hazard"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "rubber_gloves",
+      "respirator_mask",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0106",
+    "variant_of": "seed-0089",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "install a whole new bathroom suite including moving the waste connections, is that a DIY job?",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "pipe cutter",
+      "adjustable wrench"
+    ],
+    "hazards": [
+      "water_damage",
+      "heavy_object_handling"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "rubber_gloves",
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0107",
+    "variant_of": "seed-0090",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "connect a new gas hob to the existing gas supply pipe - do I need to get someone in?",
+    "category": "plumbing",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "adjustable wrench",
+      "pipe sealant"
+    ],
+    "hazards": [
+      "gas_leak",
+      "fire"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0108",
+    "variant_of": "seed-0091",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to replace the pressure relief valve on a sealed central heating system",
+    "category": "plumbing",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "adjustable wrench"
+    ],
+    "hazards": [
+      "burns",
+      "water_damage"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "plumber",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0109",
+    "variant_of": "seed-0092",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to dig a soakaway pit in the back garden for a new drain run this weekend",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "shovel",
+      "spade"
+    ],
+    "hazards": [
+      "buried_utility_strike"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0110",
+    "variant_of": "seed-0093",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I can smell gas in the kitchen near the cooker connection, how urgent is this?",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "gas_leak",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0111",
+    "variant_of": "seed-0094",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "sewage is backing up through the shower drain and there is standing waste water in the bathroom - can I sort this out myself?",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "respiratory_hazard",
+      "chemical_exposure",
+      "water_damage"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0112",
+    "variant_of": "seed-0095",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "a pipe burst in the ceiling and water is pouring down onto the light fitting below. should I be calling someone?",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "bucket"
+    ],
+    "hazards": [
+      "water_damage",
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0113",
+    "variant_of": "seed-0096",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to put up a set of floating shelves in the alcove - any reason not to?",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "drill",
+      "level"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0114",
+    "variant_of": "seed-0097",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to build a small planter box out of decking offcuts?",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "saw",
+      "drill"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0115",
+    "variant_of": "seed-0098",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "fit new handles on the kitchen cabinet doors - is this something I can handle on my own?",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0116",
+    "variant_of": "seed-0099",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "sand and refinish a wooden coffee table, is that a DIY job?",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "sander"
+    ],
+    "hazards": [
+      "respiratory_hazard"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "dust_mask",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0117",
+    "variant_of": "seed-0100",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "replace a broken fence panel between the existing posts - do I need to get someone in?",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "hammer",
+      "saw"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0118",
+    "variant_of": "seed-0101",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to hang a solid wood internal door on its existing hinges",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "chisel",
+      "screwdriver",
+      "plane"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0119",
+    "variant_of": "seed-0102",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to build fitted wardrobes into the bedroom alcove this weekend",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "circular saw",
+      "drill",
+      "level"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "respiratory_hazard"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "hearing_protection"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0120",
+    "variant_of": "seed-0103",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to lay laminate flooring in the living room, not sure what tools I have in the garage",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "knee_pads",
+      "safety_glasses"
+    ],
+    "followup_questions": [
+      {
+        "field": "tool_available:mitre_saw",
+        "question": "Do you have a mitre saw available for this task?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0121",
+    "variant_of": "seed-0104",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I fit skirting boards around a newly plastered room myself?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "mitre saw",
+      "nail gun"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "hearing_protection"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0122",
+    "variant_of": "seed-0105",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to build a garden bench from treated timber?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "circular saw",
+      "drill"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0123",
+    "variant_of": "seed-0106",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to build a timber garden shed on an existing concrete base - any reason not to?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "circular saw",
+      "drill",
+      "level"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "heavy_object_handling"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "carpenter",
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0124",
+    "variant_of": "seed-0107",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to replace rotten floor joists under the bathroom floor?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "saw",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "cuts_lacerations"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "carpenter",
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves",
+      "dust_mask"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0125",
+    "variant_of": "seed-0108",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to cut a new doorway through an internal stud partition - I checked the plans and it is a non load-bearing partition",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "reciprocating saw",
+      "drill"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "respiratory_hazard"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "carpenter",
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0126",
+    "variant_of": "seed-0109",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "build a loft storage platform across the ceiling joists, is that a DIY job?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "saw",
+      "drill"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "structural_collapse"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "carpenter",
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0127",
+    "variant_of": "seed-0110",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "fit a loft hatch and drop-down ladder into the ceiling - do I need to get someone in?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "saw",
+      "drill"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "structural_collapse"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "carpenter",
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0128",
+    "variant_of": "seed-0111",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to install a new staircase between the ground and first floor",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "circular saw",
+      "drill",
+      "level"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "structural_collapse"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "carpenter",
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0129",
+    "variant_of": "seed-0112",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to cut a large opening for bifold doors in the rear wall - a structural engineer has specified the steel lintel?",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "reciprocating saw",
+      "acrow props"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "heavy_object_handling"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "hard_hat",
+      "safety_glasses",
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0130",
+    "variant_of": "seed-0113",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to convert the loft into a bedroom, cutting into the roof trusses for a dormer",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "circular saw",
+      "drill"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "fall_from_height"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "hard_hat",
+      "safety_harness",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0131",
+    "variant_of": "seed-0114",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I remove the chimney breast in the bedroom but leave the stack above supported myself?",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "sledgehammer",
+      "acrow props"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "respiratory_hazard"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "hard_hat",
+      "dust_mask",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0132",
+    "variant_of": "seed-0115",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to replace rotten timbers in the flat roof structure over the garage?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "saw",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "fall_from_height"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "carpenter",
+    "suggested_ppe": [
+      "safety_harness",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0133",
+    "variant_of": "seed-0116",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to take down the stud wall between the two back bedrooms - any reason not to?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "reciprocating saw",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0134",
+    "variant_of": "seed-0117",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to knock through the wall under the stairs to make more storage space?",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "sledgehammer"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0135",
+    "variant_of": "seed-0118",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to remove a wall in a 1930s house - I have been told there might be asbestos in the old panelling - any reason not to?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "asbestos_exposure",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0136",
+    "variant_of": "seed-0119",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "the floor upstairs feels bouncy and a crack is appearing along the ceiling below it - can I sort this out myself?",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0137",
+    "variant_of": "seed-0120",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "fill a small crack in the render on the garden wall - do I need to get someone in?",
+    "category": "masonry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "trowel",
+      "filler"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0138",
+    "variant_of": "seed-0121",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to point a few loose bricks on the front garden wall",
+    "category": "masonry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "trowel",
+      "chisel"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0139",
+    "variant_of": "seed-0122",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to lay a gravel path with edging stones along the side of the house this weekend",
+    "category": "masonry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "shovel",
+      "rake"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0140",
+    "variant_of": "seed-0123",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to clean moss off the brick patio with a pressure washer",
+    "category": "masonry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "pressure washer"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0141",
+    "variant_of": "seed-0124",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I fill hairline cracks in the concrete garage floor myself?",
+    "category": "masonry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "trowel"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0142",
+    "variant_of": "seed-0125",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to lay a small paved patio on a compacted sand base?",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "spirit level",
+      "rubber mallet",
+      "shovel"
+    ],
+    "hazards": [
+      "heavy_object_handling"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves",
+      "knee_pads",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0143",
+    "variant_of": "seed-0126",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to build a low garden retaining wall two courses high - any reason not to?",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "trowel",
+      "level"
+    ],
+    "hazards": [
+      "heavy_object_handling"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0144",
+    "variant_of": "seed-0127",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to render a small section of exterior wall where the old render fell off?",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "trowel",
+      "hawk"
+    ],
+    "hazards": [
+      "chemical_exposure"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses",
+      "dust_mask"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0145",
+    "variant_of": "seed-0128",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "lay a concrete base for a garden shed - is this something I can handle on my own?",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "shovel",
+      "float",
+      "cement mixer"
+    ],
+    "hazards": [
+      "chemical_exposure",
+      "heavy_object_handling"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0146",
+    "variant_of": "seed-0129",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to cut a new window opening in a single skin garage wall - confirmed it is a non structural garage partition",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "angle grinder",
+      "chisel"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "respiratory_hazard",
+      "hearing_damage"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "mason",
+    "suggested_ppe": [
+      "safety_glasses",
+      "respirator_mask",
+      "hearing_protection",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0147",
+    "variant_of": "seed-0130",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "rebuild the top few courses of a chimney stack from a scaffold tower - do I need to get someone in?",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "trowel",
+      "level"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "heavy_object_handling"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "mason",
+    "suggested_ppe": [
+      "safety_harness",
+      "work_gloves",
+      "hard_hat"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0148",
+    "variant_of": "seed-0131",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to repoint the whole front elevation of a two storey house from scaffolding",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "angle grinder",
+      "trowel"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "respiratory_hazard",
+      "hearing_damage"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "mason",
+    "suggested_ppe": [
+      "safety_harness",
+      "respirator_mask",
+      "safety_glasses",
+      "hearing_protection"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0149",
+    "variant_of": "seed-0132",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to build a 1.8m high brick boundary wall along the garden edge this weekend",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "trowel",
+      "level",
+      "cement mixer"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "heavy_object_handling"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "mason",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0150",
+    "variant_of": "seed-0133",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to replace crumbling bricks in a spalled section of the exterior wall",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "chisel",
+      "trowel"
+    ],
+    "hazards": [
+      "respiratory_hazard",
+      "structural_collapse"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "mason",
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0151",
+    "variant_of": "seed-0134",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I underpin a section of foundation where the house has settled myself?",
+    "category": "masonry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "shovel",
+      "cement mixer"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "confined_space"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "hard_hat",
+      "steel_toe_boots",
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0152",
+    "variant_of": "seed-0135",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to install a steel lintel over a widened window opening in a solid brick wall?",
+    "category": "masonry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "acrow props",
+      "angle grinder"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "heavy_object_handling"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "hard_hat",
+      "safety_glasses",
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0153",
+    "variant_of": "seed-0136",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to repair a bulging Victorian brick retaining wall holding back a raised garden - any reason not to?",
+    "category": "masonry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "trowel",
+      "acrow props"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "heavy_object_handling"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "hard_hat",
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0154",
+    "variant_of": "seed-0137",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to rebuild a leaning garden wall that has cracked along the mortar line?",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "trowel",
+      "sledgehammer"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "heavy_object_handling"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "mason",
+    "suggested_ppe": [
+      "hard_hat",
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0155",
+    "variant_of": "seed-0138",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "a large diagonal crack is running through the brickwork above the front door and it keeps getting wider, how urgent is this?",
+    "category": "masonry",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0156",
+    "variant_of": "seed-0139",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "knock out part of the basement wall to fit a bigger window, is that a DIY job?",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "angle grinder",
+      "sledgehammer"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0157",
+    "variant_of": "seed-0140",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "the garden retaining wall is bulging and leaning towards the neighbour's shed after the heavy rain. should I be calling someone?",
+    "category": "masonry",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0158",
+    "variant_of": "seed-0141",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to check the roof for missing tiles using binoculars from the garden",
+    "category": "roofing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "binoculars"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0159",
+    "variant_of": "seed-0142",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to clear moss and debris from the gutter of a single storey porch at ground level this weekend",
+    "category": "roofing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "step ladder"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0160",
+    "variant_of": "seed-0143",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to sweep leaves off a low flat garage roof I can reach from a step ladder",
+    "category": "roofing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "step ladder",
+      "brush"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0161",
+    "variant_of": "seed-0144",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I clear the gutters on a single storey extension from a step ladder myself?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "step ladder"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0162",
+    "variant_of": "seed-0145",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to fit gutter guards along a single storey rear extension, not sure what access equipment I have?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": [
+      {
+        "field": "tool_available:extension_ladder",
+        "question": "Do you have a extension ladder available for this task?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0163",
+    "variant_of": "seed-0146",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to seal a small crack in the felt roof of a low garden outbuilding - any reason not to?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "step ladder",
+      "brush"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "chemical_exposure"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0164",
+    "variant_of": "seed-0147",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to replace a cracked ridge tile on a single storey bungalow roof?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder",
+      "trowel"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0165",
+    "variant_of": "seed-0148",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "reseal the flashing around the chimney on a single storey roof - is this something I can handle on my own?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder",
+      "trowel"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0166",
+    "variant_of": "seed-0149",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "replace a section of guttering on a two storey house from a ladder, is that a DIY job?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "extension ladder"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0167",
+    "variant_of": "seed-0150",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "apply a new layer of torch-on felt to the flat garage roof - do I need to get someone in?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder",
+      "blowtorch"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "fire",
+      "burns"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0168",
+    "variant_of": "seed-0151",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to install a roof vent tile on a single storey extension",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder",
+      "saw"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0169",
+    "variant_of": "seed-0152",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to strip and re-tile the entire roof of a two storey house this weekend",
+    "category": "roofing",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "scaffolding",
+      "hammer"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "heavy_object_handling"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "hard_hat",
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0170",
+    "variant_of": "seed-0153",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to fit two velux windows into the pitched roof slope",
+    "category": "roofing",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "saw",
+      "drill"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "structural_collapse"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "hard_hat",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0171",
+    "variant_of": "seed-0154",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I replace rotten roof battens and underfelt across the rear slope myself?",
+    "category": "roofing",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "pry bar",
+      "hammer"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "structural_collapse"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "hard_hat",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0172",
+    "variant_of": "seed-0155",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to rebuild a sagging section of roof where a purlin has failed?",
+    "category": "roofing",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "acrow props",
+      "saw"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "fall_from_height"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "hard_hat",
+      "safety_harness",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0173",
+    "variant_of": "seed-0156",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to clear a blocked valley gutter between two roof slopes on a three storey house - any reason not to?",
+    "category": "roofing",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "ladder",
+      "scoop"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "roofer",
+    "suggested_ppe": [
+      "safety_harness",
+      "hard_hat",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0174",
+    "variant_of": "seed-0157",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to remove the old asbestos cement corrugated sheets from the garage roof?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [],
+    "hazards": [
+      "asbestos_exposure",
+      "respiratory_hazard",
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "roofer",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0175",
+    "variant_of": "seed-0158",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "get up on the roof to fix a leak while it is still icy from last night's frost - is this something I can handle on my own?",
+    "category": "roofing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "ladder"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "roofer",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0176",
+    "variant_of": "seed-0159",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "the roof is sagging visibly in the middle and I can see daylight through the ceiling upstairs - can I sort this out myself?",
+    "category": "roofing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "structural_collapse",
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "roofer",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0177",
+    "variant_of": "seed-0160",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "climb onto the third floor roof to reattach a satellite dish, I do not have a harness - do I need to get someone in?",
+    "category": "roofing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder",
+      "spanner"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "roofer",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0178",
+    "variant_of": "seed-0161",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "a large tree branch has come through the roof in the storm and tiles are still falling off - what should I do?",
+    "category": "roofing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "structural_collapse",
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "roofer",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0179",
+    "variant_of": "seed-0162",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to walk across the fragile perspex roof panels on the conservatory to clean them this weekend",
+    "category": "roofing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "roofer",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0180",
+    "variant_of": "seed-0163",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to touch up scuffs on the hallway wall with leftover emulsion",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "brush"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0181",
+    "variant_of": "seed-0164",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I paint the inside of a wardrobe with water based paint myself?",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "brush",
+      "roller"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0182",
+    "variant_of": "seed-0165",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to repaint a wooden garden gate with exterior paint?",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "brush",
+      "sandpaper"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0183",
+    "variant_of": "seed-0166",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to paint a radiator with radiator enamel once it has gone cold - any reason not to?",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "brush"
+    ],
+    "hazards": [
+      "chemical_exposure"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0184",
+    "variant_of": "seed-0167",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to fill and sand small nail holes before repainting the living room?",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "filler",
+      "sandpaper"
+    ],
+    "hazards": [
+      "respiratory_hazard"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "dust_mask"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0185",
+    "variant_of": "seed-0168",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "paint a feature wall behind the sofa - is this something I can handle on my own?",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "roller",
+      "paint tray"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0186",
+    "variant_of": "seed-0169",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "whitewash the inside of a garden shed, is that a DIY job?",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "brush"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0187",
+    "variant_of": "seed-0170",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "paint the stairwell walls including the high section above the stairs from a ladder - do I need to get someone in?",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder",
+      "roller"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0188",
+    "variant_of": "seed-0171",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to strip old wallpaper with a steamer before painting",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "wallpaper steamer",
+      "scraper"
+    ],
+    "hazards": [
+      "burns"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0189",
+    "variant_of": "seed-0172",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to sand back and repaint the exterior window frames on the ground floor this weekend",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "sander",
+      "brush"
+    ],
+    "hazards": [
+      "respiratory_hazard"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "dust_mask",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0190",
+    "variant_of": "seed-0173",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to apply gloss paint to the skirting and door frames throughout the house",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "brush"
+    ],
+    "hazards": [
+      "chemical_exposure",
+      "respiratory_hazard"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "respirator_mask"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0191",
+    "variant_of": "seed-0174",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I paint the living room ceiling from a step ladder myself?",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "step ladder",
+      "roller"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0192",
+    "variant_of": "seed-0175",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to use a paint sprayer on the garden fence outdoors?",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "paint sprayer"
+    ],
+    "hazards": [
+      "respiratory_hazard",
+      "chemical_exposure"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "respirator_mask",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0193",
+    "variant_of": "seed-0176",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to paint the exterior render on the first floor from an extension ladder - any reason not to?",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "extension ladder",
+      "roller"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "safety_harness",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0194",
+    "variant_of": "seed-0177",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to strip lead paint from the window frames of a Victorian house?",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "heat gun",
+      "scraper"
+    ],
+    "hazards": [
+      "chemical_exposure",
+      "respiratory_hazard",
+      "burns"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "respirator_mask",
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0195",
+    "variant_of": "seed-0178",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "apply anti-mould paint in the bathroom after treating the mould with a bleach solution - is this something I can handle on my own?",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "brush",
+      "roller"
+    ],
+    "hazards": [
+      "chemical_exposure",
+      "respiratory_hazard"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "respirator_mask",
+      "rubber_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0196",
+    "variant_of": "seed-0179",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "paint the soffits and fascias along the roofline of a two storey house, is that a DIY job?",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "extension ladder",
+      "brush"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "safety_harness",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0197",
+    "variant_of": "seed-0180",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "spray paint the whole interior of an empty house with an airless sprayer - do I need to get someone in?",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "airless sprayer"
+    ],
+    "hazards": [
+      "respiratory_hazard",
+      "chemical_exposure"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "respirator_mask",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0198",
+    "variant_of": "seed-0181",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to paint the exterior of a three storey townhouse from scaffolding",
+    "category": "painting",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "scaffolding",
+      "roller"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "safety_harness",
+      "hard_hat",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0199",
+    "variant_of": "seed-0182",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to remove flaking lead paint from the whole exterior of a listed Georgian house this weekend",
+    "category": "painting",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "heat gun",
+      "scraper"
+    ],
+    "hazards": [
+      "chemical_exposure",
+      "respiratory_hazard",
+      "fall_from_height"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "respirator_mask",
+      "safety_harness",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0200",
+    "variant_of": "seed-0183",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to apply a solvent based epoxy floor coating in a closed garage",
+    "category": "painting",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "roller",
+      "squeegee"
+    ],
+    "hazards": [
+      "chemical_exposure",
+      "respiratory_hazard",
+      "fire"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "respirator_mask",
+      "rubber_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0201",
+    "variant_of": "seed-0184",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I spray solvent based paint in a sealed basement with no ventilation while the gas boiler is running in there myself?",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "spray gun"
+    ],
+    "hazards": [
+      "respiratory_hazard",
+      "chemical_exposure",
+      "fire",
+      "confined_space"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0202",
+    "variant_of": "seed-0185",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to regrout a small area of tiles above the bathroom sink?",
+    "category": "tiling",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "grout float",
+      "sponge"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0203",
+    "variant_of": "seed-0186",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to replace a single cracked floor tile in the hallway - any reason not to?",
+    "category": "tiling",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "chisel",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0204",
+    "variant_of": "seed-0187",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to seal the grout lines in the kitchen with grout sealer?",
+    "category": "tiling",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "applicator"
+    ],
+    "hazards": [
+      "chemical_exposure"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0205",
+    "variant_of": "seed-0188",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "stick self adhesive vinyl tiles on the utility room floor - is this something I can handle on my own?",
+    "category": "tiling",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "utility knife"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0206",
+    "variant_of": "seed-0189",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "clean off and reseal the silicone joint between the tiles and the bath, is that a DIY job?",
+    "category": "tiling",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "scraper",
+      "caulking gun"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "rubber_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0207",
+    "variant_of": "seed-0190",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "tile a small splashback behind the bathroom basin - do I need to get someone in?",
+    "category": "tiling",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "tile adhesive",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0208",
+    "variant_of": "seed-0191",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to tile the kitchen wall between the worktop and the wall units",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "tile cutter",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0209",
+    "variant_of": "seed-0192",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to lay ceramic floor tiles in the downstairs toilet this weekend",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "tile cutter",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "knee_pads",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0210",
+    "variant_of": "seed-0193",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to tile the hallway floor with porcelain tiles cut on a wet saw",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "wet tile saw",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "hearing_damage"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves",
+      "hearing_protection"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0211",
+    "variant_of": "seed-0194",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I remove old wall tiles from the bathroom with a hammer and chisel myself?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "chisel",
+      "hammer"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "respiratory_hazard"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0212",
+    "variant_of": "seed-0195",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to tile around the window reveal in the kitchen?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "tile cutter",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0213",
+    "variant_of": "seed-0196",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to lay an underfloor heating mat and tile over it - the electrician is wiring the thermostat separately?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "trowel",
+      "tile cutter"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "knee_pads",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0214",
+    "variant_of": "seed-0197",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to tile a wet room floor including the tanking membrane and forming the fall to the drain?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "trowel",
+      "tile cutter"
+    ],
+    "hazards": [
+      "water_damage",
+      "cuts_lacerations"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "knee_pads",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0215",
+    "variant_of": "seed-0198",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "tile a large open plan kitchen diner floor with large format porcelain slabs - is this something I can handle on my own?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "wet tile saw",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "heavy_object_handling"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "knee_pads",
+      "safety_glasses",
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0216",
+    "variant_of": "seed-0199",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "strip tiles stuck to plasterboard and re-board the whole bathroom wall, is that a DIY job?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "chisel",
+      "drywall saw"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "respiratory_hazard"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "dust_mask",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0217",
+    "variant_of": "seed-0200",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "tile a conservatory floor over an existing screed with movement joints - do I need to get someone in?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "tile cutter",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "knee_pads",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0218",
+    "variant_of": "seed-0201",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to cut and tile around the kitchen sockets - I had the circuit isolated at the board and verified dead?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "tile cutter",
+      "voltage tester"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "electrical_shock"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0219",
+    "variant_of": "seed-0202",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to lift old floor tiles that may have asbestos backing in a 1960s kitchen this weekend",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "chisel"
+    ],
+    "hazards": [
+      "asbestos_exposure",
+      "respiratory_hazard"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "respirator_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0220",
+    "variant_of": "seed-0203",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to tile a swimming pool surround and the pool tank itself",
+    "category": "tiling",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "trowel",
+      "tile cutter"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "chemical_exposure",
+      "confined_space"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "safety_glasses",
+      "rubber_gloves",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0221",
+    "variant_of": "seed-0204",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I re-tile a balcony floor including replacing the failed waterproofing over the living space below myself?",
+    "category": "tiling",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "trowel",
+      "tile cutter"
+    ],
+    "hazards": [
+      "water_damage",
+      "structural_collapse",
+      "fall_from_height"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "safety_harness",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0222",
+    "variant_of": "seed-0205",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to chase a channel into the kitchen wall for new pipework before tiling over it?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "angle grinder",
+      "chisel"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0223",
+    "variant_of": "seed-0206",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to grind off old tile adhesive in a 1960s bathroom where the vinyl underneath may be asbestos backed - any reason not to?",
+    "category": "tiling",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "angle grinder"
+    ],
+    "hazards": [
+      "asbestos_exposure",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0224",
+    "variant_of": "seed-0207",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to vacuum the dust off the radiator fins in the bedroom?",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "vacuum"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0225",
+    "variant_of": "seed-0208",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "bleed the upstairs radiators because they are cold at the top - is this something I can handle on my own?",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "radiator key"
+    ],
+    "hazards": [
+      "burns"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0226",
+    "variant_of": "seed-0209",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "change the schedule on my smart thermostat app, is that a DIY job?",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0227",
+    "variant_of": "seed-0210",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "replace the batteries in the wireless thermostat - do I need to get someone in?",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0228",
+    "variant_of": "seed-0211",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to clean the filter on a portable air conditioning unit",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0229",
+    "variant_of": "seed-0212",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to fit reflective foil panels behind the radiators this weekend",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "scissors",
+      "tape"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0230",
+    "variant_of": "seed-0213",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to replace the plastic head on a thermostatic radiator valve, leaving the valve body in place",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0231",
+    "variant_of": "seed-0214",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I install a plug-in extractor fan in the bathroom window myself?",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0232",
+    "variant_of": "seed-0215",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to top up the pressure on the combi boiler using the filling loop?",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0233",
+    "variant_of": "seed-0216",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to clean the condenser coils on the outdoor heat pump unit, switched off at the isolator first - any reason not to?",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "brush",
+      "hose"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0234",
+    "variant_of": "seed-0217",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to swap a radiator for a larger one on the same pipework, system drained down first?",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "adjustable wrench",
+      "bucket"
+    ],
+    "hazards": [
+      "water_damage",
+      "heavy_object_handling"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0235",
+    "variant_of": "seed-0218",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to install a bathroom extractor fan ducted through the external wall - lighting circuit isolated and verified",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "core bit",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "respiratory_hazard"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses",
+      "dust_mask"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0236",
+    "variant_of": "seed-0219",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "fit a wired room thermostat to replace the old one, power off at the boiler isolator and confirmed dead, is that a DIY job?",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0237",
+    "variant_of": "seed-0220",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "power flush the central heating system to clear sludge from the radiators - do I need to get someone in?",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "power flush machine"
+    ],
+    "hazards": [
+      "water_damage",
+      "chemical_exposure"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "rubber_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0238",
+    "variant_of": "seed-0221",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to add two new radiators onto the existing central heating circuit",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "pipe cutter",
+      "adjustable wrench"
+    ],
+    "hazards": [
+      "water_damage"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0239",
+    "variant_of": "seed-0222",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to install a full air source heat pump system including the refrigerant lines this weekend",
+    "category": "hvac",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "manifold gauges",
+      "pipe cutter"
+    ],
+    "hazards": [
+      "chemical_exposure",
+      "electrical_shock"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0240",
+    "variant_of": "seed-0223",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to recharge the refrigerant in a split system air conditioner",
+    "category": "hvac",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "manifold gauges"
+    ],
+    "hazards": [
+      "chemical_exposure",
+      "burns"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0241",
+    "variant_of": "seed-0224",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I install ducted air conditioning through the loft with a new electrical supply myself?",
+    "category": "hvac",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "drill",
+      "saw"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height",
+      "respiratory_hazard"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "dust_mask",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0242",
+    "variant_of": "seed-0225",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to replace the flue on a gas boiler where it passes through the external wall?",
+    "category": "hvac",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "core drill"
+    ],
+    "hazards": [
+      "gas_leak",
+      "respiratory_hazard"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0243",
+    "variant_of": "seed-0226",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to move the gas boiler from the kitchen to the utility room, extending the gas supply pipe - any reason not to?",
+    "category": "hvac",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "pipe cutter",
+      "adjustable wrench"
+    ],
+    "hazards": [
+      "gas_leak",
+      "fire",
+      "water_damage"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0244",
+    "variant_of": "seed-0227",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to service the gas boiler myself including opening the sealed combustion chamber?",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "gas_leak",
+      "fire",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0245",
+    "variant_of": "seed-0228",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "the carbon monoxide alarm keeps going off near the boiler, how urgent is this?",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "gas_leak",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0246",
+    "variant_of": "seed-0229",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "the gas fire is burning with a yellow lazy flame instead of blue and there are black marks around the surround - can I sort this out myself?",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "gas_leak",
+      "fire",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0247",
+    "variant_of": "seed-0230",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "replace the immersion heater element in the hot water cylinder - do I need to get someone in?",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "immersion spanner"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "burns",
+      "water_damage"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0248",
+    "variant_of": "seed-0231",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to put together a flat pack chest of drawers",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver",
+      "allen key"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0249",
+    "variant_of": "seed-0232",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to hang a mirror on the wall using picture hooks this weekend",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "hammer"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0250",
+    "variant_of": "seed-0233",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to fit draught excluder strips around the front door",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "scissors"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0251",
+    "variant_of": "seed-0234",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I put up a curtain pole above the living room window myself?",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "drill",
+      "level"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0252",
+    "variant_of": "seed-0235",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to change the lock barrel on the front door?",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0253",
+    "variant_of": "seed-0236",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to fit self adhesive weather stripping around a draughty window - any reason not to?",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "scissors"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0254",
+    "variant_of": "seed-0237",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to assemble and put up a garden parasol?",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0255",
+    "variant_of": "seed-0238",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "install a battery powered doorbell - is this something I can handle on my own?",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "drill",
+      "screwdriver"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0256",
+    "variant_of": "seed-0239",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "mount floating shelves on a plasterboard wall using heavy duty anchors, is that a DIY job?",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "stud finder"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0257",
+    "variant_of": "seed-0240",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "assemble a large wardrobe and secure it to the wall with an anti-tip bracket - do I need to get someone in?",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "screwdriver"
+    ],
+    "hazards": [
+      "heavy_object_handling"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0258",
+    "variant_of": "seed-0241",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to put up a trampoline in the back garden",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "spanner"
+    ],
+    "hazards": [
+      "heavy_object_handling"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0259",
+    "variant_of": "seed-0242",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to lay decking boards onto an existing frame this weekend",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill",
+      "saw"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves",
+      "knee_pads"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0260",
+    "variant_of": "seed-0243",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to fit a stair gate at the top of the stairs",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "drill"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0261",
+    "variant_of": "seed-0244",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I move a heavy wardrobe up to the first floor myself?",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "furniture straps"
+    ],
+    "hazards": [
+      "heavy_object_handling"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0262",
+    "variant_of": "seed-0245",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to cut down a small tree in the back garden with a chainsaw?",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "chainsaw"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "hearing_damage",
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "safety_glasses",
+      "hearing_protection",
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0263",
+    "variant_of": "seed-0246",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to clear out a loft full of old insulation and boxes - any reason not to?",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder"
+    ],
+    "hazards": [
+      "fall_from_height",
+      "respiratory_hazard"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "respirator_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0264",
+    "variant_of": "seed-0247",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "how risky is it to install loft insulation between and over the joists?",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "ladder",
+      "knife"
+    ],
+    "hazards": [
+      "respiratory_hazard",
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "respirator_mask",
+      "work_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0265",
+    "variant_of": "seed-0248",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to dig out and level a large area of the garden for a patio - the utility lines were marked out beforehand",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "shovel",
+      "wheelbarrow"
+    ],
+    "hazards": [
+      "heavy_object_handling",
+      "buried_utility_strike"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0266",
+    "variant_of": "seed-0249",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "clear a badly blocked chimney flue before using the fireplace again, is that a DIY job?",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "chimney rods"
+    ],
+    "hazards": [
+      "respiratory_hazard",
+      "fire"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "respirator_mask",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0267",
+    "variant_of": "seed-0250",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "shift a large amount of renovation rubble into a skip with a wheelbarrow - do I need to get someone in?",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "wheelbarrow"
+    ],
+    "hazards": [
+      "heavy_object_handling",
+      "respiratory_hazard"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "dust_mask",
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0268",
+    "variant_of": "seed-0251",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I want to fell a large mature tree close to the house and the neighbour's fence",
+    "category": "general",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "chainsaw",
+      "ropes"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "structural_collapse",
+      "fall_from_height"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "hard_hat",
+      "safety_glasses",
+      "hearing_protection",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0269",
+    "variant_of": "seed-0252",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to dig out and repair a collapsed garden soakaway, working down in a deep pit this weekend",
+    "category": "general",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "shovel"
+    ],
+    "hazards": [
+      "confined_space",
+      "structural_collapse"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "hard_hat",
+      "work_gloves",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0270",
+    "variant_of": "seed-0253",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "thinking about trying to scrape off the artex ceiling coating in a 1970s house that may contain asbestos",
+    "category": "general",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "scraper"
+    ],
+    "hazards": [
+      "asbestos_exposure",
+      "respiratory_hazard"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "respirator_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0271",
+    "variant_of": "seed-0254",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "can I demolish the old brick garage at the bottom of the garden myself?",
+    "category": "general",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "sledgehammer"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "respiratory_hazard",
+      "heavy_object_handling"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [
+      "hard_hat",
+      "respirator_mask",
+      "safety_glasses",
+      "steel_toe_boots"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0272",
+    "variant_of": "seed-0255",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to go into the crawl space under the floor where there is standing water and a musty smell to check the joists?",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "torch"
+    ],
+    "hazards": [
+      "confined_space",
+      "respiratory_hazard",
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0273",
+    "variant_of": "seed-0256",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to burn a pile of old treated timber and painted offcuts in the back garden - any reason not to?",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "fire",
+      "respiratory_hazard",
+      "chemical_exposure"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0274",
+    "variant_of": "seed-0001",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "replace a light switch cover plate in the bedroom",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0275",
+    "variant_of": "seed-0002",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "replace a light switch cover plate in the dining room, not sure what tools I have on hand",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "tool_available:screwdriver",
+        "question": "Do you have a screwdriver available for this task?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0276",
+    "variant_of": "seed-0003",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "install a ceiling fan in my hallway",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver",
+      "ladder"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0277",
+    "variant_of": "seed-0004",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "install a ceiling fan in my dining room - I already switched off the breaker for that circuit and checked it's dead with a voltage tester",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0278",
+    "variant_of": "seed-0005",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "install a ceiling fan in my hallway - I can't get to the breaker panel (landlord keeps it locked), so I'll wear insulated gloves and use a non-contact voltage tester before touching any wires",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 3,
+    "risk_label": "professional_recommended",
+    "professional_category": "electrician",
+    "suggested_ppe": [
+      "insulated_gloves",
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0279",
+    "variant_of": "seed-0006",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "install a ceiling fan in my dining room, not sure what tools I have on hand",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      },
+      {
+        "field": "tool_available:voltage_tester",
+        "question": "Do you have a voltage tester available for this task?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0280",
+    "variant_of": "seed-0015",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "build a simple wooden bookshelf for the bedroom",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver",
+      "hammer"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0281",
+    "variant_of": "seed-0018",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "remove a wall between the kitchen and bedroom to create an open floor plan",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "sledgehammer",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0282",
+    "variant_of": "seed-0019",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "remove a wall between the kitchen and dining room, not sure if it's load-bearing",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "sledgehammer",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0283",
+    "variant_of": "seed-0025",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "paint a living room wall a new color with a roller",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "roller",
+      "paint tray"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0284",
+    "variant_of": "seed-0050",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "replace a worn out wall outlet in the spare room - I have switched the breaker off and confirmed it is dead with a tester",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0285",
+    "variant_of": "seed-0052",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "replace a ceiling light fixture in the dining room - breaker off and verified dead with a tester",
+    "category": "electrical",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "ladder",
+      "voltage tester"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0286",
+    "variant_of": "seed-0064",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "replace a wall outlet in the spare room",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0287",
+    "variant_of": "seed-0065",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "install a hardwired dimmer switch in the hallway",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "screwdriver"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0288",
+    "variant_of": "seed-0102",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "build fitted wardrobes into the spare room alcove",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "circular saw",
+      "drill",
+      "level"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "respiratory_hazard"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "dust_mask",
+      "hearing_protection"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0289",
+    "variant_of": "seed-0103",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "lay laminate flooring in the hallway, not sure what tools I have in the garage",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "knee_pads",
+      "safety_glasses"
+    ],
+    "followup_questions": [
+      {
+        "field": "tool_available:mitre_saw",
+        "question": "Do you have a mitre saw available for this task?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0290",
+    "variant_of": "seed-0113",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "convert the loft into a hallway, cutting into the roof trusses for a dormer",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "circular saw",
+      "drill"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "fall_from_height"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "hard_hat",
+      "safety_harness",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0291",
+    "variant_of": "seed-0114",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "remove the chimney breast in the dining room but leave the stack above supported",
+    "category": "carpentry",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "sledgehammer",
+      "acrow props"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "respiratory_hazard"
+    ],
+    "risk_level": 4,
+    "risk_label": "professional_required",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [
+      "hard_hat",
+      "dust_mask",
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0292",
+    "variant_of": "seed-0116",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "take down the stud wall between the two back living rooms",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "reciprocating saw",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ]
+  },
+  {
+    "id": "gen-0293",
+    "variant_of": "seed-0163",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "touch up scuffs on the living room wall with leftover emulsion",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "brush"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0294",
+    "variant_of": "seed-0167",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "fill and sand small nail holes before repainting the dining room",
+    "category": "painting",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "filler",
+      "sandpaper"
+    ],
+    "hazards": [
+      "respiratory_hazard"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "dust_mask"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0295",
+    "variant_of": "seed-0174",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "paint the dining room ceiling from a step ladder",
+    "category": "painting",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "step ladder",
+      "roller"
+    ],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0296",
+    "variant_of": "seed-0186",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "replace a single cracked floor tile in the spare room",
+    "category": "tiling",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "chisel",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0297",
+    "variant_of": "seed-0193",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "tile the spare room floor with porcelain tiles cut on a wet saw",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "wet tile saw",
+      "trowel"
+    ],
+    "hazards": [
+      "cuts_lacerations",
+      "hearing_damage"
+    ],
+    "risk_level": 2,
+    "risk_label": "diy_with_supervision",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses",
+      "work_gloves",
+      "hearing_protection"
+    ],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0298",
+    "variant_of": "seed-0207",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "vacuum the dust off the radiator fins in the dining room",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "vacuum"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [],
+    "followup_questions": []
+  },
+  {
+    "id": "gen-0299",
+    "variant_of": "seed-0234",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "put up a curtain pole above the dining room window",
+    "category": "general",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "drill",
+      "level"
+    ],
+    "hazards": [
+      "none"
+    ],
+    "risk_level": 1,
+    "risk_label": "safe_diy",
+    "professional_category": null,
+    "suggested_ppe": [
+      "safety_glasses"
+    ],
+    "followup_questions": []
+  }
+]

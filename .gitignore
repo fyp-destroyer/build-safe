@@ -21,3 +21,7 @@ apps/frontend/.env.local
 
 # OS
 .DS_Store
+
+# Derived ML artifact - regenerate with `python ml/train_embedding_model.py`
+ml/eval/embeddings_cache.npz
+ml/__pycache__/

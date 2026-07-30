@@ -48,9 +48,11 @@ Each phase has a clear deliverable and an exit check. Don't start a phase until 
 
 **Deliverable:** embedding-based classifier, compared against baseline.
 
-- [ ] `ml/train_embedding_model.py` using sentence-transformer embeddings
-- [ ] Side-by-side comparison report vs. baseline
-  **Exit check:** decision made on which model ships, documented with reasoning.
+- [x] `ml/train_embedding_model.py` using sentence-transformer embeddings — `all-MiniLM-L6-v2` (384-d, frozen) + Logistic Regression head, identical inputs to the baseline so the comparison isolates the representation (2026-07-30).
+- [x] Side-by-side comparison report vs. baseline — `ml/eval/comparison_report.md`.
+  **Exit check:** decision made on which model ships, documented with reasoning. — **MET. The TF-IDF baseline ships.** The embedding model is decisively worse on macro F1 (**−0.075 ± 0.033**, losing **5/5** paired CV folds) and no better on high-risk recall (−0.020, inside the ±0.082 fold spread). Decision rests on paired grouped 5-fold CV, not the 40-row test set, whose ±0.2 CI cannot separate two models.
+  - **Why the general-purpose encoder loses** (the opposite of the usual expectation, so it is explained in the report): risk here is carried by rare domain tokens — *gas*, *asbestos*, *load-bearing*, *consumer unit*, *fragile* — which TF-IDF weights precisely; MiniLM compresses to 384 general-similarity dimensions where *"replace a light fixture"* and *"replace a consumer unit"* sit close together despite being three risk levels apart. ~390 training rows is far too little to learn a head that recovers the distinction.
+  - Both artifacts kept per `architecture.md` §1. Serving stays scikit-learn-only — no torch, no ~90 MB download.
 
 ## Phase 5 — Safety Rule Engine
 

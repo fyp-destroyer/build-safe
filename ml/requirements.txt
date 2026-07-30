@@ -1,0 +1,16 @@
+# Phase 3/4 ML pipeline dependencies.
+# Install:  pip install -r ml/requirements.txt
+#
+# torch / transformers / sentence-transformers are needed ONLY to reproduce the
+# Phase 4 embedding comparison (ml/train_embedding_model.py). The model that
+# actually ships is the TF-IDF baseline, which needs nothing beyond
+# scikit-learn - see ml/eval/comparison_report.md.
+scikit-learn==1.8.0
+numpy==2.2.6
+scipy==1.16.3
+pandas==2.2.3
+joblib==1.5.1
+matplotlib==3.10.8
+sentence-transformers==5.6.1
+torch==2.9.0
+transformers==5.6.2

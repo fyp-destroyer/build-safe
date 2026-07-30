@@ -115,8 +115,7 @@ def main() -> int:
     # never has a missing one. Using the dataset's answer where it has one
     # and the SAFE answer otherwise - anything else measures a state the
     # product cannot reach and flatters the numbers.
-    print("
-" + "=" * 74)
+    print("\n" + "=" * 74)
     print("CONTEXT - what the deployed system actually achieves")
     sys.path.insert(0, str(Path(__file__).parents[1] / "apps" / "backend"))
     from ai.rule_engine import evaluate, required_followups
@@ -137,8 +136,7 @@ def main() -> int:
                         np.isin(np.maximum(oof_pred, rule), HIGH_RISK))):
         rec, over, _, _ = scores(y, flag)
         print(f"  {name:24s} recall {rec:.3f}   over-escalation {over:.3f}")
-    print("
-  The rule engine is far MORE PRECISE than the model: it buys")
+    print("\n  The rule engine is far MORE PRECISE than the model: it buys")
     print("  recall at ~0.01 over-escalation, where the model pays ~0.08.")
     print("  That makes new rules the cheapest available recall.")
 

@@ -1,69 +1,134 @@
-"""TEMPORARY placeholder. NOT a real ML model — still a keyword heuristic.
+"""ML risk classifier — the trained Phase 3/4 model, served.
 
-Status as of Phase 5: Phase 3 and Phase 4 ARE complete, but their output is
-not wired in here yet. The trained model that won the Phase 4 comparison is
-`ml/eval/baseline_model.joblib` (TF-IDF + Logistic Regression; the
-sentence-embedding alternative was evaluated and rejected — see
-`ml/eval/comparison_report.md`). Loading it here is a deliberate follow-up
-step, kept separate because it adds scikit-learn and a model artifact to the
-serving path and deserves its own review.
+Loads `ml/eval/baseline_model.joblib`: TF-IDF (word + char n-grams) +
+Logistic Regression, the model that won the Phase 4 comparison. The
+sentence-embedding alternative was evaluated and rejected — with features
+matched the two were statistically indistinguishable, so the tie was broken
+on deployment cost (see `ml/eval/comparison_report.md`).
 
-Until then this module exists only to prove the `final_risk = max(ML, rules)`
-wiring works end-to-end. Do not treat its output as representative of real
-model accuracy or confidence.
+FEATURES — and why there are only three
+---------------------------------------
+`task_text`, `category`, `user_skill`. The model is trained on exactly these
+and nothing else, because they are exactly what a `Job` carries at assessment
+time. In particular it does NOT use `tools_available`: the dataset records it
+but `Job` has no such column and intake never asks, so training on it would
+be train/serve skew (measured: fitting with tools scored macro-F1 0.613 but
+served blanked — all production could do — it fell to 0.549). Everything else
+on a dataset row is an *output* of assessment and would leak the label.
 
-Note the safety consequence of that gap: right now the ML half of
-`max(ML, rules)` is a heuristic, so the deterministic rule engine in
-`ai/rule_engine/` is what actually carries the safety guarantee.
+FAILURE IS LOUD, NEVER "SAFE"
+-----------------------------
+If the artifact is missing, unreadable, or produces an out-of-range value,
+`classify()` RAISES. It must never return a low risk level to paper over a
+broken model — `assess_job` catches the exception, writes `ai_logs`, and
+marks the assessment `failed` with risk 5 (CLAUDE.md: "AI pipeline failures
+must set assessment_status = failed and block the DIY recommendation — never
+silently fall back to a 'safe' result").
+
+This is only half the decision. `final_risk = max(ML, rules)`, and the
+deterministic rule engine in `ai/rule_engine/` is what actually guarantees
+safety-critical escalation — this model's high-risk recall is around 0.65
+(see `ml/eval/baseline_report.md`), nowhere near `prd.md` §7's target.
 """
 
-_HIGH_RISK_KEYWORDS = (
-    "gas",
-    "live wire",
-    "live wiring",
-    "electrical panel",
-    "main panel",
-    "load-bearing",
-    "load bearing",
-    "roof",
-    "demolition",
-)
+from __future__ import annotations
 
-_MEDIUM_RISK_KEYWORDS = (
-    "electrical",
-    "wiring",
-    "plumbing",
-    "gas line",
-    "circuit",
-    "outlet",
-    "breaker",
-)
+import logging
+import os
+from functools import lru_cache
+from pathlib import Path
 
-_LOW_RISK_CATEGORIES = ("painting", "general")
+logger = logging.getLogger(__name__)
+
+# Repo root: apps/backend/ai/classifier/classifier.py -> up 4 levels.
+_DEFAULT_MODEL_PATH = Path(__file__).resolve().parents[4] / "ml" / "eval" / "baseline_model.joblib"
+
+MODEL_PATH = Path(os.environ.get("BUILDSAFE_MODEL_PATH", _DEFAULT_MODEL_PATH))
+
+MIN_RISK_LEVEL = 1
+MAX_RISK_LEVEL = 5
 
 
-def classify(description: str, category: str) -> tuple[int, float]:
-    """Return (predicted_risk_level, confidence) from a keyword heuristic.
+class ModelUnavailableError(RuntimeError):
+    """Raised when the trained model cannot be loaded or used.
 
-    THIS IS NOT A TRAINED ML MODEL. It is a placeholder so the service layer
-    and API contracts can be built and tested before the real classifier
-    (Phase 3/4) exists. Confidence is a fixed, low-ish value to signal that
-    this prediction should not be trusted as a real model's output.
-
-    Never returns a risk level outside 1-5.
+    Deliberately fatal to the assessment. Callers must fail the assessment
+    rather than substitute a default risk level.
     """
-    text = f"{description} {category}".lower()
 
-    if any(keyword in text for keyword in _HIGH_RISK_KEYWORDS):
-        return 4, 0.55
 
-    if any(keyword in text for keyword in _MEDIUM_RISK_KEYWORDS):
-        return 3, 0.5
+@lru_cache(maxsize=1)
+def _load_model():
+    """Load and cache the fitted pipeline. Raises if anything is wrong."""
+    if not MODEL_PATH.exists():
+        raise ModelUnavailableError(
+            f"trained model not found at {MODEL_PATH}. Run "
+            f"`python ml/train_baseline.py` to build it, or set "
+            f"BUILDSAFE_MODEL_PATH to an existing artifact."
+        )
+    try:
+        import joblib
 
-    if category.lower() in _LOW_RISK_CATEGORIES:
-        return 1, 0.5
+        bundle = joblib.load(MODEL_PATH)
+        model = bundle["model"]
+    except ModelUnavailableError:
+        raise
+    except Exception as exc:  # noqa: BLE001 - re-raised as a typed error below
+        raise ModelUnavailableError(f"failed to load model from {MODEL_PATH}: {exc}") from exc
 
-    # Default: no strong signal either way. Placeholder heuristic deliberately
-    # does NOT assume "safe" with high confidence — mid-low risk, low
-    # confidence, consistent with "never silently default to safe."
-    return 2, 0.4
+    logger.info("classifier: loaded %s (features=%s)", MODEL_PATH, bundle.get("features"))
+    return model
+
+
+def warmup() -> bool:
+    """Load the model eagerly. Returns True if it is usable.
+
+    Called at app startup so a broken deployment is visible immediately in
+    the logs rather than only when the first user submits a job. Never
+    raises: the process still boots, because auth, job intake and follow-ups
+    all work without the classifier. `/health/ready` reports the degraded
+    state, and assessment itself fails loudly rather than guessing.
+    """
+    try:
+        _load_model()
+        return True
+    except ModelUnavailableError:
+        logger.exception("classifier: model unavailable at startup")
+        return False
+
+
+def classify(description: str, category: str, user_skill: str = "") -> tuple[int, float]:
+    """Predict (risk_level, confidence) for a job.
+
+    `confidence` is the model's probability for the predicted class. It is
+    NOT calibrated — treat it as a relative signal only, and see
+    `ml/eval/baseline_report.md` before surfacing it to users.
+
+    Raises ModelUnavailableError if the model cannot produce a usable
+    prediction. Never returns a fallback risk level.
+    """
+    model = _load_model()
+
+    try:
+        import pandas as pd
+
+        frame = pd.DataFrame(
+            {
+                "task_text": [description or ""],
+                "category": [category or "general"],
+                "user_skill": [user_skill or "Beginner"],
+            }
+        )
+        risk = int(model.predict(frame)[0])
+        confidence = float(max(model.predict_proba(frame)[0]))
+    except Exception as exc:  # noqa: BLE001 - re-raised as a typed error
+        raise ModelUnavailableError(f"model prediction failed: {exc}") from exc
+
+    if not MIN_RISK_LEVEL <= risk <= MAX_RISK_LEVEL:
+        # A model returning something outside the ordinal scale is broken,
+        # not merely wrong. Fail rather than clamp - clamping would hide it.
+        raise ModelUnavailableError(
+            f"model returned risk level {risk} outside [{MIN_RISK_LEVEL}, {MAX_RISK_LEVEL}]"
+        )
+
+    return risk, confidence

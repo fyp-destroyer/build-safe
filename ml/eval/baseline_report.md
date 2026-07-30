@@ -2,12 +2,18 @@
 
 TF-IDF + Logistic Regression. Reproduce with `python ml/train_baseline.py`.
 Selected on the validation split: `C=4.0`,
-word n-grams `(1, 1)` (val macro-F1 0.636).
+word n-grams `(1, 1)` (val macro-F1 0.581).
 
 ## Features — and what was deliberately excluded
 
 Inputs are limited to what the backend actually has at assessment time:
-`task_text`, `category`, `user_skill`, `tools_available`.
+`task_text`, `category`, `user_skill`.
+
+`tools_available` is in the dataset but is **not** a feature: the backend has
+no tools column and intake never asks, so training on it would be train/serve
+skew. Fitting with it scored macro-F1 0.613, but serving it blanked — which is
+all production could ever do — dropped that to 0.549. The numbers below are
+therefore what the model will actually deliver.
 
 Every other field in a row is an **output** of the assessment and would leak the
 label. This is not a theoretical concern — measured on the 555 rows:
@@ -31,8 +37,8 @@ the task, so the hand-written subset is the number to trust.
 
 | | test (all 81) | test (hand-written 40) |
 |---|---|---|
-| accuracy | 0.617 | 0.650 |
-| macro F1 | 0.613 | 0.646 |
+| accuracy | 0.630 | 0.625 |
+| macro F1 | 0.620 | 0.614 |
 | high-risk recall (≥4 caught as ≥4) | 0.514 | 0.529 |
 | 95% CI on that recall | [0.356, 0.67] | [0.31, 0.738] |
 | under-prediction rate (all) | 0.284 | 0.275 |
@@ -49,9 +55,9 @@ on top of these predictions:
 
 | | ML alone | max(ML, rules) |
 |---|---|---|
-| high-risk recall, test (all) | 0.514 | **0.657** |
-| high-risk recall, hand-written | 0.529 | **0.647** |
-| high-risk rows rescued by the rule | — | 5 |
+| high-risk recall, test (all) | 0.514 | **0.629** |
+| high-risk recall, hand-written | 0.529 | **0.588** |
+| high-risk rows rescued by the rule | — | 4 |
 
 That is still a floor, not a ceiling: only the follow-up rule is simulated here.
 The real engine also carries keyword hazard rules, so the deployed system
@@ -62,8 +68,8 @@ escalates strictly more than this table shows.
 A single 82-row test split is thin. This CV groups by `group_id`, so a seed and
 its variants never straddle a fold — it is the more stable estimate.
 
-- macro F1 **0.679 ± 0.041**
-- high-risk recall **0.706 ± 0.090**
+- macro F1 **0.620 ± 0.065**
+- high-risk recall **0.652 ± 0.045**
 
 ## Why "high-risk recall" is reported collapsed
 
@@ -79,18 +85,18 @@ measure of the failure mode `prd.md` §7 targets.
 | risk level | precision | recall | F1 | support |
 |---|---|---|---|---|
 | 1 — safe_diy | 0.69 | 1.00 | 0.82 | 20 |
-| 2 — diy_with_supervision | 0.30 | 0.43 | 0.35 | 14 |
-| 3 — professional_recommended | 0.50 | 0.50 | 0.50 | 12 |
+| 2 — diy_with_supervision | 0.39 | 0.64 | 0.49 | 14 |
+| 3 — professional_recommended | 0.67 | 0.33 | 0.44 | 12 |
 | 4 — professional_required | 1.00 | 0.83 | 0.91 | 12 |
-| 5 — dangerous | 0.80 | 0.35 | 0.48 | 23 |
+| 5 — dangerous | 0.62 | 0.35 | 0.44 | 23 |
 
 ### Confusion matrix — test (all rows)
 
 | true \ pred | 1 | 2 | 3 | 4 | 5 |
 |---|---|---|---|---|---|
 | **1** | 20 | 0 | 0 | 0 | 0 |
-| **2** | 0 | 6 | 6 | 0 | 2 |
-| **3** | 0 | 6 | 6 | 0 | 0 |
+| **2** | 0 | 9 | 2 | 0 | 3 |
+| **3** | 0 | 6 | 4 | 0 | 2 |
 | **4** | 0 | 2 | 0 | 10 | 0 |
 | **5** | 9 | 6 | 0 | 0 | 8 |
 
@@ -100,11 +106,11 @@ measure of the failure mode `prd.md` §7 targets.
 
 | risk level | precision | recall | F1 | support |
 |---|---|---|---|---|
-| 1 — safe_diy | 0.71 | 1.00 | 0.83 | 10 |
-| 2 — diy_with_supervision | 0.36 | 0.57 | 0.44 | 7 |
-| 3 — professional_recommended | 0.60 | 0.50 | 0.55 | 6 |
+| 1 — safe_diy | 0.67 | 1.00 | 0.80 | 10 |
+| 2 — diy_with_supervision | 0.40 | 0.57 | 0.47 | 7 |
+| 3 — professional_recommended | 0.67 | 0.33 | 0.44 | 6 |
 | 4 — professional_required | 1.00 | 0.83 | 0.91 | 6 |
-| 5 — dangerous | 0.80 | 0.36 | 0.50 | 11 |
+| 5 — dangerous | 0.57 | 0.36 | 0.44 | 11 |
 
 ## Limitations
 

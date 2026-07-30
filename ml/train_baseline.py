@@ -11,7 +11,17 @@ Writes:
 FEATURES ARE DELIBERATELY RESTRICTED to what the backend actually knows
 when a user submits a job (architecture.md 4, srs.md 8):
 
-    task_text, category, user_skill, tools_available
+    task_text, category, user_skill
+
+NOT tools_available. The dataset records it, but the backend has no such
+field - `Job` stores description/category/skill_level/urgency and nothing
+about tools, and the conversational intake never asks. Training on a feature
+production cannot supply is train/serve skew: measured on this data, a model
+fitted with tools scores macro-F1 0.613 but drops to 0.549 when served with
+tools blanked, because 87% of training rows have them and it leans on them.
+So the shipped model is fitted WITHOUT tools and its reported numbers are
+what it will actually deliver in production. Restore the feature only if
+`Job` gains a tools column and intake starts collecting it.
 
 Everything else in a dataset row is an OUTPUT of the assessment, and using
 it would leak the label. Measured on the current data:
@@ -67,9 +77,8 @@ def to_frame(rows: list[dict]):
         "task_text": [r["task_text"] for r in rows],
         "category": [r["category"] for r in rows],
         "user_skill": [r["user_skill"] for r in rows],
-        # Tools are a list; join into a token string so TF-IDF can consume it.
-        "tools": [" ".join(t.replace(" ", "_") for t in r["tools_available"]) or "none"
-                  for r in rows],
+        # NOTE: tools_available is deliberately NOT a feature - the backend
+        # cannot supply it at inference time. See the module docstring.
     })
 
 
@@ -82,7 +91,6 @@ def build_pipeline(C: float, ngram: tuple[int, int]) -> Pipeline:
             # shared morphology ("wiring"/"rewire") that word n-grams miss.
             ("char", TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 5),
                                      sublinear_tf=True, min_df=2), "task_text"),
-            ("tools", TfidfVectorizer(token_pattern=r"[^ ]+", min_df=1), "tools"),
             ("cat", OneHotEncoder(handle_unknown="ignore"), ["category", "user_skill"]),
         ])),
         ("clf", LogisticRegression(
@@ -146,7 +154,8 @@ def main() -> int:
     final = build_pipeline(best_C, best_ng).fit(
         pd.concat([Xtr, Xva], ignore_index=True), np.concatenate([ytr, yva]))
     joblib.dump({"model": final, "C": best_C, "ngram": best_ng,
-                 "features": ["task_text", "category", "user_skill", "tools_available"]},
+                 "features": ["task_text", "category", "user_skill"],
+                 "risk_levels": [1, 2, 3, 4, 5]},
                 EVAL / "baseline_model.joblib")
 
     metrics = {"selected": {"C": best_C, "ngram": list(best_ng), "val_macro_f1": best_f1},
@@ -197,7 +206,13 @@ word n-grams `{tuple(m['selected']['ngram'])}` (val macro-F1 {m['selected']['val
 ## Features — and what was deliberately excluded
 
 Inputs are limited to what the backend actually has at assessment time:
-`task_text`, `category`, `user_skill`, `tools_available`.
+`task_text`, `category`, `user_skill`.
+
+`tools_available` is in the dataset but is **not** a feature: the backend has
+no tools column and intake never asks, so training on it would be train/serve
+skew. Fitting with it scored macro-F1 0.613, but serving it blanked — which is
+all production could ever do — dropped that to 0.549. The numbers below are
+therefore what the model will actually deliver.
 
 Every other field in a row is an **output** of the assessment and would leak the
 label. This is not a theoretical concern — measured on the 555 rows:

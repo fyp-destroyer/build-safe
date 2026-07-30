@@ -11,3 +11,12 @@ pytest
 httpx
 python-dotenv
 google-genai==2.12.1
+
+# Serving the trained Phase 3/4 classifier (ml/eval/baseline_model.joblib).
+# Versions must match those the artifact was pickled with (ml/requirements.txt);
+# a mismatch makes joblib.load fail, which classify() surfaces loudly.
+scikit-learn==1.8.0
+joblib==1.5.1
+pandas==2.2.3
+numpy==2.2.6
+

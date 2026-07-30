@@ -9,15 +9,40 @@ DB tables are managed via Alembic migrations (see alembic/), not
 `Base.metadata.create_all` — no create_all call happens here or anywhere.
 """
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from ai.classifier import warmup as classifier_warmup
 from routers import assessments, auth, jobs, recommendations
 
-app = FastAPI(title="BuildSafe AI API", version="0.0.1")
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    """Load the trained classifier at startup.
+
+    Eager so a missing or unloadable model artifact shows up in the logs at
+    boot rather than on a user's first assessment. Deliberately does NOT
+    abort startup: auth, job intake and follow-ups all still work without
+    the classifier, and /health/ready reports the degraded state. Assessment
+    itself still fails loudly rather than guessing a risk level.
+    """
+    if not classifier_warmup():
+        # Not fatal to boot, but must be impossible to miss in the logs.
+        import logging
+
+        logging.getLogger(__name__).error(
+            "STARTUP: risk classifier unavailable - /jobs/{id}/assess will fail "
+            "until it is fixed. Run `python ml/train_baseline.py`."
+        )
+    yield
+
+
+app = FastAPI(title="BuildSafe AI API", version="0.0.1", lifespan=lifespan)
 
 # Dev-only CORS: the Next.js frontend (localhost:3000) calls this API
 # (localhost:8000) directly from the browser, which requires explicit CORS
@@ -83,3 +108,25 @@ async def validation_error_handler(request: Request, exc: RequestValidationError
 async def health() -> dict[str, str]:
     """Liveness check. Must never touch the DB or AI layer."""
     return {"status": "ok"}
+
+
+@app.get("/health/ready")
+async def readiness() -> dict[str, object]:
+    """Readiness check: is this instance able to actually assess a job?
+
+    Separate from /health on purpose. /health answers "is the process
+    alive" and must stay dependency-free; this answers "is the AI layer
+    usable", which needs the model loaded. A deployment can be live but not
+    ready, and that distinction is the whole point of splitting them.
+
+    Reports degraded rather than failing: intake still works without the
+    classifier, only assessment does not.
+    """
+    from ai.classifier import classifier as _clf
+
+    model_ok = _clf.warmup()
+    return {
+        "status": "ready" if model_ok else "degraded",
+        "classifier": "loaded" if model_ok else "unavailable",
+        "model_path": str(_clf.MODEL_PATH),
+    }

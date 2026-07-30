@@ -68,10 +68,14 @@ Each phase has a clear deliverable and an exit check. Don't start a phase until 
 
 **Deliverable:** all core REST endpoints functional.
 
-- [x] `/auth`, `/jobs`, `/assessments`, `/recommendations` — built 2026-07-19, ahead of sequence at the user's explicit request (Phases 1-5 not yet done)
+- [x] `/auth`, `/jobs`, `/assessments`, `/recommendations` — built 2026-07-19 ahead of sequence; the AI layer behind them became real in Phases 5–6 (2026-07-31).
 - [x] Auth enforced and tested (single `user` role — no admin/professional roles; real JWT+bcrypt)
 - [x] `ai_logs` writes on every assessment (including failures) — never a silent "safe" fallback
-  **Exit check:** Postman/OpenAPI collection covers every FR-01–FR-12 endpoint; all return correct error shapes on bad input. — **Wiring/shape met and independently re-verified (38/38 pytest passing).** Actual risk *decisions* are still not trustworthy: `ai/classifier/` and `ai/rule_engine/` are TEMPORARY keyword-heuristic placeholders standing in for real Phase 3-5 work, loudly marked as such in module docstrings. Must be swapped for the real ML/rule-engine before this phase's exit check is truly, not just structurally, met.
+- [x] **Placeholders replaced.** `ai/rule_engine/` is the real hardcoded catalog (Phase 5); `ai/classifier/` now serves the trained `ml/eval/baseline_model.joblib` (Phase 3/4 winner) instead of a keyword heuristic.
+- [x] **API contract exported and FR coverage verified** — `python apps/backend/scripts/export_api_collection.py` writes `docs/openapi.json`, `docs/postman_collection.json` and `docs/API_COVERAGE.md`, and **exits non-zero if any FR has no endpoint**, so coverage is checked rather than claimed.
+  **Exit check:** Postman/OpenAPI collection covers every FR-01–FR-09 endpoint; all return correct error shapes on bad input. — **MET.** All 9 FRs map to live endpoints across 10 product routes; error shape `{ "error": { "code", "message" } }` and 422 field-level detail are covered by `tests/test_validation_errors.py` / `tests/test_auth.py`. Risk decisions are now produced by the real trained model and the real rule engine, so the earlier "structurally met only" caveat is resolved.
+  - Two honest gaps recorded in `docs/API_COVERAGE.md` rather than hidden: **FR-02** has no photo upload or location/budget fields, and **FR-07** returns `cost`/`time`/`difficulty` as `null` because no estimation engine exists (`prd.md` ranks it Medium priority). The endpoints and response shapes exist; the data does not.
+  - `GET /health/ready` added alongside `/health`: liveness stays dependency-free, readiness reports whether the classifier actually loaded. A deployment can be live but unable to assess, and that distinction should be visible.
 
 ## Phase 7 — Frontend Chat Flow
 

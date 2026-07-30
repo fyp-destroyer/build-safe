@@ -13,9 +13,10 @@ is pretrained and never fitted on our data, encoding all 555 rows up front is
 NOT leakage - no information flows from test rows into the encoder. Only the
 classification head is fitted, and only ever on training folds.
 
-Features match the baseline's exactly (task_text, category, user_skill,
-tools_available) so the comparison isolates the representation, not the
-inputs. See evaluation.py for why every other field is excluded.
+Features match the baseline's exactly (task_text, category, user_skill) so
+the comparison isolates the representation, not the inputs. tools_available
+is excluded from both for serve-time parity - the backend has no tools field
+(see train_baseline.py's docstring). See evaluation.py for why every other field is excluded.
 
 HOW THE SHIP DECISION IS MADE: a single 40-row hand-written test set cannot
 separate two models - its 95% CIs are ~+/-0.2 wide. So the decision rests on
@@ -74,14 +75,13 @@ def encode_all(rows: list[dict]) -> dict[str, np.ndarray]:
 
 def build_features(rows: list[dict], emb: dict[str, np.ndarray],
                    ohe: OneHotEncoder, fit: bool = False) -> np.ndarray:
-    """Sentence embedding of task_text, plus the same categorical context the
-    baseline gets. Tools are folded in as a presence-weighted count so the
-    two models see equivalent information."""
+    """Sentence embedding of task_text plus the same categorical context the
+    baseline gets - and, like the baseline, no tools feature (the backend
+    cannot supply one)."""
     E = np.vstack([emb[r["id"]] for r in rows])
     cats = [[r["category"], r["user_skill"]] for r in rows]
     C = ohe.fit_transform(cats) if fit else ohe.transform(cats)
-    ntools = np.array([[len(r["tools_available"])] for r in rows], dtype=float) / 5.0
-    return np.hstack([E, C, ntools])
+    return np.hstack([E, C])
 
 
 def fit_head(X: np.ndarray, y: np.ndarray, C: float) -> LogisticRegression:
@@ -161,7 +161,7 @@ def main() -> int:
     Xtv = np.vstack([Xtr, Xva])
     final = fit_head(Xtv, np.concatenate([ytr, yva]), best_C)
     joblib.dump({"head": final, "ohe": ohe, "encoder": ENCODER, "C": best_C,
-                 "features": ["task_text", "category", "user_skill", "tools_available"]},
+                 "features": ["task_text", "category", "user_skill"]},
                 EVAL / "embedding_model.joblib")
 
     metrics = {"encoder": ENCODER, "selected": {"C": best_C, "val_macro_f1": best_f1},
@@ -214,7 +214,7 @@ Reproduce: `python ml/train_baseline.py && python ml/train_embedding_model.py`.
 |---|---|---|
 | representation | TF-IDF word + char n-grams | `{m['encoder']}` sentence embeddings (384-d, frozen) |
 | head | Logistic Regression, `class_weight=balanced` | Logistic Regression, `class_weight=balanced` |
-| inputs | `task_text`, `category`, `user_skill`, `tools_available` | identical |
+| inputs | `task_text`, `category`, `user_skill` | identical |
 
 Both models are scored by the same code (`ml/evaluation.py`) on the same splits,
 so the comparison isolates the representation.

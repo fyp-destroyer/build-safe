@@ -190,7 +190,7 @@ async def assess_job(db: AsyncSession, job: Job) -> RiskAssessment:
     }
 
     try:
-        ml_risk, confidence = classify(job.description, job.category)
+        ml_risk, confidence = classify(job.description, job.category, job.skill_level)
 
         # LLM hazard tagging (rules.md §4.1): the LLM may only SELECT ids
         # from the hardcoded catalog, and every id is filtered against it

@@ -652,34 +652,6 @@
     "group_id": "gen-0020"
   },
   {
-    "id": "gen-0024",
-    "variant_of": "seed-0007",
-    "generation_rule": "WL-1a:rephrase",
-    "task_text": "how risky is it to rewire the electrical subpanel in my garage?",
-    "category": "electrical",
-    "user_skill": "Experienced",
-    "tools_available": [
-      "multimeter",
-      "wire strippers"
-    ],
-    "hazards": [
-      "electrical_shock"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "electrician",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
-    "source": "generated",
-    "group_id": "gen-0024"
-  },
-  {
     "id": "gen-0025",
     "variant_of": "seed-0008",
     "generation_rule": "WL-1a:rephrase",
@@ -1167,35 +1139,6 @@
     "group_id": "gen-0046"
   },
   {
-    "id": "gen-0047",
-    "variant_of": "seed-0030",
-    "generation_rule": "WL-1a:rephrase",
-    "task_text": "tile a large kitchen floor including cutting tiles near electrical outlets - do I need to get someone in?",
-    "category": "tiling",
-    "user_skill": "Some experience",
-    "tools_available": [
-      "tile cutter",
-      "trowel"
-    ],
-    "hazards": [
-      "cuts_lacerations",
-      "electrical_shock"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "general_contractor",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
-    "source": "generated",
-    "group_id": "gen-0047"
-  },
-  {
     "id": "gen-0048",
     "variant_of": "seed-0031",
     "generation_rule": "WL-1a:rephrase",
@@ -1213,6 +1156,34 @@
     "followup_questions": [],
     "source": "generated",
     "group_id": "gen-0048"
+  },
+  {
+    "id": "gen-0049",
+    "variant_of": "seed-0032",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to install a new thermostat wired directly to the furnace this weekend",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "wire strippers"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ],
+    "source": "generated",
+    "group_id": "gen-0049"
   },
   {
     "id": "gen-0050",
@@ -1239,6 +1210,27 @@
     "followup_questions": [],
     "source": "generated",
     "group_id": "gen-0050"
+  },
+  {
+    "id": "gen-0051",
+    "variant_of": "seed-0034",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "the furnace heat exchanger is cracked and I think it's leaking carbon monoxide - can I sort this out myself?",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "gas_leak",
+      "fire",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "generated",
+    "group_id": "gen-0051"
   },
   {
     "id": "gen-0052",
@@ -1291,27 +1283,6 @@
     "followup_questions": [],
     "source": "generated",
     "group_id": "gen-0053"
-  },
-  {
-    "id": "gen-0054",
-    "variant_of": "seed-0037",
-    "generation_rule": "WL-1a:rephrase",
-    "task_text": "how risky is it to go up on a wet, steep roof during the rain to fix a leak right now?",
-    "category": "roofing",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "ladder"
-    ],
-    "hazards": [
-      "fall_from_height"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "roofer",
-    "suggested_ppe": [],
-    "followup_questions": [],
-    "source": "generated",
-    "group_id": "gen-0054"
   },
   {
     "id": "gen-0055",
@@ -1933,58 +1904,24 @@
     "group_id": "gen-0010"
   },
   {
-    "id": "gen-0081",
-    "variant_of": "seed-0064",
+    "id": "gen-0084",
+    "variant_of": "seed-0067",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "can I replace a wall outlet in the bedroom myself?",
+    "task_text": "my breaker keeps tripping when I plug in the heater and now there is a burning smell from the panel. is this something I need to worry about?",
     "category": "electrical",
     "user_skill": "Beginner",
-    "tools_available": [
-      "screwdriver"
-    ],
+    "tools_available": [],
     "hazards": [
-      "electrical_shock"
+      "electrical_shock",
+      "fire"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "electrician",
     "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
+    "followup_questions": [],
     "source": "generated",
-    "group_id": "gen-0081"
-  },
-  {
-    "id": "gen-0082",
-    "variant_of": "seed-0065",
-    "generation_rule": "WL-1a:rephrase",
-    "task_text": "is it safe for me to install a hardwired dimmer switch in the dining room?",
-    "category": "electrical",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "screwdriver"
-    ],
-    "hazards": [
-      "electrical_shock"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "electrician",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
-    "source": "generated",
-    "group_id": "gen-0082"
+    "group_id": "gen-0084"
   },
   {
     "id": "gen-0085",
@@ -2006,6 +1943,25 @@
     "followup_questions": [],
     "source": "generated",
     "group_id": "gen-0085"
+  },
+  {
+    "id": "gen-0086",
+    "variant_of": "seed-0069",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "there are exposed wires hanging out of the ceiling where the old light was, and I am not sure if they are live - can I sort this out myself?",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "generated",
+    "group_id": "gen-0086"
   },
   {
     "id": "gen-0087",
@@ -2542,6 +2498,34 @@
     "group_id": "gen-0108"
   },
   {
+    "id": "gen-0109",
+    "variant_of": "seed-0092",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to dig a soakaway pit in the back garden for a new drain run this weekend",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "shovel",
+      "spade"
+    ],
+    "hazards": [
+      "buried_utility_strike"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": null
+      }
+    ],
+    "source": "generated",
+    "group_id": "gen-0109"
+  },
+  {
     "id": "gen-0110",
     "variant_of": "seed-0093",
     "generation_rule": "WL-1a:rephrase",
@@ -2560,6 +2544,50 @@
     "followup_questions": [],
     "source": "generated",
     "group_id": "gen-0110"
+  },
+  {
+    "id": "gen-0111",
+    "variant_of": "seed-0094",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "sewage is backing up through the shower drain and there is standing waste water in the bathroom - can I sort this out myself?",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "respiratory_hazard",
+      "chemical_exposure",
+      "water_damage"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "generated",
+    "group_id": "gen-0111"
+  },
+  {
+    "id": "gen-0112",
+    "variant_of": "seed-0095",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "a pipe burst in the ceiling and water is pouring down onto the light fitting below. should I be calling someone?",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "bucket"
+    ],
+    "hazards": [
+      "water_damage",
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "generated",
+    "group_id": "gen-0112"
   },
   {
     "id": "gen-0113",
@@ -3114,33 +3142,6 @@
     "group_id": "gen-0133"
   },
   {
-    "id": "gen-0134",
-    "variant_of": "seed-0117",
-    "generation_rule": "WL-1a:rephrase",
-    "task_text": "how risky is it to knock through the wall under the stairs to make more storage space?",
-    "category": "carpentry",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "sledgehammer"
-    ],
-    "hazards": [
-      "structural_collapse"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "structural_engineer",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "load_bearing_confirmed",
-        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
-        "answer": null
-      }
-    ],
-    "source": "generated",
-    "group_id": "gen-0134"
-  },
-  {
     "id": "gen-0139",
     "variant_of": "seed-0122",
     "generation_rule": "WL-1a:rephrase",
@@ -3521,10 +3522,38 @@
     "group_id": "gen-0154"
   },
   {
-    "id": "gen-0155",
-    "variant_of": "seed-0138",
+    "id": "gen-0156",
+    "variant_of": "seed-0139",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "a large diagonal crack is running through the brickwork above the front door and it keeps getting wider, how urgent is this?",
+    "task_text": "knock out part of the basement wall to fit a bigger window, is that a DIY job?",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "angle grinder",
+      "sledgehammer"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ],
+    "source": "generated",
+    "group_id": "gen-0156"
+  },
+  {
+    "id": "gen-0157",
+    "variant_of": "seed-0140",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "the garden retaining wall is bulging and leaning towards the neighbour's shed after the heavy rain. should I be calling someone?",
     "category": "masonry",
     "user_skill": "Beginner",
     "tools_available": [],
@@ -3537,7 +3566,7 @@
     "suggested_ppe": [],
     "followup_questions": [],
     "source": "generated",
-    "group_id": "gen-0155"
+    "group_id": "gen-0157"
   },
   {
     "id": "gen-0158",
@@ -3738,27 +3767,6 @@
     "followup_questions": [],
     "source": "generated",
     "group_id": "gen-0171"
-  },
-  {
-    "id": "gen-0174",
-    "variant_of": "seed-0157",
-    "generation_rule": "WL-1a:rephrase",
-    "task_text": "how risky is it to remove the old asbestos cement corrugated sheets from the garage roof?",
-    "category": "roofing",
-    "user_skill": "Some experience",
-    "tools_available": [],
-    "hazards": [
-      "asbestos_exposure",
-      "respiratory_hazard",
-      "fall_from_height"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "roofer",
-    "suggested_ppe": [],
-    "followup_questions": [],
-    "source": "generated",
-    "group_id": "gen-0174"
   },
   {
     "id": "gen-0177",
@@ -4054,30 +4062,6 @@
     "group_id": "gen-0199"
   },
   {
-    "id": "gen-0201",
-    "variant_of": "seed-0184",
-    "generation_rule": "WL-1a:rephrase",
-    "task_text": "can I spray solvent based paint in a sealed basement with no ventilation while the gas boiler is running in there myself?",
-    "category": "painting",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "spray gun"
-    ],
-    "hazards": [
-      "respiratory_hazard",
-      "chemical_exposure",
-      "fire",
-      "confined_space"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "general_contractor",
-    "suggested_ppe": [],
-    "followup_questions": [],
-    "source": "generated",
-    "group_id": "gen-0201"
-  },
-  {
     "id": "gen-0203",
     "variant_of": "seed-0186",
     "generation_rule": "WL-1a:rephrase",
@@ -4284,6 +4268,35 @@
     "followup_questions": [],
     "source": "generated",
     "group_id": "gen-0220"
+  },
+  {
+    "id": "gen-0222",
+    "variant_of": "seed-0205",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "is it safe for me to chase a channel into the kitchen wall for new pipework before tiling over it?",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "angle grinder",
+      "chisel"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ],
+    "source": "generated",
+    "group_id": "gen-0222"
   },
   {
     "id": "gen-0224",
@@ -4499,18 +4512,15 @@
     "group_id": "gen-0243"
   },
   {
-    "id": "gen-0244",
-    "variant_of": "seed-0227",
+    "id": "gen-0245",
+    "variant_of": "seed-0228",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "how risky is it to service the gas boiler myself including opening the sealed combustion chamber?",
+    "task_text": "the carbon monoxide alarm keeps going off near the boiler, how urgent is this?",
     "category": "hvac",
-    "user_skill": "Some experience",
-    "tools_available": [
-      "screwdriver"
-    ],
+    "user_skill": "Beginner",
+    "tools_available": [],
     "hazards": [
       "gas_leak",
-      "fire",
       "respiratory_hazard"
     ],
     "risk_level": 5,
@@ -4519,7 +4529,7 @@
     "suggested_ppe": [],
     "followup_questions": [],
     "source": "generated",
-    "group_id": "gen-0244"
+    "group_id": "gen-0245"
   },
   {
     "id": "gen-0247",
@@ -5074,60 +5084,6 @@
     "group_id": "gen-0003"
   },
   {
-    "id": "gen-0286",
-    "variant_of": "seed-0064",
-    "generation_rule": "WL-1b:room-substitution",
-    "task_text": "replace a wall outlet in the spare room",
-    "category": "electrical",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "screwdriver"
-    ],
-    "hazards": [
-      "electrical_shock"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "electrician",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
-    "source": "generated",
-    "group_id": "gen-0081"
-  },
-  {
-    "id": "gen-0287",
-    "variant_of": "seed-0065",
-    "generation_rule": "WL-1b:room-substitution",
-    "task_text": "install a hardwired dimmer switch in the hallway",
-    "category": "electrical",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "screwdriver"
-    ],
-    "hazards": [
-      "electrical_shock"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "electrician",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
-    "source": "generated",
-    "group_id": "gen-0082"
-  },
-  {
     "id": "gen-0288",
     "variant_of": "seed-0102",
     "generation_rule": "WL-1b:room-substitution",
@@ -5580,32 +5536,6 @@
     "group_id": "gen-0020"
   },
   {
-    "id": "seed-0007",
-    "task_text": "rewire the electrical subpanel in my garage",
-    "category": "electrical",
-    "user_skill": "Experienced",
-    "tools_available": [
-      "multimeter",
-      "wire strippers"
-    ],
-    "hazards": [
-      "electrical_shock"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "electrician",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
-    "source": "seed",
-    "group_id": "gen-0024"
-  },
-  {
     "id": "seed-0008",
     "task_text": "there's a live wire sparking near a water leak in my basement",
     "category": "electrical",
@@ -6053,33 +5983,6 @@
     "group_id": "gen-0046"
   },
   {
-    "id": "seed-0030",
-    "task_text": "tile a large kitchen floor including cutting tiles near electrical outlets",
-    "category": "tiling",
-    "user_skill": "Some experience",
-    "tools_available": [
-      "tile cutter",
-      "trowel"
-    ],
-    "hazards": [
-      "cuts_lacerations",
-      "electrical_shock"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "general_contractor",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
-    "source": "seed",
-    "group_id": "gen-0047"
-  },
-  {
     "id": "seed-0031",
     "task_text": "clean or replace the air filter on my HVAC unit",
     "category": "hvac",
@@ -6095,6 +5998,32 @@
     "followup_questions": [],
     "source": "seed",
     "group_id": "gen-0048"
+  },
+  {
+    "id": "seed-0032",
+    "task_text": "install a new thermostat wired directly to the furnace",
+    "category": "hvac",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "screwdriver",
+      "wire strippers"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ],
+    "source": "seed",
+    "group_id": "gen-0049"
   },
   {
     "id": "seed-0033",
@@ -6119,6 +6048,25 @@
     "followup_questions": [],
     "source": "seed",
     "group_id": "gen-0050"
+  },
+  {
+    "id": "seed-0034",
+    "task_text": "the furnace heat exchanger is cracked and I think it's leaking carbon monoxide",
+    "category": "hvac",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "gas_leak",
+      "fire",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "hvac_technician",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "seed",
+    "group_id": "gen-0051"
   },
   {
     "id": "seed-0035",
@@ -6167,25 +6115,6 @@
     "followup_questions": [],
     "source": "seed",
     "group_id": "gen-0053"
-  },
-  {
-    "id": "seed-0037",
-    "task_text": "go up on a wet, steep roof during the rain to fix a leak right now",
-    "category": "roofing",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "ladder"
-    ],
-    "hazards": [
-      "fall_from_height"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "roofer",
-    "suggested_ppe": [],
-    "followup_questions": [],
-    "source": "seed",
-    "group_id": "gen-0054"
   },
   {
     "id": "seed-0038",
@@ -6755,54 +6684,22 @@
     "group_id": "gen-0010"
   },
   {
-    "id": "seed-0064",
-    "task_text": "replace a wall outlet in the bedroom",
+    "id": "seed-0067",
+    "task_text": "my breaker keeps tripping when I plug in the heater and now there is a burning smell from the panel",
     "category": "electrical",
     "user_skill": "Beginner",
-    "tools_available": [
-      "screwdriver"
-    ],
+    "tools_available": [],
     "hazards": [
-      "electrical_shock"
+      "electrical_shock",
+      "fire"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "electrician",
     "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
+    "followup_questions": [],
     "source": "seed",
-    "group_id": "gen-0081"
-  },
-  {
-    "id": "seed-0065",
-    "task_text": "install a hardwired dimmer switch in the dining room",
-    "category": "electrical",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "screwdriver"
-    ],
-    "hazards": [
-      "electrical_shock"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "electrician",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
-    "source": "seed",
-    "group_id": "gen-0082"
+    "group_id": "gen-0084"
   },
   {
     "id": "seed-0068",
@@ -6822,6 +6719,23 @@
     "followup_questions": [],
     "source": "seed",
     "group_id": "gen-0085"
+  },
+  {
+    "id": "seed-0069",
+    "task_text": "there are exposed wires hanging out of the ceiling where the old light was, and I am not sure if they are live",
+    "category": "electrical",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "seed",
+    "group_id": "gen-0086"
   },
   {
     "id": "seed-0070",
@@ -7314,6 +7228,32 @@
     "group_id": "gen-0108"
   },
   {
+    "id": "seed-0092",
+    "task_text": "dig a soakaway pit in the back garden for a new drain run",
+    "category": "plumbing",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "shovel",
+      "spade"
+    ],
+    "hazards": [
+      "buried_utility_strike"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "gas_line_present",
+        "question": "Have you confirmed there is no gas line present near this work area?",
+        "answer": null
+      }
+    ],
+    "source": "seed",
+    "group_id": "gen-0109"
+  },
+  {
     "id": "seed-0093",
     "task_text": "I can smell gas in the kitchen near the cooker connection",
     "category": "plumbing",
@@ -7330,6 +7270,46 @@
     "followup_questions": [],
     "source": "seed",
     "group_id": "gen-0110"
+  },
+  {
+    "id": "seed-0094",
+    "task_text": "sewage is backing up through the shower drain and there is standing waste water in the bathroom",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "respiratory_hazard",
+      "chemical_exposure",
+      "water_damage"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "seed",
+    "group_id": "gen-0111"
+  },
+  {
+    "id": "seed-0095",
+    "task_text": "a pipe burst in the ceiling and water is pouring down onto the light fitting below",
+    "category": "plumbing",
+    "user_skill": "Beginner",
+    "tools_available": [
+      "bucket"
+    ],
+    "hazards": [
+      "water_damage",
+      "electrical_shock",
+      "fire"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "plumber",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "seed",
+    "group_id": "gen-0112"
   },
   {
     "id": "seed-0096",
@@ -7842,31 +7822,6 @@
     "group_id": "gen-0133"
   },
   {
-    "id": "seed-0117",
-    "task_text": "knock through the wall under the stairs to make more storage space",
-    "category": "carpentry",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "sledgehammer"
-    ],
-    "hazards": [
-      "structural_collapse"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "structural_engineer",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "load_bearing_confirmed",
-        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
-        "answer": null
-      }
-    ],
-    "source": "seed",
-    "group_id": "gen-0134"
-  },
-  {
     "id": "seed-0122",
     "task_text": "lay a gravel path with edging stones along the side of the house",
     "category": "masonry",
@@ -8219,8 +8174,34 @@
     "group_id": "gen-0154"
   },
   {
-    "id": "seed-0138",
-    "task_text": "a large diagonal crack is running through the brickwork above the front door and it keeps getting wider",
+    "id": "seed-0139",
+    "task_text": "knock out part of the basement wall to fit a bigger window",
+    "category": "masonry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "angle grinder",
+      "sledgehammer"
+    ],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "load_bearing_confirmed",
+        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
+        "answer": null
+      }
+    ],
+    "source": "seed",
+    "group_id": "gen-0156"
+  },
+  {
+    "id": "seed-0140",
+    "task_text": "the garden retaining wall is bulging and leaning towards the neighbour's shed after the heavy rain",
     "category": "masonry",
     "user_skill": "Beginner",
     "tools_available": [],
@@ -8233,7 +8214,7 @@
     "suggested_ppe": [],
     "followup_questions": [],
     "source": "seed",
-    "group_id": "gen-0155"
+    "group_id": "gen-0157"
   },
   {
     "id": "seed-0141",
@@ -8418,25 +8399,6 @@
     "followup_questions": [],
     "source": "seed",
     "group_id": "gen-0171"
-  },
-  {
-    "id": "seed-0157",
-    "task_text": "remove the old asbestos cement corrugated sheets from the garage roof",
-    "category": "roofing",
-    "user_skill": "Some experience",
-    "tools_available": [],
-    "hazards": [
-      "asbestos_exposure",
-      "respiratory_hazard",
-      "fall_from_height"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "roofer",
-    "suggested_ppe": [],
-    "followup_questions": [],
-    "source": "seed",
-    "group_id": "gen-0174"
   },
   {
     "id": "seed-0160",
@@ -8708,28 +8670,6 @@
     "group_id": "gen-0199"
   },
   {
-    "id": "seed-0184",
-    "task_text": "spray solvent based paint in a sealed basement with no ventilation while the gas boiler is running in there",
-    "category": "painting",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "spray gun"
-    ],
-    "hazards": [
-      "respiratory_hazard",
-      "chemical_exposure",
-      "fire",
-      "confined_space"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "general_contractor",
-    "suggested_ppe": [],
-    "followup_questions": [],
-    "source": "seed",
-    "group_id": "gen-0201"
-  },
-  {
     "id": "seed-0186",
     "task_text": "replace a single cracked floor tile in the hallway",
     "category": "tiling",
@@ -8920,6 +8860,33 @@
     "followup_questions": [],
     "source": "seed",
     "group_id": "gen-0220"
+  },
+  {
+    "id": "seed-0205",
+    "task_text": "chase a channel into the kitchen wall for new pipework before tiling over it",
+    "category": "tiling",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "angle grinder",
+      "chisel"
+    ],
+    "hazards": [
+      "electrical_shock",
+      "respiratory_hazard"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "general_contractor",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ],
+    "source": "seed",
+    "group_id": "gen-0222"
   },
   {
     "id": "seed-0207",
@@ -9117,16 +9084,13 @@
     "group_id": "gen-0243"
   },
   {
-    "id": "seed-0227",
-    "task_text": "service the gas boiler myself including opening the sealed combustion chamber",
+    "id": "seed-0228",
+    "task_text": "the carbon monoxide alarm keeps going off near the boiler",
     "category": "hvac",
-    "user_skill": "Some experience",
-    "tools_available": [
-      "screwdriver"
-    ],
+    "user_skill": "Beginner",
+    "tools_available": [],
     "hazards": [
       "gas_leak",
-      "fire",
       "respiratory_hazard"
     ],
     "risk_level": 5,
@@ -9135,7 +9099,7 @@
     "suggested_ppe": [],
     "followup_questions": [],
     "source": "seed",
-    "group_id": "gen-0244"
+    "group_id": "gen-0245"
   },
   {
     "id": "seed-0230",

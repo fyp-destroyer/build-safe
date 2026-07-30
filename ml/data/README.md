@@ -31,11 +31,15 @@ Weak labeling can quietly produce *wrong safety labels* at scale, and padding to
 
 | | rows | % | hand-written | generated |
 |---|---|---|---|---|
-| train | 387 | 69.7 | 172 | 215 |
-| val | 86 | 15.5 | 43 | 43 |
-| test | 82 | 14.8 | 41 | 41 |
+| train | 387 | 69.7 | 173 | 214 |
+| val | 87 | 15.7 | 43 | 44 |
+| test | 81 | 14.6 | 40 | 41 |
 
 All five risk levels appear in all three splits, in both the full and hand-written-only views.
+
+**Stratification is on risk level _and_ on problem-report style.** A "problem report" is a task_text describing something already going wrong (`"my gas water heater is hissing"`, `"the roof is sagging"`) rather than an intended action. These are a small, stylistically distinct subpopulation that is almost entirely `risk_level 5`, and they are the highest-stakes inputs the system will ever receive.
+
+Stratifying on risk level alone was not enough: it put 10 of them in train against 14 in test — the test set held *more* of this population than training did — so the model never learned the pattern and mislabelled dangerous emergencies as `safe_diy`. This was found by error analysis on the first Phase 3 baseline run, not by inspection. `make_splits.py` now fails if train holds under 50% of them.
 
 **Grouping is the entire point of this script.** A variant shares almost all its text with its parent, so rows are grouped and assigned to splits atomically: 555 rows → 250 groups. Grouping combines two things:
 

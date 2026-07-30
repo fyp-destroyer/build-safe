@@ -39,9 +39,10 @@ Each phase has a clear deliverable and an exit check. Don't start a phase until 
 
 **Deliverable:** TF-IDF + Logistic Regression classifier, evaluated.
 
-- [ ] `ml/train_baseline.py` trains and saves a model artifact
-- [ ] Evaluation report: accuracy, macro F1, recall per class, confusion matrix
-  **Exit check:** baseline recall on high-risk classes measured and documented (even if not yet at target).
+- [x] `ml/train_baseline.py` trains and saves a model artifact — TF-IDF (word + char n-grams) + Logistic Regression (`class_weight="balanced"`), hyperparameters selected on val, artifact at `ml/eval/baseline_model.joblib` (2026-07-30).
+- [x] Evaluation report: accuracy, macro F1, recall per class, confusion matrix — `ml/eval/baseline_report.md` (+ `baseline_metrics.json`, `baseline_confusion.png`).
+  **Exit check:** baseline recall on high-risk classes measured and documented (even if not yet at target). — **MET.** Hand-written test set: accuracy 0.650, macro-F1 0.646, high-risk recall (≥4 caught as ≥4) **0.529, 95% CI [0.31, 0.74]**. Grouped 5-fold CV over all 555 rows (more stable): macro-F1 0.679 ±0.041, high-risk recall **0.706 ±0.090**. Simulating the deployed `max(ML, rules)` pipeline lifts test high-risk recall to **0.657**. All well below `prd.md` §7's provisional ≥95% target — which is expected and explicitly permitted at this phase; closing that gap is Phase 4's job.
+  - Features restricted to real inference-time inputs (`task_text`, `category`, `user_skill`, `tools_available`). `professional_category`, `suggested_ppe`, `hazards` and follow-up state are all **excluded as label leakage** — measured, not assumed: `professional_category is None` ⟺ `risk ≤ 2` in 555/555 rows.
 
 ## Phase 4 — Improved ML Model
 

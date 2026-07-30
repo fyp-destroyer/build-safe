@@ -1,21 +1,50 @@
 [
   {
-    "id": "gen-0031",
-    "variant_of": "seed-0014",
+    "id": "gen-0024",
+    "variant_of": "seed-0007",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "can I dig a small trench in my backyard to run a new water line for a garden faucet myself?",
-    "category": "plumbing",
-    "user_skill": "Some experience",
+    "task_text": "how risky is it to rewire the electrical subpanel in my garage?",
+    "category": "electrical",
+    "user_skill": "Experienced",
     "tools_available": [
-      "shovel",
-      "pipe cutter"
+      "multimeter",
+      "wire strippers"
     ],
     "hazards": [
-      "buried_utility_strike"
+      "electrical_shock"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
-    "professional_category": "plumber",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ],
+    "source": "generated",
+    "group_id": "gen-0024"
+  },
+  {
+    "id": "gen-0037",
+    "variant_of": "seed-0020",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "I was going to remove a wall in my basement near the gas meter - not totally sure if it's load-bearing - any reason not to?",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "sledgehammer",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "gas_leak"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
     "suggested_ppe": [],
     "followup_questions": [
       {
@@ -25,50 +54,41 @@
       }
     ],
     "source": "generated",
-    "group_id": "gen-0031"
+    "group_id": "gen-0037"
   },
   {
-    "id": "gen-0049",
-    "variant_of": "seed-0032",
+    "id": "gen-0054",
+    "variant_of": "seed-0037",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "planning to install a new thermostat wired directly to the furnace this weekend",
-    "category": "hvac",
-    "user_skill": "Some experience",
+    "task_text": "how risky is it to go up on a wet, steep roof during the rain to fix a leak right now?",
+    "category": "roofing",
+    "user_skill": "Beginner",
     "tools_available": [
-      "screwdriver",
-      "wire strippers"
+      "ladder"
     ],
     "hazards": [
-      "electrical_shock"
+      "fall_from_height"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
-    "professional_category": "hvac_technician",
+    "professional_category": "roofer",
     "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
+    "followup_questions": [],
     "source": "generated",
-    "group_id": "gen-0049"
+    "group_id": "gen-0054"
   },
   {
-    "id": "gen-0083",
-    "variant_of": "seed-0066",
+    "id": "gen-0081",
+    "variant_of": "seed-0064",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "I was going to run new wiring for an outdoor socket on the patio - any reason not to?",
+    "task_text": "can I replace a wall outlet in the bedroom myself?",
     "category": "electrical",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
-      "drill",
-      "wire strippers"
+      "screwdriver"
     ],
     "hazards": [
-      "electrical_shock",
-      "fire"
+      "electrical_shock"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
@@ -82,62 +102,20 @@
       }
     ],
     "source": "generated",
-    "group_id": "gen-0083"
+    "group_id": "gen-0081"
   },
   {
-    "id": "gen-0086",
-    "variant_of": "seed-0069",
+    "id": "gen-0134",
+    "variant_of": "seed-0117",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "there are exposed wires hanging out of the ceiling where the old light was, and I am not sure if they are live - can I sort this out myself?",
-    "category": "electrical",
-    "user_skill": "Beginner",
-    "tools_available": [],
-    "hazards": [
-      "electrical_shock"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "electrician",
-    "suggested_ppe": [],
-    "followup_questions": [],
-    "source": "generated",
-    "group_id": "gen-0086"
-  },
-  {
-    "id": "gen-0111",
-    "variant_of": "seed-0094",
-    "generation_rule": "WL-1a:rephrase",
-    "task_text": "sewage is backing up through the shower drain and there is standing waste water in the bathroom - can I sort this out myself?",
-    "category": "plumbing",
-    "user_skill": "Beginner",
-    "tools_available": [],
-    "hazards": [
-      "respiratory_hazard",
-      "chemical_exposure",
-      "water_damage"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "plumber",
-    "suggested_ppe": [],
-    "followup_questions": [],
-    "source": "generated",
-    "group_id": "gen-0111"
-  },
-  {
-    "id": "gen-0135",
-    "variant_of": "seed-0118",
-    "generation_rule": "WL-1a:rephrase",
-    "task_text": "I was going to remove a wall in a 1930s house - I have been told there might be asbestos in the old panelling - any reason not to?",
+    "task_text": "how risky is it to knock through the wall under the stairs to make more storage space?",
     "category": "carpentry",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
-      "pry bar"
+      "sledgehammer"
     ],
     "hazards": [
-      "structural_collapse",
-      "asbestos_exposure",
-      "respiratory_hazard"
+      "structural_collapse"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
@@ -151,7 +129,26 @@
       }
     ],
     "source": "generated",
-    "group_id": "gen-0135"
+    "group_id": "gen-0134"
+  },
+  {
+    "id": "gen-0136",
+    "variant_of": "seed-0119",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "the floor upstairs feels bouncy and a crack is appearing along the ceiling below it - can I sort this out myself?",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "generated",
+    "group_id": "gen-0136"
   },
   {
     "id": "gen-0137",
@@ -200,34 +197,6 @@
     "followup_questions": [],
     "source": "generated",
     "group_id": "gen-0140"
-  },
-  {
-    "id": "gen-0156",
-    "variant_of": "seed-0139",
-    "generation_rule": "WL-1a:rephrase",
-    "task_text": "knock out part of the basement wall to fit a bigger window, is that a DIY job?",
-    "category": "masonry",
-    "user_skill": "Some experience",
-    "tools_available": [
-      "angle grinder",
-      "sledgehammer"
-    ],
-    "hazards": [
-      "structural_collapse"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "structural_engineer",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "load_bearing_confirmed",
-        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
-        "answer": null
-      }
-    ],
-    "source": "generated",
-    "group_id": "gen-0156"
   },
   {
     "id": "gen-0159",
@@ -359,16 +328,16 @@
     "group_id": "gen-0172"
   },
   {
-    "id": "gen-0175",
-    "variant_of": "seed-0158",
+    "id": "gen-0174",
+    "variant_of": "seed-0157",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "get up on the roof to fix a leak while it is still icy from last night's frost - is this something I can handle on my own?",
+    "task_text": "how risky is it to remove the old asbestos cement corrugated sheets from the garage roof?",
     "category": "roofing",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "ladder"
-    ],
+    "user_skill": "Some experience",
+    "tools_available": [],
     "hazards": [
+      "asbestos_exposure",
+      "respiratory_hazard",
       "fall_from_height"
     ],
     "risk_level": 5,
@@ -377,13 +346,13 @@
     "suggested_ppe": [],
     "followup_questions": [],
     "source": "generated",
-    "group_id": "gen-0175"
+    "group_id": "gen-0174"
   },
   {
-    "id": "gen-0178",
-    "variant_of": "seed-0161",
+    "id": "gen-0176",
+    "variant_of": "seed-0159",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "a large tree branch has come through the roof in the storm and tiles are still falling off - what should I do?",
+    "task_text": "the roof is sagging visibly in the middle and I can see daylight through the ceiling upstairs - can I sort this out myself?",
     "category": "roofing",
     "user_skill": "Beginner",
     "tools_available": [],
@@ -397,7 +366,26 @@
     "suggested_ppe": [],
     "followup_questions": [],
     "source": "generated",
-    "group_id": "gen-0178"
+    "group_id": "gen-0176"
+  },
+  {
+    "id": "gen-0179",
+    "variant_of": "seed-0162",
+    "generation_rule": "WL-1a:rephrase",
+    "task_text": "planning to walk across the fragile perspex roof panels on the conservatory to clean them this weekend",
+    "category": "roofing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "roofer",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "generated",
+    "group_id": "gen-0179"
   },
   {
     "id": "gen-0182",
@@ -678,33 +666,26 @@
     "group_id": "gen-0221"
   },
   {
-    "id": "gen-0222",
-    "variant_of": "seed-0205",
+    "id": "gen-0223",
+    "variant_of": "seed-0206",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "is it safe for me to chase a channel into the kitchen wall for new pipework before tiling over it?",
+    "task_text": "I was going to grind off old tile adhesive in a 1960s bathroom where the vinyl underneath may be asbestos backed - any reason not to?",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
-      "angle grinder",
-      "chisel"
+      "angle grinder"
     ],
     "hazards": [
-      "electrical_shock",
+      "asbestos_exposure",
       "respiratory_hazard"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "general_contractor",
     "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
+    "followup_questions": [],
     "source": "generated",
-    "group_id": "gen-0222"
+    "group_id": "gen-0223"
   },
   {
     "id": "gen-0225",
@@ -845,15 +826,16 @@
     "group_id": "gen-0241"
   },
   {
-    "id": "gen-0245",
-    "variant_of": "seed-0228",
+    "id": "gen-0246",
+    "variant_of": "seed-0229",
     "generation_rule": "WL-1a:rephrase",
-    "task_text": "the carbon monoxide alarm keeps going off near the boiler, how urgent is this?",
+    "task_text": "the gas fire is burning with a yellow lazy flame instead of blue and there are black marks around the surround - can I sort this out myself?",
     "category": "hvac",
     "user_skill": "Beginner",
     "tools_available": [],
     "hazards": [
       "gas_leak",
+      "fire",
       "respiratory_hazard"
     ],
     "risk_level": 5,
@@ -862,7 +844,7 @@
     "suggested_ppe": [],
     "followup_questions": [],
     "source": "generated",
-    "group_id": "gen-0245"
+    "group_id": "gen-0246"
   },
   {
     "id": "gen-0250",
@@ -1059,20 +1041,74 @@
     "group_id": "gen-0272"
   },
   {
-    "id": "seed-0014",
-    "task_text": "dig a small trench in my backyard to run a new water line for a garden faucet",
-    "category": "plumbing",
-    "user_skill": "Some experience",
+    "id": "gen-0286",
+    "variant_of": "seed-0064",
+    "generation_rule": "WL-1b:room-substitution",
+    "task_text": "replace a wall outlet in the spare room",
+    "category": "electrical",
+    "user_skill": "Beginner",
     "tools_available": [
-      "shovel",
-      "pipe cutter"
+      "screwdriver"
     ],
     "hazards": [
-      "buried_utility_strike"
+      "electrical_shock"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
-    "professional_category": "plumber",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ],
+    "source": "generated",
+    "group_id": "gen-0081"
+  },
+  {
+    "id": "seed-0007",
+    "task_text": "rewire the electrical subpanel in my garage",
+    "category": "electrical",
+    "user_skill": "Experienced",
+    "tools_available": [
+      "multimeter",
+      "wire strippers"
+    ],
+    "hazards": [
+      "electrical_shock"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "electrician",
+    "suggested_ppe": [],
+    "followup_questions": [
+      {
+        "field": "power_isolated",
+        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+        "answer": null
+      }
+    ],
+    "source": "seed",
+    "group_id": "gen-0024"
+  },
+  {
+    "id": "seed-0020",
+    "task_text": "remove a wall in my basement near the gas meter - not totally sure if it's load-bearing",
+    "category": "carpentry",
+    "user_skill": "Some experience",
+    "tools_available": [
+      "sledgehammer",
+      "pry bar"
+    ],
+    "hazards": [
+      "structural_collapse",
+      "gas_leak"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
     "suggested_ppe": [],
     "followup_questions": [
       {
@@ -1082,46 +1118,37 @@
       }
     ],
     "source": "seed",
-    "group_id": "gen-0031"
+    "group_id": "gen-0037"
   },
   {
-    "id": "seed-0032",
-    "task_text": "install a new thermostat wired directly to the furnace",
-    "category": "hvac",
-    "user_skill": "Some experience",
+    "id": "seed-0037",
+    "task_text": "go up on a wet, steep roof during the rain to fix a leak right now",
+    "category": "roofing",
+    "user_skill": "Beginner",
     "tools_available": [
-      "screwdriver",
-      "wire strippers"
+      "ladder"
     ],
     "hazards": [
-      "electrical_shock"
+      "fall_from_height"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
-    "professional_category": "hvac_technician",
+    "professional_category": "roofer",
     "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
+    "followup_questions": [],
     "source": "seed",
-    "group_id": "gen-0049"
+    "group_id": "gen-0054"
   },
   {
-    "id": "seed-0066",
-    "task_text": "run new wiring for an outdoor socket on the patio",
+    "id": "seed-0064",
+    "task_text": "replace a wall outlet in the bedroom",
     "category": "electrical",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
-      "drill",
-      "wire strippers"
+      "screwdriver"
     ],
     "hazards": [
-      "electrical_shock",
-      "fire"
+      "electrical_shock"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
@@ -1135,56 +1162,18 @@
       }
     ],
     "source": "seed",
-    "group_id": "gen-0083"
+    "group_id": "gen-0081"
   },
   {
-    "id": "seed-0069",
-    "task_text": "there are exposed wires hanging out of the ceiling where the old light was, and I am not sure if they are live",
-    "category": "electrical",
-    "user_skill": "Beginner",
-    "tools_available": [],
-    "hazards": [
-      "electrical_shock"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "electrician",
-    "suggested_ppe": [],
-    "followup_questions": [],
-    "source": "seed",
-    "group_id": "gen-0086"
-  },
-  {
-    "id": "seed-0094",
-    "task_text": "sewage is backing up through the shower drain and there is standing waste water in the bathroom",
-    "category": "plumbing",
-    "user_skill": "Beginner",
-    "tools_available": [],
-    "hazards": [
-      "respiratory_hazard",
-      "chemical_exposure",
-      "water_damage"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "plumber",
-    "suggested_ppe": [],
-    "followup_questions": [],
-    "source": "seed",
-    "group_id": "gen-0111"
-  },
-  {
-    "id": "seed-0118",
-    "task_text": "remove a wall in a 1930s house - I have been told there might be asbestos in the old panelling",
+    "id": "seed-0117",
+    "task_text": "knock through the wall under the stairs to make more storage space",
     "category": "carpentry",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
-      "pry bar"
+      "sledgehammer"
     ],
     "hazards": [
-      "structural_collapse",
-      "asbestos_exposure",
-      "respiratory_hazard"
+      "structural_collapse"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
@@ -1198,7 +1187,24 @@
       }
     ],
     "source": "seed",
-    "group_id": "gen-0135"
+    "group_id": "gen-0134"
+  },
+  {
+    "id": "seed-0119",
+    "task_text": "the floor upstairs feels bouncy and a crack is appearing along the ceiling below it",
+    "category": "carpentry",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "structural_collapse"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "structural_engineer",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "seed",
+    "group_id": "gen-0136"
   },
   {
     "id": "seed-0120",
@@ -1243,32 +1249,6 @@
     "followup_questions": [],
     "source": "seed",
     "group_id": "gen-0140"
-  },
-  {
-    "id": "seed-0139",
-    "task_text": "knock out part of the basement wall to fit a bigger window",
-    "category": "masonry",
-    "user_skill": "Some experience",
-    "tools_available": [
-      "angle grinder",
-      "sledgehammer"
-    ],
-    "hazards": [
-      "structural_collapse"
-    ],
-    "risk_level": 5,
-    "risk_label": "dangerous",
-    "professional_category": "structural_engineer",
-    "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "load_bearing_confirmed",
-        "question": "Have you confirmed the wall or structure involved is NOT load-bearing?",
-        "answer": null
-      }
-    ],
-    "source": "seed",
-    "group_id": "gen-0156"
   },
   {
     "id": "seed-0142",
@@ -1390,14 +1370,14 @@
     "group_id": "gen-0172"
   },
   {
-    "id": "seed-0158",
-    "task_text": "get up on the roof to fix a leak while it is still icy from last night's frost",
+    "id": "seed-0157",
+    "task_text": "remove the old asbestos cement corrugated sheets from the garage roof",
     "category": "roofing",
-    "user_skill": "Beginner",
-    "tools_available": [
-      "ladder"
-    ],
+    "user_skill": "Some experience",
+    "tools_available": [],
     "hazards": [
+      "asbestos_exposure",
+      "respiratory_hazard",
       "fall_from_height"
     ],
     "risk_level": 5,
@@ -1406,11 +1386,11 @@
     "suggested_ppe": [],
     "followup_questions": [],
     "source": "seed",
-    "group_id": "gen-0175"
+    "group_id": "gen-0174"
   },
   {
-    "id": "seed-0161",
-    "task_text": "a large tree branch has come through the roof in the storm and tiles are still falling off",
+    "id": "seed-0159",
+    "task_text": "the roof is sagging visibly in the middle and I can see daylight through the ceiling upstairs",
     "category": "roofing",
     "user_skill": "Beginner",
     "tools_available": [],
@@ -1424,7 +1404,24 @@
     "suggested_ppe": [],
     "followup_questions": [],
     "source": "seed",
-    "group_id": "gen-0178"
+    "group_id": "gen-0176"
+  },
+  {
+    "id": "seed-0162",
+    "task_text": "walk across the fragile perspex roof panels on the conservatory to clean them",
+    "category": "roofing",
+    "user_skill": "Beginner",
+    "tools_available": [],
+    "hazards": [
+      "fall_from_height"
+    ],
+    "risk_level": 5,
+    "risk_label": "dangerous",
+    "professional_category": "roofer",
+    "suggested_ppe": [],
+    "followup_questions": [],
+    "source": "seed",
+    "group_id": "gen-0179"
   },
   {
     "id": "seed-0165",
@@ -1683,31 +1680,24 @@
     "group_id": "gen-0221"
   },
   {
-    "id": "seed-0205",
-    "task_text": "chase a channel into the kitchen wall for new pipework before tiling over it",
+    "id": "seed-0206",
+    "task_text": "grind off old tile adhesive in a 1960s bathroom where the vinyl underneath may be asbestos backed",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
-      "angle grinder",
-      "chisel"
+      "angle grinder"
     ],
     "hazards": [
-      "electrical_shock",
+      "asbestos_exposure",
       "respiratory_hazard"
     ],
     "risk_level": 5,
     "risk_label": "dangerous",
     "professional_category": "general_contractor",
     "suggested_ppe": [],
-    "followup_questions": [
-      {
-        "field": "power_isolated",
-        "question": "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-        "answer": null
-      }
-    ],
+    "followup_questions": [],
     "source": "seed",
-    "group_id": "gen-0222"
+    "group_id": "gen-0223"
   },
   {
     "id": "seed-0208",
@@ -1836,13 +1826,14 @@
     "group_id": "gen-0241"
   },
   {
-    "id": "seed-0228",
-    "task_text": "the carbon monoxide alarm keeps going off near the boiler",
+    "id": "seed-0229",
+    "task_text": "the gas fire is burning with a yellow lazy flame instead of blue and there are black marks around the surround",
     "category": "hvac",
     "user_skill": "Beginner",
     "tools_available": [],
     "hazards": [
       "gas_leak",
+      "fire",
       "respiratory_hazard"
     ],
     "risk_level": 5,
@@ -1851,7 +1842,7 @@
     "suggested_ppe": [],
     "followup_questions": [],
     "source": "seed",
-    "group_id": "gen-0245"
+    "group_id": "gen-0246"
   },
   {
     "id": "seed-0233",

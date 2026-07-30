@@ -41,6 +41,11 @@ LEAK_THRESHOLD = 0.85
 CONTAINMENT_THRESHOLD = 0.9
 MIN_TOKENS_FOR_CONTAINMENT = 4
 
+# A task_text that reports a problem the user is already facing, rather than
+# an action they intend to take. Same test the generator uses to pick
+# rephrase templates.
+PROBLEM_REPORT = re.compile(r"^(there|the |my |a |water |sewage |i can )", re.I)
+
 
 def tokens(text: str) -> set[str]:
     return set(re.findall(r"[a-z0-9]+", text.lower()))
@@ -109,11 +114,21 @@ def main() -> int:
         print(f"    merged {a} + {b}  ({t}...)")
 
     # --- stratified assignment -----------------------------------------
-    # Each group is stratified by its most severe risk_level, so the rarest
-    # and most safety-relevant classes are the ones kept balanced.
-    by_stratum: dict[int, list[tuple[str, list[dict]]]] = defaultdict(list)
+    # Stratify on risk_level AND on whether the group is a problem report
+    # ("my gas water heater is hissing", "the roof is sagging") rather than
+    # an intended action ("install a ceiling fan").
+    #
+    # Risk level alone is not enough. Problem reports are a small, stylisti-
+    # cally distinct subpopulation that is almost entirely risk 5, and they
+    # are the highest-stakes inputs the system will ever see. Stratifying on
+    # risk alone let them land 10 in train against 14 in test - the test set
+    # held MORE of them than training did - which made both sides
+    # unrepresentative. Found by error analysis on the first baseline run.
+    by_stratum: dict[tuple, list[tuple[str, list[dict]]]] = defaultdict(list)
     for gid, members in groups.items():
-        by_stratum[max(m["risk_level"] for m in members)].append((gid, members))
+        key = (max(m["risk_level"] for m in members),
+               any(PROBLEM_REPORT.match(m["task_text"]) for m in members))
+        by_stratum[key].append((gid, members))
 
     assigned: dict[str, str] = {}
     for stratum in sorted(by_stratum):
@@ -156,6 +171,16 @@ def main() -> int:
 
     if sum(len(v) for v in splits.values()) != len(rows):
         problems.append("row count mismatch after splitting")
+
+    # Problem reports are the highest-stakes inputs and a small population;
+    # guard against them collapsing into one split again.
+    pr = {s: sum(1 for r in rws if PROBLEM_REPORT.match(r["task_text"]))
+          for s, rws in splits.items()}
+    pr_total = sum(pr.values())
+    if pr_total and pr["train"] / pr_total < 0.5:
+        problems.append(
+            f"problem-report rows are badly distributed {pr} - train holds only "
+            f"{pr['train'] / pr_total:.0%}, model cannot learn the pattern")
 
     # Cross-split leak check, on SEED texts only.
     #

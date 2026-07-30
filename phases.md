@@ -58,11 +58,11 @@ Each phase has a clear deliverable and an exit check. Don't start a phase until 
 
 **Deliverable:** hardcoded rule set (LLM-assisted authoring, dev-reviewed) + escalation logic implemented and tested. No admin UI — rule changes go through code review and redeploy.
 
-- [ ] Hardcoded rubric + hazard rule module (`ai/rule_engine/rules.py` or equivalent, version-controlled)
-- [ ] `ai/rule_engine` uses an LLM call to classify which hardcoded hazard rule(s) match a job's context (hazard tagging only — never assigns a risk number)
-- [ ] `final_risk = max(ML, rules)` implemented and unit-tested
-- [ ] Representative rule set from SRS §9 seeded into the hardcoded module
-  **Exit check:** unit tests prove rules can only escalate, never de-escalate (see `rules.md` §4.2), and that the LLM hazard classifier cannot introduce a rule outside the hardcoded set.
+- [x] Hardcoded rubric + hazard rule module — `ai/rule_engine/catalog.py` (DATA: 13 rules, floors, explanations) + `ai/rule_engine/rules.py` (LOGIC). Version-controlled, no `safety_rules` table, no runtime edit path (2026-07-31).
+- [x] `ai/rule_engine` uses an LLM call to classify which hardcoded hazard rule(s) match — `llm_assist.tag_hazards()`. The LLM may only SELECT ids from the catalog; every id is filtered against `VALID_RULE_IDS`, so an invented id is discarded. It never assigns a risk number. Returns `[]` on any failure, so the engine degrades to "no LLM", never to "no hazards".
+- [x] `final_risk = max(ML, rules)` implemented and unit-tested — property test is exhaustive over descriptions × categories × answer sets × all 5 possible ML outputs.
+- [x] Representative rule set from SRS §9 seeded — all six §9 rows implemented, plus hazards the dataset surfaced (asbestos, fragile surfaces, confined space, buried services, structural distress). **Jurisdiction-neutral**: rules state hazard and consequence, not legal citations, since the project targets no specific regulatory regime.
+  **Exit check:** unit tests prove rules can only escalate, never de-escalate (see `rules.md` §4.2), and that the LLM hazard classifier cannot introduce a rule outside the hardcoded set. — **MET.** `apps/backend/tests/test_rule_catalog.py`, 45 pure-logic tests passing (no DB, no network — a test proving the safety engine cannot be subverted must not be skippable because a container is down). Adversarial cases included: hallucinated ids, an empty id, and a SQL-injection-shaped id are all discarded without shifting risk.
 
 ## Phase 6 — Backend APIs
 

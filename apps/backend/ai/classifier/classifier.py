@@ -1,12 +1,20 @@
-"""TEMPORARY placeholder for Phase 3/4. NOT a real ML model.
+"""TEMPORARY placeholder. NOT a real ML model — still a keyword heuristic.
 
-Phase 3 (TF-IDF + Logistic Regression baseline) and Phase 4 (sentence-
-transformer + classifier) have not been built yet — see phases.md. This
-module exists only to prove the `final_risk = max(ML, rules)` wiring works
-end-to-end. It uses a trivial keyword-scoring heuristic, not a trained
-model, and must be replaced before Phase 3/4's exit check (phases.md) can
-pass. Do not treat this as production-safe or as representative of real
-model accuracy/confidence.
+Status as of Phase 5: Phase 3 and Phase 4 ARE complete, but their output is
+not wired in here yet. The trained model that won the Phase 4 comparison is
+`ml/eval/baseline_model.joblib` (TF-IDF + Logistic Regression; the
+sentence-embedding alternative was evaluated and rejected — see
+`ml/eval/comparison_report.md`). Loading it here is a deliberate follow-up
+step, kept separate because it adds scikit-learn and a model artifact to the
+serving path and deserves its own review.
+
+Until then this module exists only to prove the `final_risk = max(ML, rules)`
+wiring works end-to-end. Do not treat its output as representative of real
+model accuracy or confidence.
+
+Note the safety consequence of that gap: right now the ML half of
+`max(ML, rules)` is a heuristic, so the deterministic rule engine in
+`ai/rule_engine/` is what actually carries the safety guarantee.
 """
 
 _HIGH_RISK_KEYWORDS = (

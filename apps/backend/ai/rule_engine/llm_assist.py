@@ -123,3 +123,62 @@ def phrase_followup_question(field: str, category: str) -> str:
         return fallback
 
     return result.question.strip()
+
+
+# ---------------------------------------------------------------------------
+# Phase 5: LLM hazard tagging.
+#
+# The LLM's entire authority here is to SELECT ids from the hardcoded catalog.
+# It cannot invent a hazard, cannot assign or suggest a risk number, and
+# cannot change a floor - those live in ai/rule_engine/catalog.py and change
+# only by code review (rules.md §4.1).
+#
+# Everything it returns is filtered against catalog.VALID_RULE_IDS, so a
+# hallucinated id is discarded rather than trusted. Failure is safe by
+# construction: on any error this returns [] and the deterministic keyword
+# rules still run, so the engine degrades to "no LLM" rather than to "no
+# hazards".
+# ---------------------------------------------------------------------------
+class HazardTags(BaseModel):
+    """Structured-output schema for Gemini's hazard tagging call."""
+
+    rule_ids: list[str] = []
+
+
+def tag_hazards(description: str, category: str) -> list[str]:
+    """Ask the LLM which hardcoded catalog rules apply. Never trusts the reply.
+
+    Returns only ids that exist in the catalog. Returns [] if Gemini is
+    unavailable, returns nothing usable, or returns only invalid ids - the
+    caller's keyword matching is unaffected either way.
+    """
+    from ai.rule_engine.catalog import RULES, VALID_RULE_IDS
+
+    menu = "\n".join(f"- {r.id}: {r.summary}" for r in RULES.values())
+    prompt = (
+        "You are tagging which known hazards apply to a home improvement task.\n"
+        "Choose ONLY from this fixed list of hazard ids. Do not invent ids, do "
+        "not rate severity, and do not assign any risk level.\n\n"
+        f"{menu}\n\n"
+        f"Task category: {category}\n"
+        f"Task description: {description}\n\n"
+        "Return the ids that clearly apply. Return an empty list if none do."
+    )
+
+    result = generate_structured(prompt, HazardTags)
+    if result is None:
+        logger.info("tag_hazards: no LLM result, falling back to keyword rules only")
+        return []
+
+    valid, invalid = [], []
+    for rid in result.rule_ids or []:
+        (valid if rid in VALID_RULE_IDS else invalid).append(rid)
+    if invalid:
+        # A model returning ids outside the catalog is a model error, never a
+        # new rule. Logged loudly because silent discards hide prompt drift.
+        logger.warning(
+            "tag_hazards: discarded %d id(s) outside the hardcoded " "catalog: %s",
+            len(invalid),
+            invalid,
+        )
+    return list(dict.fromkeys(valid))

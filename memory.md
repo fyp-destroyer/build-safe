@@ -80,7 +80,15 @@ This file is a **living record** of what has actually been done, kept in sync wi
 - Status: **Complete.** Baseline ships; the embedding experiment is documented as a negative result with its reasoning.
 
 ### Phase 5 — Safety Rule Engine
-- Status: **Not started**
+- [x] **Real rule engine built 2026-07-31, replacing the keyword placeholder.** `ai/rule_engine/catalog.py` holds the DATA (13 hazard rules: id, hazard tag, escalation floor, hardcoded explanation, keywords, optional category/skill gates); `ai/rule_engine/rules.py` holds the LOGIC. Split deliberately so no hazard can be defined anywhere else.
+- [x] **LLM hazard tagging — `llm_assist.tag_hazards()`.** The LLM's entire authority is selecting ids from the hardcoded catalog. Every returned id is filtered against `VALID_RULE_IDS`; invented ids are dropped and logged. It cannot assign a risk number or change a floor. Failure returns `[]`, so the engine degrades to "no LLM", never "no hazards" — keyword rules still run.
+- [x] **Exit check MET** — `tests/test_rule_catalog.py`, 45 pure-logic tests (no DB, no network). Escalation invariant is proven exhaustively over descriptions × categories × answer sets × all 5 ML outputs. Adversarial LLM inputs tested: hallucinated ids, empty string, and a SQL-injection-shaped id all discarded with risk unchanged.
+- **Jurisdiction-neutral by explicit user decision (2026-07-31):** rules state hazard and consequence, never legal citations, because the project targets no specific regulatory regime and shouldn't claim legal authority it can't back. Same reasoning as `ml/data/REVIEW.md`.
+- **Three-state follow-up semantics**, which the placeholder did not have: *missing* (floor 5 — worst plausible case cannot be ruled out) > *answered no* (floor 3–4 — unsafe but a known state the user can be advised about) > *answered yes*. Keeping missing strictly above denied is asserted by a test, since conflating unanswered with answered-unsafe is the exact bug that once made the whole dangerous-task path unreachable (see 2026-07-19).
+- **Removed a duplicated safety mapping.** `services/job_service.py` had its own `_REQUIRED_FOLLOWUPS_BY_CATEGORY` table alongside the rule engine's — two copies of a safety-critical mapping that could drift silently. Both now derive from `required_followups()`.
+- **Follow-ups are hazard-driven, not category-driven.** A failing test caught that the old design gated wiring rules on `category == "electrical"`, so chasing a wall in a *tiling* job never triggered the power-isolation question — contradicting what the dataset encodes. Fixed by making `fixed_wiring_work` category-agnostic.
+- **The engine now receives `user_skill`,** so `srs.md` §9's "electrical wiring task + beginner user" is implemented faithfully rather than approximated by category. Previously a rule was *named* for beginners but had no way to check skill.
+- Status: **Complete.** Note the classifier half of `max(ML, rules)` is still the keyword placeholder — the Phase 3/4 trained model is not yet wired into the backend (deliberately deferred, see Decisions Log), so the rule engine currently carries the safety guarantee on its own.
 
 ### Phase 6 — Backend APIs
 - [x] `/auth` (register, login) — real JWT (HS256, python-jose) + bcrypt password hashing, `get_current_user` dependency

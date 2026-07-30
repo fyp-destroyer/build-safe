@@ -23,23 +23,22 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ai.classifier import classify
 from ai.rule_engine import evaluate, llm_assist
+from ai.rule_engine.rules import required_followups
 from core.errors import ApiError
 from models import AiLog, Job, RiskAssessment
 from schemas.job import FollowupPrompt, JobCreateRequest, JobFollowupRequest, JobOut
 
 logger = logging.getLogger(__name__)
 
-# Safety-critical follow-up fields per category. Kept in sync with
-# ai/rule_engine/rules.py's _relevant_followups_for — duplicated here (not
-# imported) because "which fields gate advancing past follow-up" is a job
-# workflow concern, while the rule engine's copy is what it escalates on.
-# Both are placeholders pending the real Phase 5 follow-up schema.
-_REQUIRED_FOLLOWUPS_BY_CATEGORY: dict[str, set[str]] = {
-    "electrical": {"power_isolated"},
-    "masonry": {"load_bearing_confirmed"},
-    "carpentry": {"load_bearing_confirmed"},
-    "plumbing": {"gas_line_present"},
-}
+# Which follow-ups gate assessment is NOT defined here. It is derived from
+# the hardcoded catalog via ai/rule_engine.required_followups(), so the set
+# that blocks the workflow and the set the engine escalates on cannot drift
+# apart. Phase 5 removed the duplicate table that used to live here: two
+# copies of a safety-critical mapping is exactly the kind of thing that goes
+# stale silently.
+#
+# It is also hazard-driven rather than category-driven now: chasing a wall
+# before tiling needs `power_isolated` even though its category is `tiling`.
 
 
 async def create_job(db: AsyncSession, user_id: UUID, payload: JobCreateRequest) -> Job:
@@ -103,7 +102,7 @@ def _missing_required_followups(job: Job) -> set[str]:
     instead of ever producing the Dangerous/Do-Not-Attempt result the rule
     engine is designed to compute for exactly that case.
     """
-    required = _REQUIRED_FOLLOWUPS_BY_CATEGORY.get(job.category.lower(), set())
+    required = required_followups(job.description, job.category, user_skill=job.skill_level)
     return {field for field in required if field not in job.followup_answers}
 
 
@@ -140,8 +139,8 @@ async def _next_followup_prompt(job: Job) -> FollowupPrompt | None:
     """The first still-missing required follow-up for `job`, with
     Gemini-phrased question wording, or None if nothing's missing.
 
-    *Never* decides which fields are required (that's
-    `_REQUIRED_FOLLOWUPS_BY_CATEGORY` above / rules.md §4) — this only picks
+    *Never* decides which fields are required (that's the hardcoded catalog
+    via `required_followups()` / rules.md §4) — this only picks
     a deterministic field (sorted, so behavior is stable regardless of the
     underlying set's iteration order) among the already-known-missing ones
     and asks llm_assist for wording.
@@ -192,7 +191,23 @@ async def assess_job(db: AsyncSession, job: Job) -> RiskAssessment:
 
     try:
         ml_risk, confidence = classify(job.description, job.category)
-        rule_risk, triggered_rules = evaluate(job.description, job.category, job.followup_answers)
+
+        # LLM hazard tagging (rules.md §4.1): the LLM may only SELECT ids
+        # from the hardcoded catalog, and every id is filtered against it
+        # inside the engine. Returns [] on any failure, in which case the
+        # deterministic keyword rules still run - the engine degrades to
+        # "no LLM", never to "no hazards".
+        llm_hazard_ids = await asyncio.to_thread(
+            llm_assist.tag_hazards, job.description, job.category
+        )
+
+        rule_risk, triggered_rules = evaluate(
+            job.description,
+            job.category,
+            job.followup_answers,
+            llm_hazard_ids,
+            user_skill=job.skill_level,
+        )
 
         # THE non-negotiable invariant: rules only ever escalate.
         final_risk = max(ml_risk, rule_risk)

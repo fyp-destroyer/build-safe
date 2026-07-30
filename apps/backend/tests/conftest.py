@@ -47,7 +47,7 @@ def anyio_backend() -> str:
     return "asyncio"
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session")
 async def _create_schema():
     """Create all tables once for the test session, drop at the end.
 
@@ -55,6 +55,10 @@ async def _create_schema():
     running Alembic migrations in the loop — the migration itself is
     verified separately (see report: `alembic upgrade head` was run
     against this same test database as part of implementation).
+
+    NOT autouse on purpose: the safety-critical rule-engine and classifier
+    tests are pure logic and must stay runnable without a database
+    container. Only fixtures that genuinely touch the DB request this.
     """
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
@@ -66,7 +70,7 @@ async def _create_schema():
 
 
 @pytest.fixture
-async def db_session():
+async def db_session(_create_schema):
     """A DB session wrapped in a transaction that's rolled back after the
     test, so tests never see each other's data."""
     async with engine.connect() as conn:

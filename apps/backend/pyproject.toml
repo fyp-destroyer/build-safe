@@ -10,6 +10,10 @@ line-length = 100
 target-version = ["py312"]
 
 [tool.pytest.ini_options]
-# anyio ships its own pytest plugin (no pytest-asyncio dependency needed);
-# restrict to asyncio since that's all we use.
-anyio_mode = "auto"
+# pytest-asyncio in auto mode: async tests and async fixtures are picked up
+# without per-test markers. NOTE: the previous setting here was
+# `anyio_mode = "auto"`, which is not a real option - anyio's plugin has no
+# such key, so it was silently ignored. Under pytest 9 that left async
+# fixtures unhandled and every test in the suite errored at collection.
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"

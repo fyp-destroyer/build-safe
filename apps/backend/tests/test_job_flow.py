@@ -175,13 +175,19 @@ async def test_explicit_false_followup_answer_unblocks_and_escalates_risk(client
     assess_resp = await client.post(f"/jobs/{job_id}/assess", headers=headers)
     assert assess_resp.status_code == 200
     assert assess_resp.json()["status"] == "completed"
-    # power_isolated escalates to at least level 4 per rules.py's
-    # _SAFETY_CRITICAL_FOLLOWUPS — confirms the rule engine actually ran
-    # and escalated, not just that assess "succeeded".
+    # An explicitly-unsafe answer escalates per catalog.FOLLOWUPS —
+    # confirms the rule engine actually ran and escalated, not just that
+    # assess "succeeded".
     assert assess_resp.json()["risk_level"] >= 4
 
     get_resp = await client.get(f"/assessments/{job_id}", headers=headers)
-    assert "missing_followup:power_isolated" in get_resp.json()["triggered_rules"]
+    triggered = get_resp.json()["triggered_rules"]
+    # The distinction Phase 5 introduced: an answered-unsafe field is
+    # `unsafe_followup:`, NOT `missing_followup:`. Conflating the two is the
+    # bug that once made this whole path unreachable (memory.md 2026-07-19),
+    # so assert both directions.
+    assert "unsafe_followup:power_isolated" in triggered
+    assert "missing_followup:power_isolated" not in triggered
 
 
 async def test_job_ownership_enforced_404(client):

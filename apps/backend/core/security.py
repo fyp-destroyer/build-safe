@@ -26,12 +26,13 @@ compatible (e.g. passlib >= 1.7.5 or bcrypt pinned to < 4.1) with network
 access to actually install it.
 """
 
+import logging
 from datetime import datetime, timedelta, timezone
 from typing import Any
 from uuid import UUID
 
 import bcrypt
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Response, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from sqlalchemy import select
@@ -41,9 +42,17 @@ from core.config import get_settings
 from core.db import get_db
 
 settings = get_settings()
+logger = logging.getLogger(__name__)
 
 _ALGORITHM = "HS256"
-_DEFAULT_EXPIRES_MINUTES = 60
+# Read from settings rather than hardcoded, so session length is config.
+_DEFAULT_EXPIRES_MINUTES = settings.JWT_EXPIRES_MINUTES
+# Renew a token once it is more than halfway through its life. This is what
+# makes an active user effectively never log out: every request they make
+# past the halfway mark hands back a fresh token, so the clock keeps
+# resetting for as long as they keep using the app. Someone who stays away
+# longer than the full window still has to sign in again.
+_RENEW_AFTER_FRACTION = 0.5
 _BCRYPT_MAX_BYTES = 72  # bcrypt's hard limit; truncate deterministically, never crash.
 
 _bearer_scheme = HTTPBearer(auto_error=False)
@@ -89,6 +98,7 @@ def _unauthorized(message: str = "Invalid or missing authentication credentials.
 
 
 async def get_current_user(
+    response: Response,
     credentials: HTTPAuthorizationCredentials | None = Depends(_bearer_scheme),
     db: AsyncSession = Depends(get_db),
 ) -> Any:
@@ -123,4 +133,35 @@ async def get_current_user(
     if user is None:
         raise _unauthorized()
 
+    _maybe_renew(response, payload, subject)
     return user
+
+
+def _maybe_renew(response: Response, payload: dict[str, Any], subject: str) -> None:
+    """Hand back a fresh token once the current one is past halfway.
+
+    Sent as a response header rather than a body field so it works on every
+    authenticated endpoint without changing a single response schema, and so
+    a client that ignores it simply keeps its existing (still valid) token.
+
+    Any problem here is swallowed: renewal is a convenience, and a failure to
+    renew must never turn a perfectly good authenticated request into an
+    error.
+    """
+    try:
+        issued_at, expires_at = payload.get("iat"), payload.get("exp")
+        if not issued_at or not expires_at:
+            return
+        lifetime = expires_at - issued_at
+        if lifetime <= 0:
+            return
+        elapsed = datetime.now(timezone.utc).timestamp() - issued_at
+        if elapsed < lifetime * _RENEW_AFTER_FRACTION:
+            return
+        response.headers["X-Refreshed-Token"] = create_access_token(subject)
+        # Browsers hide non-safelisted response headers from JS unless the
+        # server explicitly exposes them — without this the frontend can
+        # never read the renewed token, and sessions would still expire.
+        response.headers["Access-Control-Expose-Headers"] = "X-Refreshed-Token"
+    except Exception:  # noqa: BLE001 - renewal must never break a valid request
+        logger.warning("Token renewal failed; the existing token remains valid.")

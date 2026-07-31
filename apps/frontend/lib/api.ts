@@ -3,7 +3,7 @@
 // responses, parsing the backend's `{ "error": { "code", "message", "fields"?
 // } }` shape (see rules.md / architecture.md §5).
 
-import { clearToken, getToken } from "./auth";
+import { clearToken, getToken, setToken } from "./auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
@@ -51,6 +51,14 @@ export async function apiFetch<T = unknown>(
       ...init?.headers,
     },
   });
+
+  // The backend hands back a renewed token once the current one is past
+  // halfway through its life (core/security.py `_maybe_renew`). Storing it
+  // here — at the one place every authenticated request passes through — is
+  // what keeps an active user signed in indefinitely instead of being
+  // dropped mid-session.
+  const renewed = res.headers.get("X-Refreshed-Token");
+  if (renewed) setToken(renewed);
 
   // An expired or invalid token used to leave the app looking signed in —
   // the auth gate only checks that a token EXISTS, and the user's name comes

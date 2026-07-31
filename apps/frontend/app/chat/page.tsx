@@ -355,9 +355,9 @@ export default function ChatPage() {
 
   // ---- Small helpers ----
 
-  const pushUserMessage = (text: string) => {
+  const pushUserMessage = (text: string, { persist = true }: { persist?: boolean } = {}) => {
     setMessages((prev) => [...prev, { id: nextId(), role: "user", text, createdAt: Date.now() }]);
-    queueTranscript({ role: "user", text });
+    if (persist) queueTranscript({ role: "user", text });
   };
 
   const pushErrorMessage = (err: unknown) => {
@@ -625,8 +625,11 @@ export default function ChatPage() {
 
   const handleQuickReply = (option: string) => {
     setAwaitingReplyOptions(null);
-    pushUserMessage(option);
     const stage = flowStageRef.current;
+    // "Continue" answers the resume prompt, which is deliberately not
+    // persisted (it's re-emitted on every open). Storing the answer without
+    // its question would replay as an orphan "Continue" bubble.
+    pushUserMessage(option, { persist: stage !== "resume_prompt" });
 
     if (stage === "ask_skill") {
       pendingSkillRef.current = option;

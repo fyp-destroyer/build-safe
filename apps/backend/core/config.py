@@ -20,6 +20,18 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str = "postgresql+asyncpg://buildsafe:buildsafe@localhost:5432/buildsafe"
     JWT_SECRET: str = "changeme"
+    # How long a session lasts. Was effectively 60 minutes, which logged the
+    # user out mid-use and — because the frontend only checked that a token
+    # EXISTED — left the app looking signed in while every request 401'd.
+    # 30 days, plus the sliding renewal in core/security.py, is what makes
+    # "open it and you're still logged in" true in practice.
+    #
+    # The trade-off, stated plainly: a long-lived token in localStorage is
+    # valid for its full lifetime if stolen, and there is no revocation list.
+    # Acceptable for this app (single `user` role, no payment or PII beyond
+    # an email); revisit before any real deployment — the fix is short-lived
+    # access tokens plus a refresh token in an httpOnly cookie.
+    JWT_EXPIRES_MINUTES: int = 60 * 24 * 30
     ENV: str = "development"
 
     # --- LLM provider ---------------------------------------------------

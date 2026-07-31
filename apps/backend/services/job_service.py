@@ -6,6 +6,13 @@ and writes both a RiskAssessment and an AiLog row on every attempt,
 including failures — an AI pipeline exception must never silently produce a
 "safe" result (CLAUDE.md / rules.md §4).
 
+LLM hazard tags are resolved ONCE, at job creation, and persisted on
+`jobs.llm_hazard_ids`. Everything downstream — the follow-up gate, the
+question shown to the user, and the rule engine at assessment — reads that
+one column, so the hazard set that decides what the user is ASKED can never
+differ from the one that decides how the task is SCORED. See `_hazard_ids`
+for the bug that made this necessary.
+
 `build_job_out` additionally computes `next_followup` (Gemini-phrased
 wording for the first still-missing safety-critical field, or None) at
 request time — it is never persisted on the Job model. The LLM call is
@@ -61,6 +68,12 @@ async def create_job(db: AsyncSession, user_id: UUID, payload: JobCreateRequest)
     if category is None:
         category = await asyncio.to_thread(llm_assist.tag_category, payload.description)
 
+    # Resolve LLM hazard tags HERE, once, and persist them — see
+    # `_hazard_ids` for why this must not be re-derived per step.
+    hazard_ids = await asyncio.to_thread(
+        llm_assist.tag_hazards_result, payload.description, category
+    )
+
     job = Job(
         user_id=user_id,
         description=payload.description,
@@ -68,6 +81,7 @@ async def create_job(db: AsyncSession, user_id: UUID, payload: JobCreateRequest)
         skill_level=payload.skill_level,
         urgency=payload.urgency,  # optional; nothing consumes it (srs.md FR-02)
         followup_answers={},
+        llm_hazard_ids=hazard_ids,
         status="pending_followup",
     )
     job.status = "pending_followup" if _missing_required_followups(job) else "ready_to_assess"
@@ -87,6 +101,54 @@ async def get_owned_job(db: AsyncSession, job_id: UUID, user_id: UUID) -> Job:
     return job
 
 
+def _hazard_ids(job: Job) -> list[str]:
+    """The LLM-proposed catalog rule ids resolved for this job, or [].
+
+    Read from the persisted column, never re-derived. The follow-up gate
+    (`_missing_required_followups`), the question shown to the user
+    (`_next_followup_prompt`) and the escalation (`assess_job`) all read
+    this one value, so they cannot disagree about which hazards apply.
+
+    They used to disagree: tagging ran only inside `assess_job`, while the
+    gate matched keywords alone. "replace my ceiling fans" matches no
+    keyword, so no follow-up was required and none was asked — then the
+    tagger flagged `fixed_wiring_work` at assessment, which made
+    `power_isolated` required, unanswered, and worth a level-5 floor. The
+    user was told a safety-critical question went unanswered without ever
+    having been shown one. Rules may only escalate on facts the user had a
+    chance to supply.
+
+    A NULL column means tagging never succeeded (Gemini was down at
+    creation); the job degrades to keyword-only hazards, which is the
+    documented no-LLM behaviour, and `ensure_hazard_ids` retries later.
+    """
+    return job.llm_hazard_ids or []
+
+
+async def ensure_hazard_ids(db: AsyncSession, job: Job) -> Job:
+    """Tag and persist hazard ids for a job that has none yet (NULL).
+
+    Covers jobs created before this column existed and jobs whose creation
+    happened during a Gemini outage. Re-tagging can only ADD hazards, so it
+    can only widen the required follow-up set — never narrow it. Callers
+    must therefore run this BEFORE the follow-up gate, so any newly
+    discovered question is asked rather than silently penalised.
+    """
+    if job.llm_hazard_ids is not None:
+        return job
+    hazard_ids = await asyncio.to_thread(
+        llm_assist.tag_hazards_result, job.description, job.category
+    )
+    if hazard_ids is None:
+        return job  # still unavailable; stay NULL and retry on the next pass
+    job.llm_hazard_ids = hazard_ids
+    if job.status in ("pending_followup", "ready_to_assess"):
+        job.status = "pending_followup" if _missing_required_followups(job) else "ready_to_assess"
+    await db.commit()
+    await db.refresh(job)
+    return job
+
+
 def _missing_required_followups(job: Job) -> set[str]:
     """Fields that still need an answer at all (key absent), not fields
     whose answer happens to be the unsafe one.
@@ -102,7 +164,12 @@ def _missing_required_followups(job: Job) -> set[str]:
     instead of ever producing the Dangerous/Do-Not-Attempt result the rule
     engine is designed to compute for exactly that case.
     """
-    required = required_followups(job.description, job.category, user_skill=job.skill_level)
+    required = required_followups(
+        job.description,
+        job.category,
+        _hazard_ids(job),
+        user_skill=job.skill_level,
+    )
     return {field for field in required if field not in job.followup_answers}
 
 
@@ -114,6 +181,11 @@ async def submit_followup(db: AsyncSession, job: Job, payload: JobFollowupReques
     been answered (any value, including an explicit `False` — see
     `_missing_required_followups`). Otherwise it stays "pending_followup".
     """
+    # Retry tagging first if creation-time tagging failed, so a hazard we
+    # only learn about now still turns into a question instead of an
+    # unanswerable penalty at assessment.
+    job = await ensure_hazard_ids(db, job)
+
     merged = {**job.followup_answers, **payload.answers}
     job.followup_answers = merged
 
@@ -174,6 +246,12 @@ async def assess_job(db: AsyncSession, job: Job) -> RiskAssessment:
     callers can inspect `.status` to decide the HTTP response, but the
     system never silently returns a "safe" default.
     """
+    # Last chance to tag if creation-time tagging failed. Must run BEFORE the
+    # gate: a hazard discovered here may add a follow-up, and the correct
+    # response to that is to send the user back to answer it (409), never to
+    # assess and escalate on the unanswered field.
+    job = await ensure_hazard_ids(db, job)
+
     if _missing_required_followups(job):
         raise ApiError(
             409,
@@ -194,12 +272,12 @@ async def assess_job(db: AsyncSession, job: Job) -> RiskAssessment:
 
         # LLM hazard tagging (rules.md §4.1): the LLM may only SELECT ids
         # from the hardcoded catalog, and every id is filtered against it
-        # inside the engine. Returns [] on any failure, in which case the
-        # deterministic keyword rules still run - the engine degrades to
-        # "no LLM", never to "no hazards".
-        llm_hazard_ids = await asyncio.to_thread(
-            llm_assist.tag_hazards, job.description, job.category
-        )
+        # inside the engine. Read from the job rather than re-tagged here:
+        # the gate above must have been evaluated against the SAME ids, or
+        # assessment can escalate on a hazard whose follow-up was never
+        # asked (see `_hazard_ids`). Empty means keyword rules alone still
+        # run - the engine degrades to "no LLM", never to "no hazards".
+        llm_hazard_ids = _hazard_ids(job)
 
         rule_risk, triggered_rules = evaluate(
             job.description,

@@ -2,16 +2,23 @@
 
 **What this module is allowed to do, and nothing more** (rules.md §4 /
 CLAUDE.md): (a) pick a category string from the fixed, closed 9-value
-`TASK_CATEGORIES` set for a free-text task description ("tagging"), and
-(b) phrase the natural-language wording of a question about an
-*already-hardcoded* follow-up field. It never decides which follow-up fields
-are required for a category, and never decides whether a missing answer
-escalates risk — that logic is 100% hardcoded and lives entirely in
-`ai/rule_engine/rules.py` (`_SAFETY_CRITICAL_FOLLOWUPS`,
-`_relevant_followups_for`) and `services/job_service.py`
-(`_REQUIRED_FOLLOWUPS_BY_CATEGORY`). This module is never consulted for, and
-has no way to influence, risk level, rule triggering, or which fields are
-required.
+`TASK_CATEGORIES` set for a free-text task description ("tagging"), (b) tag
+which *existing* catalog hazard rule ids apply to a description, and (c)
+phrase the natural-language wording of a question about an
+*already-hardcoded* follow-up field.
+
+It cannot invent a rule, cannot assign or suggest a risk number, and cannot
+change any escalation floor: every id it proposes is filtered against
+`catalog.VALID_RULE_IDS` inside `ai/rule_engine/rules.py` before it can
+influence anything, and the floors themselves are hardcoded in
+`catalog.py`. Tagging is additive only — it can cause a hardcoded rule to
+fire that keyword matching missed, never suppress one that matched.
+
+Because which follow-ups are required is derived from which hazard rules
+fired (`rules.required_followups`), tagging does indirectly widen the set of
+questions asked. That is intended, but it means the tagged set must be
+*identical* everywhere it is consulted — `services/job_service.py` resolves
+it once per job and persists it for exactly that reason.
 
 Every call into Gemini goes through `ai.llm.client.generate_structured`,
 which never raises and returns `None` on any failure — every function here
@@ -151,6 +158,22 @@ def tag_hazards(description: str, category: str) -> list[str]:
     Returns only ids that exist in the catalog. Returns [] if Gemini is
     unavailable, returns nothing usable, or returns only invalid ids - the
     caller's keyword matching is unaffected either way.
+
+    Callers that need to tell "Gemini was down" apart from "Gemini ran and
+    found no hazards" must use `tag_hazards_result` instead: the two cases
+    are indistinguishable here and conflating them would let a job cache an
+    empty hazard set produced by an outage.
+    """
+    return tag_hazards_result(description, category) or []
+
+
+def tag_hazards_result(description: str, category: str) -> list[str] | None:
+    """`tag_hazards`, but returns None when the LLM produced no usable reply.
+
+    None means "not tagged" (retry later); [] means "tagged, no hazards
+    apply". `services/job_service.py` persists the distinction so a job
+    tagged during a Gemini outage is re-tagged rather than permanently
+    treated as hazard-free.
     """
     from ai.rule_engine.catalog import RULES, VALID_RULE_IDS
 
@@ -168,7 +191,7 @@ def tag_hazards(description: str, category: str) -> list[str]:
     result = generate_structured(prompt, HazardTags)
     if result is None:
         logger.info("tag_hazards: no LLM result, falling back to keyword rules only")
-        return []
+        return None
 
     valid, invalid = [], []
     for rid in result.rule_ids or []:

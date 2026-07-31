@@ -294,6 +294,10 @@ export default function ChatPage() {
 
   // ---- Assessment ----
 
+  // Guards the followup_incomplete recovery below against ping-ponging with
+  // a backend that keeps reporting a missing field we can't surface.
+  const followupRecoveryRef = useRef(0);
+
   const runAssessment = async (job: JobOut) => {
     flowStageRef.current = "assessing";
     setIsTyping(true);
@@ -316,6 +320,28 @@ export default function ChatPage() {
       flowStageRef.current = "done";
       void refreshJobs();
     } catch (err) {
+      // The backend can discover a safety-critical follow-up at assessment
+      // time that it didn't know about at intake (hazard tagging retried
+      // after a Gemini outage). It refuses to assess rather than penalise an
+      // unanswered question — so ask the question instead of dead-ending on
+      // an error the user can't act on.
+      if (err instanceof ApiError && err.code === "followup_incomplete" && followupRecoveryRef.current < 3) {
+        followupRecoveryRef.current += 1;
+        try {
+          const refreshed = await apiFetch<JobOut>(`/jobs/${job.id}/followup`, {
+            method: "PATCH",
+            body: JSON.stringify({ answers: {} }),
+          });
+          setJobsById((prev) => ({ ...prev, [refreshed.id]: refreshed }));
+          if (refreshed.next_followup) {
+            setIsTyping(false);
+            await processJobFollowup(refreshed);
+            return;
+          }
+        } catch {
+          // Fall through to the generic error below rather than looping.
+        }
+      }
       setIsTyping(false);
       pushErrorMessage(err);
       flowStageRef.current = "done";
@@ -341,6 +367,7 @@ export default function ChatPage() {
   };
 
   const createJobAndProceed = async () => {
+    followupRecoveryRef.current = 0;
     setIsTyping(true);
     setAwaitingReplyOptions(null);
     try {

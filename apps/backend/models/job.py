@@ -39,6 +39,15 @@ class Job(Base):
     # survive and the change is reversible.
     urgency: Mapped[str | None] = mapped_column(String(50), nullable=True)
     followup_answers: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    # Catalog rule ids the LLM tagger proposed for this description, resolved
+    # ONCE at creation and reused for the rest of the job's life. Persisted
+    # because the follow-up gate and the rule engine must see the identical
+    # hazard set: tagging separately at each step let assessment escalate on a
+    # hazard the intake flow never knew about, so the user was penalised for
+    # not answering a question that was never asked (see job_service).
+    # NULL means "not tagged yet" (LLM unavailable at creation), which is
+    # distinct from [] meaning "tagged, no hazards found".
+    llm_hazard_ids: Mapped[list | None] = mapped_column(JSON, nullable=True, default=None)
     status: Mapped[str] = mapped_column(String(30), nullable=False, default="pending_followup")
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

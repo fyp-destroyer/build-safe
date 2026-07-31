@@ -15,7 +15,7 @@ from unittest.mock import patch
 import pytest
 from sqlalchemy import update
 
-from ai.rule_engine.llm_assist import CategoryTag, PhrasedQuestion
+from ai.rule_engine.llm_assist import CategoryTag, HazardTags, PhrasedQuestion
 from models import Job
 from schemas.job import TASK_CATEGORIES
 from tests.conftest import register_and_login
@@ -28,15 +28,29 @@ async def _auth_headers(client, email: str) -> dict:
     return {"Authorization": f"Bearer {token}"}
 
 
-def _llm_stub(prompt: str, response_schema):
-    """generate_structured is called for both category tagging and
-    follow-up phrasing within a single request (e.g. a carpentry job needs
-    both) — a real Gemini call would naturally return the shape asked for,
-    so the stub mirrors that by dispatching on the requested schema rather
-    than returning one canned value for every call."""
-    if response_schema is CategoryTag:
-        return CategoryTag(category="carpentry")
-    return PhrasedQuestion(question="Have you confirmed this wall is not load-bearing?")
+def _make_llm_stub(*, category="carpentry", question=None, hazards=()):
+    """Build a generate_structured stub that dispatches on the requested
+    schema, the way a real Gemini call does.
+
+    A single request can now trigger all three call sites — category
+    tagging, hazard tagging (moved to job creation so the follow-up gate and
+    the rule engine see the same hazards) and question phrasing — so a stub
+    that returns one canned object for every call would hand a
+    `PhrasedQuestion` to the hazard parser.
+    """
+    default_question = question or "Have you confirmed this wall is not load-bearing?"
+
+    def _stub(prompt: str, response_schema):
+        if response_schema is CategoryTag:
+            return CategoryTag(category=category)
+        if response_schema is HazardTags:
+            return HazardTags(rule_ids=list(hazards))
+        return PhrasedQuestion(question=default_question)
+
+    return _stub
+
+
+_llm_stub = _make_llm_stub()
 
 
 async def test_create_job_without_category_infers_from_fixed_set(client):
@@ -67,8 +81,11 @@ async def test_electrical_job_next_followup_then_clears_after_answer(client):
     text; answering it clears next_followup and flips status."""
     headers = await _auth_headers(client, "llm_job2@example.com")
 
-    phrased = PhrasedQuestion(question="Have you switched off the breaker for this circuit?")
-    with patch("ai.rule_engine.llm_assist.generate_structured", return_value=phrased):
+    stub = _make_llm_stub(
+        category="electrical",
+        question="Have you switched off the breaker for this circuit?",
+    )
+    with patch("ai.rule_engine.llm_assist.generate_structured", side_effect=stub):
         create_resp = await client.post(
             "/jobs",
             json={
@@ -152,3 +169,116 @@ async def test_list_jobs_returns_only_callers_jobs_most_recent_first(client, db_
 
     for job in jobs:
         assert "next_followup" in job
+
+
+async def test_llm_only_hazard_is_asked_about_before_it_can_escalate(client):
+    """Regression (2026-07-31): a hazard the LLM tagger finds but keyword
+    matching misses must produce a QUESTION at intake, not a silent level-5
+    penalty at assessment.
+
+    "replace my ceiling fans" matches none of `fixed_wiring_work`'s
+    keywords. Hazard tagging used to run only inside assess_job, so the
+    intake gate saw no hazards, asked nothing, and let the job through —
+    then the tagger fired at assessment, made `power_isolated` required,
+    found it unanswered, and applied its floor of 5. The user was told a
+    safety-critical question went unanswered without ever being shown one.
+
+    The fix is not "escalate less": it is that the tagged hazard set is
+    resolved once at creation and persisted, so the set that decides what is
+    ASKED is the same set that decides how the job is SCORED.
+    """
+    headers = await _auth_headers(client, "llm_hazard_gate@example.com")
+    stub = _make_llm_stub(
+        category="electrical",
+        question="Have you confirmed the power to this circuit is isolated?",
+        hazards=["fixed_wiring_work"],
+    )
+
+    with patch("ai.rule_engine.llm_assist.generate_structured", side_effect=stub):
+        create_resp = await client.post(
+            "/jobs",
+            json={
+                "description": "i want to replace my ceiling fans",
+                "skill_level": "beginner",
+            },
+            headers=headers,
+        )
+        assert create_resp.status_code == 201
+        body = create_resp.json()
+
+        # The whole point: the question is surfaced up front.
+        assert body["status"] == "pending_followup"
+        assert body["next_followup"] is not None
+        assert body["next_followup"]["field"] == "power_isolated"
+
+        job_id = body["id"]
+
+        # And assessment is blocked until it's answered — never assessed
+        # while a field the engine will escalate on is still unanswered.
+        assert (await client.post(f"/jobs/{job_id}/assess", headers=headers)).status_code == 409
+
+        followup_resp = await client.patch(
+            f"/jobs/{job_id}/followup",
+            json={"answers": {"power_isolated": True}},
+            headers=headers,
+        )
+        assert followup_resp.status_code == 200
+        assert followup_resp.json()["status"] == "ready_to_assess"
+
+        assess_resp = await client.post(f"/jobs/{job_id}/assess", headers=headers)
+
+    assert assess_resp.status_code == 200
+    assert assess_resp.json()["status"] == "completed"
+
+    get_resp = await client.get(f"/assessments/{job_id}", headers=headers)
+    triggered = get_resp.json()["triggered_rules"]
+    # The LLM-tagged hazard still fires and still escalates — this is not a
+    # de-escalation. What must not survive is the missing-answer penalty for
+    # a question the user was never asked.
+    assert "fixed_wiring_work" in triggered
+    assert "missing_followup:power_isolated" not in triggered
+
+
+async def test_hazard_tagging_failure_at_creation_never_escalates_on_unasked_field(client):
+    """If Gemini is down at creation, the job is stored untagged (NULL, not
+    []) and re-tagged on the next request. A hazard discovered by that retry
+    must send the user back to answer its follow-up (409), never be scored
+    against them as "unanswered"."""
+    headers = await _auth_headers(client, "llm_hazard_retry@example.com")
+
+    # Creation: every LLM call fails -> untagged, keyword-only.
+    with patch("ai.rule_engine.llm_assist.generate_structured", return_value=None):
+        create_resp = await client.post(
+            "/jobs",
+            json={
+                "description": "i want to replace my ceiling fans",
+                "category": "electrical",
+                "skill_level": "beginner",
+            },
+            headers=headers,
+        )
+        assert create_resp.status_code == 201
+        body = create_resp.json()
+        job_id = body["id"]
+        # No keyword match and no tagger -> nothing known to ask about yet.
+        assert body["next_followup"] is None
+
+    # Assessment: tagging succeeds this time and surfaces the hazard. The
+    # follow-up it requires is unanswered, so assessment must refuse rather
+    # than apply the missing-answer floor.
+    stub = _make_llm_stub(
+        category="electrical",
+        question="Have you confirmed the power to this circuit is isolated?",
+        hazards=["fixed_wiring_work"],
+    )
+    with patch("ai.rule_engine.llm_assist.generate_structured", side_effect=stub):
+        assess_resp = await client.post(f"/jobs/{job_id}/assess", headers=headers)
+        assert assess_resp.status_code == 409
+        assert assess_resp.json()["error"]["code"] == "followup_incomplete"
+
+        # ...and the question is now available to ask (what the chat UI's
+        # followup_incomplete recovery path re-reads).
+        refreshed = await client.patch(
+            f"/jobs/{job_id}/followup", json={"answers": {}}, headers=headers
+        )
+        assert refreshed.json()["next_followup"]["field"] == "power_isolated"

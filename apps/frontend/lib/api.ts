@@ -3,7 +3,7 @@
 // responses, parsing the backend's `{ "error": { "code", "message", "fields"?
 // } }` shape (see rules.md / architecture.md §5).
 
-import { getToken } from "./auth";
+import { clearToken, getToken } from "./auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
@@ -51,6 +51,22 @@ export async function apiFetch<T = unknown>(
       ...init?.headers,
     },
   });
+
+  // An expired or invalid token used to leave the app looking signed in —
+  // the auth gate only checks that a token EXISTS, and the user's name comes
+  // from localStorage — while every request failed with "Invalid or missing
+  // authentication credentials" and the sidebar showed "No saved
+  // conversations". Observed live: a dead session that looks like data loss.
+  // Treat 401 as "session over": clear the token and send them to log in.
+  //
+  // /auth/* is excluded because a wrong password there is a 401 the login
+  // form must show inline — redirecting would loop the page on itself.
+  if (res.status === 401 && !path.startsWith("/auth/")) {
+    clearToken();
+    if (typeof window !== "undefined" && !window.location.pathname.startsWith("/login")) {
+      window.location.assign("/login");
+    }
+  }
 
   if (!res.ok) {
     let code = "UNKNOWN_ERROR";

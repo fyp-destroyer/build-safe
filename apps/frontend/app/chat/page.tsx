@@ -112,8 +112,15 @@ function buildRiskCardData(
   // triggered_rules) — de-dupe before mapping to <RiskCard>'s factors list,
   // which keys each <li> by its text and would otherwise get duplicate keys.
   const uniqueFactors = Array.from(new Set(rawFactors));
+  // Prefer the backend's plain-language safety notes, which come from the
+  // hardcoded rule catalog. Prettified slugs are only a fallback: showing a
+  // user "Unsafe followup:load bearing confirmed" (what this did before) is
+  // not an explanation, and FR-05 asks for one.
+  const notes = assessment.safety_notes ?? [];
   const factors =
-    uniqueFactors.length > 0
+    notes.length > 0
+      ? Array.from(new Set(notes))
+      : uniqueFactors.length > 0
       ? uniqueFactors.map(prettifyTag)
       : assessment.status === "failed"
         ? [

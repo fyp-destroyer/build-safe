@@ -84,10 +84,18 @@ Each phase has a clear deliverable and an exit check. Don't start a phase until 
 **Deliverable:** conversational task intake → follow-up → inline risk card → saved history, working end to end against real backend, with a ChatGPT/Gemini-like interaction feel.
 
 - [x] Chat interface (sidebar conversation list, message thread, composer)
-- [x] Conversational task intake + follow-up question flow (asked as chat messages, quick-reply chips) — wired to the real backend 2026-07-19 (scripted `chatData.ts` demo data removed)
-- [x] Inline risk assessment card (risk chip, explanation, tools/materials) rendered as an assistant message — `cost`/`time` fields not yet populated (`"Not yet available"`), pending a real cost/time engine
-- [x] User dashboard (history, saved lists) — **resolved without a dedicated dashboard page**, at the user's request after reviewing and rejecting a mockup: built directly into `Sidebar.tsx` as Favourites/Chats sections instead. `app/dashboard/page.tsx` remains an intentionally untouched stub.
-  **Exit check:** a non-technical tester can complete the full journey unassisted for all 4 demo scenarios. — **Not yet met.** Flow now runs against the real backend end-to-end (API-contract-level verified 2026-07-19; a live browser click-through of the real-backend version is still outstanding), but only 2 of the 4 demo scenarios exist, and risk decisions still ride on Phase 6's TEMPORARY placeholders — not truly meetable until Phases 3-5 land.
+- [x] Conversational task intake + follow-up question flow (quick-reply chips), wired to the real backend
+- [x] Inline risk assessment card (risk chip, explanation, tools/materials)
+- [x] User dashboard (history, saved lists) — built into `Sidebar.tsx`, not a separate page (user decision)
+- [x] **Verified live in Chrome against the real stack (2026-07-31)** — trained classifier + real rule engine + Postgres, not placeholders.
+  **Exit check:** a non-technical tester can complete the full journey unassisted for all 4 demo scenarios. — **MET.** All four risk tiers driven through the real UI end to end:
+  1. **Safe DIY (1)** — repaint a bedroom wall → level 1, no rules, PPE + DIY checklist shown.
+  2. **Professional Recommended (3)** — cracked ridge tile on a *single storey bungalow* → level 3 from the classifier alone, `work_at_height` correctly suppressed by its low-height excludes.
+  3. **Professional Required (4)** — remove a wall, follow-up answered "No" → **`max(ML=2, rules=4) = 4`**, the escalation invariant visible in production.
+  4. **Dangerous (5)** — gas smell → level 5, `active_gas_or_co`, DIY tool guidance withheld.
+  - Also verified: register → JWT session persists across reload, sidebar history, and re-opening a past chat restores its saved assessment (FR-09).
+  - **Bug found by this testing and fixed:** the risk card showed prettified rule slugs ("Active gas or co", "Unsafe followup:load bearing confirmed") instead of guidance. `explain()` existed in the catalog but nothing ever called it. `RiskAssessmentOut` now exposes a computed `safety_notes`, so a gas report reads "leave the area, avoid switches and naked flames, and contact your gas emergency service". Computed at read time, so existing assessments improve too.
+  - Known limitation, not a defect: every chat is categorised **"General"** because `GEMINI_API_KEY` is unset and `tag_category` falls back as designed. Category tagging is the only visibly degraded feature without a key.
 
 ## Phase 8 — Testing & Deployment
 

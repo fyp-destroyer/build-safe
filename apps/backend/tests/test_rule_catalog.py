@@ -229,3 +229,60 @@ def test_beginner_gated_rule_fires_only_for_beginners():
 def test_explain_returns_only_hardcoded_text_and_skips_unknown_ids():
     out = explain(["active_gas_or_co", "totally_invented_rule"])
     assert out == [RULES["active_gas_or_co"].explanation]
+
+
+# ------------------------------------------------- user-facing explanations
+def test_assessment_exposes_plain_language_safety_notes():
+    """FR-05: an explanation, not a rule id.
+
+    Regression guard for a gap found by live browser testing: the UI showed
+    "Active gas or co" to a user reporting a gas smell, because the API only
+    ever sent the rule slug. The guidance itself must reach the client.
+    """
+    import datetime
+    import uuid
+
+    from schemas.assessment import RiskAssessmentOut
+
+    out = RiskAssessmentOut(
+        id=uuid.uuid4(),
+        job_id=uuid.uuid4(),
+        risk_level=5,
+        confidence=0.7,
+        explanation="…",
+        hazard_tags=["active_gas_or_co"],
+        triggered_rules=["active_gas_or_co", "unsafe_followup:load_bearing_confirmed"],
+        cost=None,
+        time=None,
+        difficulty=None,
+        status="completed",
+        created_at=datetime.datetime.now(datetime.timezone.utc),
+    )
+    notes = out.safety_notes
+    assert len(notes) == 2
+    assert any("emergency" in n for n in notes), "gas guidance missing"
+    # It must be prose, not the slug.
+    assert not any(n.startswith("active_gas_or_co") for n in notes)
+
+
+def test_safety_notes_empty_when_nothing_triggered():
+    import datetime
+    import uuid
+
+    from schemas.assessment import RiskAssessmentOut
+
+    out = RiskAssessmentOut(
+        id=uuid.uuid4(),
+        job_id=uuid.uuid4(),
+        risk_level=1,
+        confidence=0.9,
+        explanation="…",
+        hazard_tags=[],
+        triggered_rules=[],
+        cost=None,
+        time=None,
+        difficulty=None,
+        status="completed",
+        created_at=datetime.datetime.now(datetime.timezone.utc),
+    )
+    assert out.safety_notes == []

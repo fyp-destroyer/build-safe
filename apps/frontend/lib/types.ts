@@ -68,6 +68,9 @@ export interface RiskAssessmentOut {
   explanation: string;
   hazard_tags: string[];
   triggered_rules: string[];
+  /** Plain-language guidance per triggered rule, from the backend's
+   *  hardcoded rule catalog. Preferred over prettifying raw rule slugs. */
+  safety_notes?: string[];
   cost: string | null;
   time: string | null;
   difficulty: string | null;

@@ -6,13 +6,14 @@ catalog. `professionals`, `quote_requests`, `quotes`, `tools`, `materials`,
 are all out of scope for this pass (see architecture.md's note that there is
 no `safety_rules` table either — the rubric is hardcoded in `ai/rule_engine/`).
 
-Implemented here: User, Job, RiskAssessment, AiLog.
+Implemented here: User, Job, RiskAssessment, AiLog, ChatMessage.
 """
 
 from models.ai_log import AiLog
 from models.base import Base
+from models.chat_message import ChatMessage
 from models.job import Job
 from models.risk_assessment import RiskAssessment
 from models.user import User
 
-__all__ = ["Base", "User", "Job", "RiskAssessment", "AiLog"]
+__all__ = ["Base", "User", "Job", "RiskAssessment", "AiLog", "ChatMessage"]

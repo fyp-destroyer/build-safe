@@ -94,3 +94,27 @@ export interface RecommendationsOut {
   items: RecommendedItem[];
   is_placeholder: boolean;
 }
+
+// ---- chat.py ----
+
+/** One stored transcript row.
+ *
+ *  A `risk_card` row carries no verdict — no risk level, no hazards, no
+ *  explanation. It marks where the card belongs in the conversation, and the
+ *  card is rebuilt from the assessment when the chat is reopened, so the
+ *  transcript can never display a risk level that has drifted from the
+ *  assessment of record (see apps/backend/models/chat_message.py).
+ */
+export interface ChatMessageOut {
+  id: string;
+  job_id: string;
+  role: "user" | "assistant";
+  kind: "text" | "risk_card";
+  text: string | null;
+  position: number;
+  created_at: string;
+}
+
+export interface ChatMessagesOut {
+  messages: ChatMessageOut[];
+}

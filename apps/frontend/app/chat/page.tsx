@@ -27,6 +27,7 @@ import { apiFetch, ApiError } from "@/lib/api";
 import { getToken, clearToken, getStoredUser } from "@/lib/auth";
 import type {
   AssessJobResponse,
+  ChatMessagesOut,
   JobOut,
   RecommendationsOut,
   RiskAssessmentOut,
@@ -61,6 +62,45 @@ type FlowStage =
 
 let idCounter = 0;
 const nextId = () => `m-${++idCounter}`;
+
+// What gets persisted per message. A risk card is stored as a positional
+// marker with no text: its contents are re-rendered from the assessment, so
+// the transcript can never show a verdict that has drifted from the
+// assessment of record (see apps/backend/models/chat_message.py).
+type TranscriptEntry =
+  | { role: "user" | "assistant"; kind?: "text"; text: string }
+  | { role: "assistant"; kind: "risk_card" };
+
+// Key for the job whose conversation is currently on screen, so a refresh
+// reopens it instead of dropping the user on an empty chat.
+const ACTIVE_JOB_STORAGE_KEY = "buildsafe:active-job-id";
+
+// localStorage access is wrapped because it throws in private-mode Safari
+// and when storage is full. Losing the "which chat was open" pointer is a
+// minor inconvenience; an exception on every message would not be.
+function rememberActiveJob(jobId: string): void {
+  try {
+    window.localStorage.setItem(ACTIVE_JOB_STORAGE_KEY, jobId);
+  } catch {
+    /* non-fatal: refresh just won't reopen this chat */
+  }
+}
+
+function forgetActiveJob(): void {
+  try {
+    window.localStorage.removeItem(ACTIVE_JOB_STORAGE_KEY);
+  } catch {
+    /* non-fatal */
+  }
+}
+
+function readActiveJob(): string | null {
+  try {
+    return window.localStorage.getItem(ACTIVE_JOB_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
 
 function truncateTitle(desc: string, max = 50): string {
   const trimmed = desc.trim();
@@ -213,6 +253,46 @@ export default function ChatPage() {
   const pendingSkillRef = useRef<string>("");
   const currentJobRef = useRef<JobOut | null>(null);
 
+  // ---- Transcript persistence ----
+  // Messages are queued as they're produced and flushed to the backend once
+  // a job exists to attach them to. The first two turns (task description,
+  // skill question and answer) happen BEFORE POST /jobs, so they have no
+  // job_id yet — buffering here rather than writing eagerly is what lets
+  // them survive instead of being dropped.
+  //
+  // Only live conversation is queued. Replaying a stored transcript, or
+  // rebuilding an old job's approximation, pushes messages WITHOUT queueing
+  // them — otherwise every re-open would append a duplicate copy.
+  const transcriptQueueRef = useRef<TranscriptEntry[]>([]);
+  const flushingRef = useRef(false);
+
+  const queueTranscript = (entry: TranscriptEntry) => {
+    transcriptQueueRef.current.push(entry);
+    void flushTranscript();
+  };
+
+  const flushTranscript = async () => {
+    const jobId = currentJobRef.current?.id;
+    if (!jobId || flushingRef.current || transcriptQueueRef.current.length === 0) return;
+    flushingRef.current = true;
+    const batch = transcriptQueueRef.current;
+    transcriptQueueRef.current = [];
+    try {
+      await apiFetch(`/jobs/${jobId}/messages`, {
+        method: "POST",
+        body: JSON.stringify({ messages: batch }),
+      });
+    } catch {
+      // Best-effort by design: the transcript is a record of the
+      // conversation, never an input to an assessment (see the backend's
+      // chat_service docstring). A failed write must not interrupt a safety
+      // flow, so re-queue for the next flush and stay silent.
+      transcriptQueueRef.current = [...batch, ...transcriptQueueRef.current];
+    } finally {
+      flushingRef.current = false;
+    }
+  };
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, isTyping]);
@@ -263,10 +343,13 @@ export default function ChatPage() {
     void refreshJobs();
   }, [authChecked, refreshJobs]);
 
+  const restoredRef = useRef(false);
+
   // ---- Small helpers ----
 
   const pushUserMessage = (text: string) => {
     setMessages((prev) => [...prev, { id: nextId(), role: "user", text, createdAt: Date.now() }]);
+    queueTranscript({ role: "user", text });
   };
 
   const pushErrorMessage = (err: unknown) => {
@@ -278,15 +361,28 @@ export default function ChatPage() {
       ...prev,
       { id: nextId(), role: "assistant", text: message, createdAt: Date.now(), isError: true },
     ]);
+    // Errors are part of what the user saw; a transcript that silently omits
+    // them would misrepresent the conversation on reopen.
+    queueTranscript({ role: "assistant", text: message });
   };
 
-  const showBotMessage = (text: string, quickReplies?: string[], delay = 900): Promise<void> =>
+  // `persist: false` for UI chrome that is re-emitted every time a chat is
+  // opened (the resume prompt). Persisting those would append another copy
+  // to the stored transcript on every open, so re-opening a job three times
+  // would show the prompt three times.
+  const showBotMessage = (
+    text: string,
+    quickReplies?: string[],
+    delay = 900,
+    { persist = true }: { persist?: boolean } = {},
+  ): Promise<void> =>
     new Promise((resolve) => {
       setIsTyping(true);
       setAwaitingReplyOptions(null);
       window.setTimeout(() => {
         setIsTyping(false);
         setMessages((prev) => [...prev, { id: nextId(), role: "assistant", text, createdAt: Date.now() }]);
+        if (persist) queueTranscript({ role: "assistant", text });
         if (quickReplies) setAwaitingReplyOptions(quickReplies);
         resolve();
       }, delay);
@@ -317,6 +413,8 @@ export default function ChatPage() {
       const riskCard = buildRiskCardData(job, assessment, recommendations);
       setIsTyping(false);
       setMessages((prev) => [...prev, { id: nextId(), role: "assistant", riskCard, createdAt: Date.now() }]);
+      // Marker only — the card is rebuilt from the assessment on reload.
+      queueTranscript({ role: "assistant", kind: "risk_card" });
       flowStageRef.current = "done";
       void refreshJobs();
     } catch (err) {
@@ -382,6 +480,13 @@ export default function ChatPage() {
       setJobsById((prev) => ({ ...prev, [job.id]: job }));
       setHistory((prev) => [jobToHistoryItem(job), ...prev]);
       setActiveHistoryId(job.id);
+      // The job now exists, so the messages buffered before it did (task
+      // description, skill question, skill answer) finally have somewhere to
+      // go. Flush before continuing so they're stored in the order they were
+      // said, ahead of anything the follow-up step produces.
+      currentJobRef.current = job;
+      rememberActiveJob(job.id);
+      await flushTranscript();
       await processJobFollowup(job);
     } catch (err) {
       setIsTyping(false);
@@ -418,6 +523,61 @@ export default function ChatPage() {
       pushErrorMessage(err);
       flowStageRef.current = "done";
     }
+  };
+
+  /** Replay a stored transcript, or return false if there isn't one.
+   *
+   * Risk-card rows carry no verdict, so the card is rebuilt here from the
+   * assessment — one fetch for the whole conversation regardless of how many
+   * card markers it contains. If that fetch fails the marker is skipped
+   * rather than rendered as an empty or guessed card: showing no card is
+   * honest, showing a blank one is not.
+   *
+   * Returns false when nothing is stored (jobs created before this feature
+   * existed), letting the caller fall back to the old reconstruction.
+   */
+  const replayStoredTranscript = async (job: JobOut): Promise<boolean> => {
+    let stored: ChatMessagesOut;
+    try {
+      stored = await apiFetch<ChatMessagesOut>(`/jobs/${job.id}/messages`);
+    } catch {
+      return false;
+    }
+    if (stored.messages.length === 0) return false;
+
+    let riskCard: RiskCardData | null = null;
+    if (stored.messages.some((m) => m.kind === "risk_card")) {
+      try {
+        const assessment = await apiFetch<RiskAssessmentOut>(`/assessments/${job.id}`);
+        const recommendations =
+          assessment.status === "completed"
+            ? await apiFetch<RecommendationsOut>(`/recommendations/${job.id}`)
+            : null;
+        riskCard = buildRiskCardData(job, assessment, recommendations);
+      } catch {
+        riskCard = null;
+      }
+    }
+
+    const replayed: ChatMessage[] = [];
+    for (const message of stored.messages) {
+      const createdAt = Date.parse(message.created_at) || Date.now();
+      if (message.kind === "risk_card") {
+        if (riskCard) {
+          replayed.push({ id: nextId(), role: "assistant", riskCard, createdAt });
+        }
+      } else if (message.text) {
+        replayed.push({
+          id: nextId(),
+          role: message.role,
+          text: message.text,
+          createdAt,
+        });
+      }
+    }
+
+    setMessages(replayed);
+    return true;
   };
 
   const loadFinishedJob = async (job: JobOut) => {
@@ -476,6 +636,9 @@ export default function ChatPage() {
   };
 
   const handleNewChat = () => {
+    // Flush anything still queued for the chat being left, before its job
+    // reference is cleared and the queue would have nowhere to go.
+    void flushTranscript();
     setMessages([]);
     setAwaitingReplyOptions(null);
     setActiveHistoryId(null);
@@ -483,26 +646,73 @@ export default function ChatPage() {
     pendingDescriptionRef.current = "";
     pendingSkillRef.current = "";
     currentJobRef.current = null;
+    transcriptQueueRef.current = [];
+    forgetActiveJob();
+  };
+
+  const openJob = async (job: JobOut) => {
+    setActiveHistoryId(job.id);
+    setAwaitingReplyOptions(null);
+    currentJobRef.current = job;
+    rememberActiveJob(job.id);
+    // Anything still queued belongs to the chat being navigated away from,
+    // and its job is already set — flush before switching so it isn't
+    // mis-attributed to the job being opened.
+    await flushTranscript();
+
+    const replayed = await replayStoredTranscript(job);
+    if (!replayed) {
+      // Pre-transcript job: fall back to the old approximation — the task
+      // description plus, for a finished job, a freshly built risk card.
+      setMessages([
+        {
+          id: nextId(),
+          role: "user",
+          text: job.description,
+          createdAt: Date.parse(job.created_at) || Date.now(),
+        },
+      ]);
+    }
+
+    if (job.status === "assessed" || job.status === "failed") {
+      flowStageRef.current = "done";
+      if (!replayed) await loadFinishedJob(job);
+    } else {
+      flowStageRef.current = "resume_prompt";
+      await showBotMessage("This assessment wasn't finished — continue?", ["Continue"], 500, {
+        persist: false,
+      });
+    }
   };
 
   const handleSelectHistory = (id: string) => {
     const job = jobsById[id];
     if (!job) return;
-    setActiveHistoryId(id);
-    setAwaitingReplyOptions(null);
-    setMessages([
-      { id: nextId(), role: "user", text: job.description, createdAt: Date.parse(job.created_at) || Date.now() },
-    ]);
-    currentJobRef.current = job;
-
-    if (job.status === "assessed" || job.status === "failed") {
-      flowStageRef.current = "done";
-      void loadFinishedJob(job);
-    } else {
-      flowStageRef.current = "resume_prompt";
-      void showBotMessage("This assessment wasn't finished — continue?", ["Continue"], 500);
-    }
+    void openJob(job);
   };
+
+  // Reopen whatever chat was on screen before the refresh. Declared here
+  // rather than beside the other effects because it calls `openJob`, which
+  // is defined just above. Runs once, and only once the job list has
+  // arrived — the stored id has to resolve to a job this user owns, so a
+  // stale or foreign id simply never matches and is dropped.
+  useEffect(() => {
+    if (!authChecked || restoredRef.current) return;
+    const jobId = readActiveJob();
+    if (!jobId) return;
+    const job = jobsById[jobId];
+    if (!job) return; // job list hasn't arrived yet, or the job is gone
+    restoredRef.current = true;
+    // Same rationale as the auth-gate and job-list effects above: a one-time
+    // fetch synchronized to an external system (the stored transcript) on
+    // mount, not state derivable during render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void openJob(job);
+    // `openJob` is recreated every render and is deliberately not a
+    // dependency: restoredRef already limits this to one run, and listing it
+    // would re-trigger the restore on every render instead.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authChecked, jobsById]);
 
   const handleClearHistory = () => {
     setHistory([]);

@@ -3,6 +3,8 @@
   2. PATCH /jobs/{id}/followup      — answer missing safety-critical follow-ups
   3. POST /jobs/{id}/assess         — trigger classifier + rule engine -> final_risk
   4. GET /jobs                      — list the caller's jobs, most recent first
+  5. GET/POST /jobs/{id}/messages   — the chat transcript for a job, so a page
+                                      refresh doesn't lose the conversation
 
 All ownership-scoped: a job not owned by the caller 404s (never leaks
 existence). Missing safety-critical follow-up answers are never silently
@@ -20,8 +22,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from core.db import get_db
 from core.security import get_current_user
 from models import User
+from schemas.chat import ChatMessagesAppendRequest, ChatMessagesOut
 from schemas.job import AssessJobResponse, JobCreateRequest, JobFollowupRequest, JobOut
-from services import job_service
+from services import chat_service, job_service
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
@@ -55,6 +58,30 @@ async def submit_followup(
     job = await job_service.get_owned_job(db, job_id, current_user.id)
     job = await job_service.submit_followup(db, job, payload)
     return await job_service.build_job_out(job)
+
+
+@router.get("/{job_id}/messages", response_model=ChatMessagesOut)
+async def list_messages(
+    job_id: UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> ChatMessagesOut:
+    # Ownership first: a transcript is user content, and 404-on-not-yours is
+    # the same rule the rest of this router follows.
+    await job_service.get_owned_job(db, job_id, current_user.id)
+    return ChatMessagesOut(messages=await chat_service.list_messages(db, job_id))
+
+
+@router.post("/{job_id}/messages", response_model=ChatMessagesOut, status_code=status.HTTP_201_CREATED)
+async def append_messages(
+    job_id: UUID,
+    payload: ChatMessagesAppendRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> ChatMessagesOut:
+    job = await job_service.get_owned_job(db, job_id, current_user.id)
+    rows = await chat_service.append_messages(db, job, payload.messages)
+    return ChatMessagesOut(messages=rows)
 
 
 @router.post("/{job_id}/assess", response_model=AssessJobResponse)

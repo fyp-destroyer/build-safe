@@ -200,6 +200,33 @@ def _strictify(schema: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
+def _extract_json(content: str) -> str:
+    """Best-effort unwrap of a JSON object from a model reply.
+
+    `json_object` mode is supposed to return bare JSON, but that mode is the
+    fallback path for models WITHOUT server-side schema enforcement — exactly
+    the models most likely to wrap the object in ```json fences or prefix it
+    with a sentence. Rather than discard an otherwise-correct answer over
+    packaging, strip the wrapper and let Pydantic judge the contents.
+
+    This normalises the TEXT ONLY. Schema validation still happens after, so
+    this cannot let a wrong-shaped object through — it only stops us from
+    failing on a right-shaped one.
+    """
+    text = content.strip()
+    if text.startswith("```"):
+        # ```json\n{...}\n``` -> {...}
+        text = text.split("\n", 1)[-1] if "\n" in text else text
+        if text.rstrip().endswith("```"):
+            text = text.rstrip()[: -len("```")]
+        text = text.strip()
+    if not text.startswith("{"):
+        start, end = text.find("{"), text.rfind("}")
+        if start != -1 and end > start:
+            text = text[start : end + 1]
+    return text
+
+
 def _groq_payload(
     prompt: str, response_schema: type[ModelT], model: str, *, strict: bool
 ) -> dict[str, Any]:
@@ -292,9 +319,11 @@ def _groq_generate(prompt: str, response_schema: type[ModelT]) -> ModelT | None:
             return None
 
         try:
-            return response_schema.model_validate_json(content)
+            return response_schema.model_validate_json(_extract_json(content))
         except (ValidationError, ValueError, TypeError):
-            logger.warning("Groq response failed schema validation; returning None.")
+            logger.warning(
+                "Groq response failed schema validation (%.200s); returning None.", content
+            )
             return None
 
     return None

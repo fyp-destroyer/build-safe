@@ -137,6 +137,37 @@ def test_groq_prose_instead_of_json_returns_none():
         assert generate_structured("tag this", _Schema) is None
 
 
+@pytest.mark.parametrize(
+    "content",
+    [
+        '```json\n{"category": "roofing"}\n```',
+        '```\n{"category": "roofing"}\n```',
+        'Here you go:\n{"category": "roofing"}',
+        '  {"category": "roofing"}  ',
+    ],
+)
+def test_groq_json_wrapped_in_fences_or_prose_is_still_accepted(content):
+    """json_object mode is the fallback for models WITHOUT server-side schema
+    enforcement — the ones most likely to wrap the object in markdown fences.
+    A right-shaped answer shouldn't be thrown away over packaging."""
+    with _patch_settings(GROQ_API_KEY="q"), patch(
+        "ai.llm.client.httpx.post", side_effect=[_response(400), _response(200, content)]
+    ):
+        result = generate_structured("tag this", _Schema)
+
+    assert result is not None and result.category == "roofing"
+
+
+def test_unwrapping_does_not_weaken_schema_validation():
+    """Unwrapping normalises TEXT only. A fenced object of the wrong shape
+    must still be rejected — otherwise the leniency would be a hole."""
+    with _patch_settings(GROQ_API_KEY="q"), patch(
+        "ai.llm.client.httpx.post",
+        return_value=_response(200, '```json\n{"risk_level": 1}\n```'),
+    ):
+        assert generate_structured("tag this", _Schema) is None
+
+
 @pytest.mark.parametrize("status", [401, 429, 500])
 def test_groq_http_error_returns_none(status):
     """Bad key, rate limit, provider outage — all the same to the caller."""

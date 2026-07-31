@@ -65,6 +65,14 @@ ModelT = TypeVar("ModelT", bound=BaseModel)
 _GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 _GROQ_TIMEOUT_SECONDS = 20.0
 
+# Models observed to reject json_schema structured output, remembered for the
+# life of the process. Without this, a model that doesn't support it (e.g.
+# llama-3.3-70b-versatile) costs a wasted 400 on EVERY call before the
+# json_object retry — two HTTP round trips per tag, forever. Learned at
+# runtime rather than hardcoded because Groq's per-model support changes and
+# a stale list would be worse than no list.
+_GROQ_NO_JSON_SCHEMA: set[str] = set()
+
 _JSON_INSTRUCTION = (
     "Respond with a single JSON object and nothing else — no prose, no "
     "markdown fences. It must validate against this JSON Schema:\n"
@@ -279,8 +287,10 @@ def _groq_generate(prompt: str, response_schema: type[ModelT]) -> ModelT | None:
 
     # Try server-side schema enforcement first, then degrade to json_object
     # mode: a 400 for an unsupported response_format is a model/config
-    # mismatch we can recover from, not an outage.
-    for strict in (True, False):
+    # mismatch we can recover from, not an outage. Once a model is known to
+    # reject it, skip straight to the mode that works.
+    attempts = (False,) if model in _GROQ_NO_JSON_SCHEMA else (True, False)
+    for strict in attempts:
         try:
             response = httpx.post(
                 _GROQ_URL,
@@ -298,10 +308,11 @@ def _groq_generate(prompt: str, response_schema: type[ModelT]) -> ModelT | None:
 
         if response.status_code == 400 and strict:
             logger.info(
-                "Groq model %r rejected json_schema structured output; retrying in "
-                "json_object mode.",
+                "Groq model %r rejected json_schema structured output; using "
+                "json_object mode for it from now on.",
                 model,
             )
+            _GROQ_NO_JSON_SCHEMA.add(model)
             continue
 
         if response.status_code != 200:

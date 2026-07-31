@@ -15,7 +15,19 @@ from unittest.mock import MagicMock, patch
 import pytest
 from pydantic import BaseModel
 
+import ai.llm.client as llm_client
 from ai.llm.client import _resolve_provider, _strictify, generate_structured
+
+
+@pytest.fixture(autouse=True)
+def _reset_model_capability_cache():
+    """The client remembers, for the life of the process, which models reject
+    json_schema — so it can stop wasting a 400 on every call. That memory
+    would otherwise leak between tests: whichever test ran first would decide
+    how many HTTP calls every later test makes."""
+    llm_client._GROQ_NO_JSON_SCHEMA.clear()
+    yield
+    llm_client._GROQ_NO_JSON_SCHEMA.clear()
 
 
 class _Schema(BaseModel):

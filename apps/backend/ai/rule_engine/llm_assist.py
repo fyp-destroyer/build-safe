@@ -177,15 +177,45 @@ def tag_hazards_result(description: str, category: str) -> list[str] | None:
     """
     from ai.rule_engine.catalog import RULES, VALID_RULE_IDS
 
-    menu = "\n".join(f"- {r.id}: {r.summary}" for r in RULES.values())
+    # The menu carries each rule's full explanation and example wording, not
+    # just its one-line summary. Summaries alone are too terse to scope a
+    # rule: "Exposed conductors of unverified status" reads as applicable to
+    # any job that briefly exposes a wire, so a routine light-fitting swap got
+    # tagged with a rule meant for an ACTIVE fault (its keywords are "live
+    # wire", "sparking", "arcing", "burning smell") — and that rule has a
+    # floor of 5, so every light fitting came back Do-Not-Attempt. Observed
+    # live, 2026-07-31. Showing the explanation and the example phrases is
+    # what lets the model tell "hazard present" from "hazard conceivable".
+    menu = "\n".join(
+        f'- id: "{r.id}"\n'
+        f"    {r.summary}\n"
+        f"    applies when: {r.explanation}\n"
+        f"    typical wording: {', '.join(r.keywords[:6])}"
+        for r in RULES.values()
+    )
     prompt = (
         "You are tagging which known hazards apply to a home improvement task.\n"
         "Choose ONLY from this fixed list of hazard ids. Do not invent ids, do "
         "not rate severity, and do not assign any risk level.\n\n"
-        f"{menu}\n\n"
+        "TAG every hazard that is inherent to the work being described. "
+        "Replacing a light fitting, a ceiling fan or a socket IS work on "
+        "fixed wiring, so tag it even if the description never uses the word "
+        "'wiring'. This is the main thing you are here for: catching hazards "
+        "that are obvious from the work itself.\n\n"
+        "DO NOT tag a hazard that describes a different location or a fault "
+        "the description does not report. Work on a fitting is not work on "
+        "the incoming supply or consumer unit. Wiring that is simply "
+        "disconnected during routine work is not a reported live-conductor "
+        "fault — that hazard is for sparking, arcing or a wire found live, "
+        "which the user would have said.\n\n"
         f"Task category: {category}\n"
         f"Task description: {description}\n\n"
-        "Return the ids that clearly apply. Return an empty list if none do."
+        "Return the ids that apply, copied EXACTLY as written above, "
+        'character for character — "fixed_wiring_work", not "fixed_wiring"; '
+        '"work_at_height", not "working_at_height". An id that is not an '
+        "exact match is discarded, so an approximate answer is the same as no "
+        "answer. Return an empty list if none apply.\n\n"
+        f"Valid ids: {', '.join(sorted(VALID_RULE_IDS))}"
     )
 
     result = generate_structured(prompt, HazardTags)

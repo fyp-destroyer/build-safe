@@ -417,6 +417,85 @@ _RULES: tuple[Rule, ...] = (
         ),
         keywords=("burn a pile", "burning treated", "burn old treated", "burn treated", "bonfire"),
     ),
+    # Written against the CONCEPT, not against the examples that were being
+    # missed, and validated on a held-out set committed beforehand
+    # (ml/data/holdout_rules.json, ml/check_holdout.py). Half that set is
+    # adversarial negatives, so an over-broad rule keyed on a bare word like
+    # "rotten" or "leaning" fails it.
+    _r(
+        id="circuit_extension",
+        hazard="electrical_shock",
+        floor=4,
+        summary="Extending fixed wiring rather than replacing an accessory",
+        explanation=(
+            "Adding a socket, spur or lighting point extends the "
+            "circuit rather than replacing a part of it. The existing "
+            "circuit has to be assessed for load and protection first, "
+            "and this is notifiable work in many places."
+        ),
+        keywords=(
+            "extra socket",
+            "additional socket",
+            "additional double",
+            "spur from",
+            "spur off",
+            "extend the lighting circuit",
+            "extend the circuit",
+            "add a new outlet",
+            "add a new socket",
+            "new outdoor socket",
+            "add two downlights",
+            "new outlet on",
+            "additional outlet",
+        ),
+    ),
+    _r(
+        id="decayed_roof_timber",
+        hazard="structural_collapse",
+        floor=4,
+        summary="Decayed load-bearing roof timber",
+        explanation=(
+            "Rafters, purlins and wall plates carry the roof. Once "
+            "they have decayed the roof is already weakened, and "
+            "cutting them out removes support while the work is in "
+            "progress. This needs temporary propping designed by "
+            "someone competent."
+        ),
+        keywords=(
+            "rotten rafter",
+            "decayed rafter",
+            "rotten roof timber",
+            "decayed roof timber",
+            "rotten timbers in the flat roof",
+            "rotten wall plate",
+            "decayed wall plate",
+            "rotten roof structure",
+            "rotten purlin",
+        ),
+    ),
+    _r(
+        id="masonry_wall_instability",
+        hazard="structural_collapse",
+        floor=4,
+        summary="Masonry wall showing lean, movement or through-cracking",
+        explanation=(
+            "A wall that leans, moves or has cracked through its "
+            "mortar joints is no longer stable and can come down "
+            "without warning - including onto whoever is working on "
+            "it. It needs assessing and rebuilding properly, not "
+            "patching."
+        ),
+        keywords=(
+            "leaning wall",
+            "leaning garden wall",
+            "leaning brick",
+            "leaning pier",
+            "wall that is leaning",
+            "wall is leaning",
+            "cracked along the mortar",
+            "moves when pushed",
+        ),
+    ),
     # ---- contaminants / environment --------------------------------------
     _r(
         id="asbestos_disturbance",

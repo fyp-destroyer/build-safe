@@ -334,6 +334,89 @@ _RULES: tuple[Rule, ...] = (
             "binoculars",
         ),
     ),
+    # Added after measuring which genuinely-dangerous tasks the engine was
+    # still missing (ml/analyze_recall.py). Keywords are deliberately
+    # multi-word: rules are the cheapest recall this system has precisely
+    # because they almost never false-fire, and loose single words would
+    # spend that advantage.
+    _r(
+        id="unprotected_or_adverse_height_work",
+        hazard="fall_from_height",
+        floor=5,
+        summary="Height work in adverse conditions or without fall protection",
+        explanation=(
+            "A wet, icy or storm-exposed roof offers no grip, and "
+            "height work without fall protection has no second chance. "
+            "Wait for safe conditions and use a professional with "
+            "proper access equipment."
+        ),
+        keywords=(
+            "wet, steep roof",
+            "wet roof",
+            "during the rain",
+            "still icy",
+            "icy from",
+            "frost",
+            "third floor roof",
+            "do not have a harness",
+            "without a harness",
+            "no harness",
+        ),
+    ),
+    _r(
+        id="major_roof_structural_work",
+        hazard="structural_collapse",
+        floor=4,
+        summary="Large-scale or structural roof work",
+        explanation=(
+            "Stripping, re-covering or repairing the structure of a "
+            "roof means working at height on a surface whose integrity "
+            "is itself in question. This needs scaffolding and a "
+            "roofing professional."
+        ),
+        keywords=(
+            "large damaged section of roof",
+            "strip and re-tile",
+            "roof battens",
+            "purlin",
+            "sagging section of roof",
+            "steep two-story",
+            "steep two storey",
+        ),
+    ),
+    _r(
+        id="major_plumbing_alteration",
+        hazard="water_damage",
+        floor=4,
+        summary="Alteration of mains supply or soil/waste pipework",
+        explanation=(
+            "Work on the incoming main, the soil stack or waste "
+            "connections can flood a property or breach drainage that "
+            "the whole building depends on, and is usually notifiable. "
+            "Use a qualified plumber."
+        ),
+        keywords=(
+            "main water shutoff",
+            "water main",
+            "soil stack",
+            "waste connections",
+            "mains water",
+            "whole new bathroom suite",
+        ),
+    ),
+    _r(
+        id="uncontrolled_burning",
+        hazard="chemical_exposure",
+        floor=5,
+        summary="Burning treated or painted material",
+        explanation=(
+            "Burning treated timber or painted offcuts releases arsenic, "
+            "copper and lead compounds. It is toxic to everyone "
+            "downwind and illegal in many areas. Dispose of it through "
+            "a licensed waste facility instead."
+        ),
+        keywords=("burn a pile", "burning treated", "burn old treated", "burn treated", "bonfire"),
+    ),
     # ---- contaminants / environment --------------------------------------
     _r(
         id="asbestos_disturbance",

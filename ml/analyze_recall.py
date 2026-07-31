@@ -137,8 +137,34 @@ def main() -> int:
         rec, over, _, _ = scores(y, flag)
         print(f"  {name:24s} recall {rec:.3f}   over-escalation {over:.3f}")
     print("\n  The rule engine is far MORE PRECISE than the model: it buys")
-    print("  recall at ~0.01 over-escalation, where the model pays ~0.08.")
+    print("  recall at ~0.02 over-escalation, where the model pays ~0.08.")
     print("  That makes new rules the cheapest available recall.")
+
+    # ---- decompose the residual -----------------------------------------
+    # Headline recall understates the reachable system. Many rows are
+    # labelled 5 purely because a safety question is UNANSWERED - but
+    # assess_job 409s until it is answered, so production never evaluates
+    # that state. Those are a dataset/production definitional mismatch, not
+    # detection failures, so they are reported separately rather than
+    # quietly folded into the headline.
+    final = np.maximum(oof_pred, rule)
+    hi = np.isin(y, HIGH_RISK)
+    missed = hi & (final < 4)
+    unanswered = np.array([
+        any(f["answer"] is None and f["field"] in
+            ("power_isolated", "load_bearing_confirmed", "gas_line_present")
+            for f in r["followup_questions"]) for r in rows])
+    stated = hi & ~unanswered
+
+    print("\n" + "-" * 74)
+    print(f"  missed high-risk rows: {missed.sum()}")
+    print(f"    labelled 5 only because a safety question is unanswered: "
+          f"{(missed & unanswered).sum()}")
+    print(f"    genuine misses (hazard stated in the text):              "
+          f"{(missed & ~unanswered).sum()}")
+    print(f"\n  RECALL ON TASKS WHOSE HAZARD IS ACTUALLY STATED: "
+          f"{(final[stated] >= 4).mean():.3f}")
+    print("  (prd.md 7 target is >=0.95 on the two most severe classes)")
 
     print("=" * 74)
     return 0

@@ -573,6 +573,13 @@ class Followup:
     floor_when_missing: int
     floor_when_denied: int
     applies_when_rule: tuple[str, ...] = field(default_factory=tuple)
+    # Category-based triggering is deliberately unused. It was a fallback
+    # while the LLM tagger fell back to "general" for everything; once real
+    # categories arrived it started asking nonsense - "is the wall
+    # load-bearing?" for a flat-pack wardrobe (carpentry), "is the breaker
+    # off?" for changing a light bulb (electrical). Follow-ups are driven by
+    # which HAZARD RULE fired, which is the precise signal. Kept on the
+    # dataclass only so a future follow-up can opt in explicitly.
     applies_to_categories: tuple[str, ...] = ()
 
 
@@ -589,16 +596,15 @@ FOLLOWUPS: tuple[Followup, ...] = (
             "fixed_wiring_work",
             "electrical_work_by_beginner",
             "supply_side_electrical",
+            "circuit_extension",
         ),
-        applies_to_categories=("electrical",),
     ),
     Followup(
         field="load_bearing_confirmed",
         question="Have you confirmed the wall or structure involved is NOT load-bearing?",
         floor_when_missing=5,
         floor_when_denied=4,
-        applies_when_rule=("structural_alteration",),
-        applies_to_categories=("carpentry", "masonry"),
+        applies_when_rule=("structural_alteration", "masonry_wall_instability"),
     ),
     Followup(
         field="gas_line_present",

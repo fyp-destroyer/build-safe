@@ -27,6 +27,7 @@ Boundary (rules.md §4 / CLAUDE.md, non-negotiable):
 """
 
 import logging
+import os
 from functools import lru_cache
 from typing import TypeVar
 
@@ -40,7 +41,14 @@ logger = logging.getLogger(__name__)
 
 # Small, fast, current Gemini model — appropriate for low-latency structured
 # classification/phrasing calls (not long-form generation).
-_MODEL_NAME = "gemini-2.5-flash"
+# Overridable so a model retirement is a config change, not a code change.
+#
+# NOT gemini-2.5-flash: it still appears in models.list() but generateContent
+# rejects it for keys created after its retirement ("no longer available to
+# new users", HTTP 404), so the whole LLM layer silently fell back to its
+# hardcoded defaults. Found only by reading the actual API error - the
+# fallbacks are so well-behaved that nothing looked broken from outside.
+_MODEL_NAME = os.environ.get("GEMINI_MODEL", "gemini-3.1-flash-lite")
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 

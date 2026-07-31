@@ -132,6 +132,14 @@ This file is a **living record** of what has actually been done, kept in sync wi
 - Known limitation, not a defect: every chat shows category **"General"** because `GEMINI_API_KEY` is unset and `tag_category` falls back as designed. That is the only visibly degraded feature without a key.
 - Status: **Complete.**
 
+### Phase 7 addendum — LLM enabled end to end (2026-07-31)
+- **`gemini-2.5-flash` was dead and nothing noticed.** With a real `GEMINI_API_KEY` the LLM layer still fell back to hardcoded defaults. Root cause: the model still appears in `models.list()` but `generateContent` returns **404 "no longer available to new users"** for keys created after its retirement. Switched to **`gemini-3.1-flash-lite`** (non-preview, so it will not be withdrawn mid-project), now overridable via `GEMINI_MODEL`.
+- ⚠️ **The fallbacks hid this.** They are so well-behaved that a completely dead LLM layer looked identical to a working one from outside — categories were just always "general". Nothing failed, nothing alerted. If the LLM matters, assert on its *output*, not on the absence of errors.
+- **Verified live with the key:** categories now real (`electrical`/`plumbing`/`tiling`, `general` only for nonsense); follow-up wording Gemini-phrased ("Have you turned off the power at the main breaker for this circuit?") while the *field* stays hardcoded; `tag_hazards` returns only valid catalog ids, and `[]` for a paint job (no invented hazards).
+- **Best end-to-end demonstration so far:** "replace the light switch with a dimmer" → **classifier said risk 1, rule engine escalated to 3** (`fixed_wiring_work` + `electrical_work_by_beginner`), final `max(1,3)=3`. srs.md §9's beginner-electrical rule catching a weak classifier, visible in the UI.
+- **Regression that real categories exposed, now fixed:** follow-ups could also be triggered by *category*, a fallback from when everything was tagged "general". Once categories became real it asked nonsense — "is the wall load-bearing?" for a flat-pack wardrobe (carpentry), "is the breaker off?" for changing a light bulb (electrical), and both jobs then **blocked at 409** because the question could never sensibly be answered. Category triggering removed; follow-ups are now purely hazard-rule-driven. Verified no cost: holdout still 24/24, recall on stated-hazard tasks still 1.000, 85 tests pass.
+- **Open product question raised by the user:** `urgency` is collected on every job (`POST /jobs` requires it, chat asks it) but **consumed by nothing** — excluded from the classifier as a non-safety feature in Phase 2, and unused by the rule engine. It exists only because `srs.md` FR-02 lists it. Decide whether to drop the question or give it a purpose.
+
 ### Phase 8 — Testing & Deployment
 - Status: **Not started**
 

@@ -230,3 +230,47 @@ async def test_assessment_not_found_before_assess_404(client):
     resp = await client.get(f"/assessments/{job_id}", headers=headers)
     assert resp.status_code == 404
     assert resp.json()["error"]["code"] == "assessment_not_found"
+
+
+async def test_job_can_be_created_without_urgency(client):
+    """The chat flow no longer asks for urgency (srs.md FR-02).
+
+    Nothing consumes the value - it is excluded from the classifier as a
+    non-safety feature and the rule engine ignores it - so requiring it only
+    cost the user a step. It stays accepted-but-optional so existing API
+    clients are not broken.
+    """
+    headers = await _auth_headers(client, "no_urgency@example.com")
+    resp = await client.post(
+        "/jobs",
+        json={
+            "description": "paint the spare room ceiling with a roller",
+            "category": "painting",
+            "skill_level": "Beginner",
+        },
+        headers=headers,
+    )
+    assert resp.status_code == 201, resp.text
+    body = resp.json()
+    assert body["urgency"] is None
+    # And the job must still be assessable end to end.
+    assess = await client.post(f"/jobs/{body['id']}/assess", headers=headers)
+    assert assess.status_code == 200
+    assert assess.json()["status"] == "completed"
+
+
+async def test_urgency_still_accepted_when_supplied(client):
+    """Backwards compatibility for any client still sending it."""
+    headers = await _auth_headers(client, "with_urgency@example.com")
+    resp = await client.post(
+        "/jobs",
+        json={
+            "description": "paint the hallway",
+            "category": "painting",
+            "skill_level": "Beginner",
+            "urgency": "No rush",
+        },
+        headers=headers,
+    )
+    assert resp.status_code == 201, resp.text
+    assert resp.json()["urgency"] == "No rush"

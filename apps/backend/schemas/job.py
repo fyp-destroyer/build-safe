@@ -49,7 +49,12 @@ class JobCreateRequest(BaseModel):
     description: str = Field(min_length=1, max_length=5000)
     category: TaskCategory | None = None
     skill_level: str = Field(min_length=1, max_length=50)
-    urgency: str = Field(min_length=1, max_length=50)
+    # Optional, and no longer collected by the chat flow. Nothing consumes
+    # it: it is excluded from the classifier as a non-safety feature
+    # (ml/train_baseline.py) and the rule engine ignores it. Kept on the API
+    # so existing clients and srs.md FR-02 are not silently broken - see
+    # srs.md FR-02's note.
+    urgency: str | None = Field(default=None, max_length=50)
 
 
 class JobFollowupRequest(BaseModel):
@@ -84,7 +89,7 @@ class JobOut(BaseModel):
     description: str
     category: str
     skill_level: str
-    urgency: str
+    urgency: str | None = None
     followup_answers: dict
     status: str
     created_at: datetime

@@ -34,7 +34,10 @@ class Job(Base):
     description: Mapped[str] = mapped_column(Text, nullable=False)
     category: Mapped[str] = mapped_column(String(50), nullable=False)
     skill_level: Mapped[str] = mapped_column(String(50), nullable=False)
-    urgency: Mapped[str] = mapped_column(String(50), nullable=False)
+    # Nullable since 2026-07-31: the chat flow no longer asks for it and
+    # nothing reads it. Column kept rather than dropped so existing rows
+    # survive and the change is reversible.
+    urgency: Mapped[str | None] = mapped_column(String(50), nullable=True)
     followup_answers: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
     status: Mapped[str] = mapped_column(String(30), nullable=False, default="pending_followup")
     created_at: Mapped[datetime] = mapped_column(

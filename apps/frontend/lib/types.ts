@@ -45,7 +45,8 @@ export interface JobOut {
   description: string;
   category: string;
   skill_level: string;
-  urgency: string;
+  /** Legacy: no longer collected by the chat flow (srs.md FR-02). */
+  urgency: string | null;
   followup_answers: Record<string, boolean>;
   status: JobStatus;
   created_at: string;

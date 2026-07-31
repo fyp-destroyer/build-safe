@@ -66,7 +66,7 @@ async def create_job(db: AsyncSession, user_id: UUID, payload: JobCreateRequest)
         description=payload.description,
         category=category,
         skill_level=payload.skill_level,
-        urgency=payload.urgency,
+        urgency=payload.urgency,  # optional; nothing consumes it (srs.md FR-02)
         followup_answers={},
         status="pending_followup",
     )

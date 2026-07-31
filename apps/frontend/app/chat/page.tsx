@@ -43,8 +43,10 @@ const EXAMPLE_PROMPTS = [
 ];
 
 // Drives the multi-step conversational flow. "idle" -> user hasn't sent a
-// task description yet. ask_skill/ask_urgency -> the two quick-reply
-// questions asked before a Job is created. followup -> waiting on a
+// task description yet. ask_skill -> the one quick-reply question asked
+// before a Job is created (urgency used to be asked here too; it was
+// removed because nothing consumed it - see srs.md FR-02). followup ->
+// waiting on a
 // yes/no answer to `next_followup` from the backend (may loop). assessing
 // -> POST /assess + GET /assessments (+ /recommendations) in flight.
 // resume_prompt -> user picked an unfinished job from history and is being
@@ -52,7 +54,6 @@ const EXAMPLE_PROMPTS = [
 type FlowStage =
   | "idle"
   | "ask_skill"
-  | "ask_urgency"
   | "followup"
   | "assessing"
   | "resume_prompt"
@@ -210,7 +211,6 @@ export default function ChatPage() {
   const flowStageRef = useRef<FlowStage>("idle");
   const pendingDescriptionRef = useRef<string>("");
   const pendingSkillRef = useRef<string>("");
-  const pendingUrgencyRef = useRef<string>("");
   const currentJobRef = useRef<JobOut | null>(null);
 
   useEffect(() => {
@@ -349,7 +349,6 @@ export default function ChatPage() {
         body: JSON.stringify({
           description: pendingDescriptionRef.current,
           skill_level: pendingSkillRef.current,
-          urgency: pendingUrgencyRef.current,
         }),
       });
       setIsTyping(false);
@@ -436,10 +435,6 @@ export default function ChatPage() {
 
     if (stage === "ask_skill") {
       pendingSkillRef.current = option;
-      flowStageRef.current = "ask_urgency";
-      void showBotMessage("How urgent is this?", ["No rush", "This week", "Urgent"]);
-    } else if (stage === "ask_urgency") {
-      pendingUrgencyRef.current = option;
       void createJobAndProceed();
     } else if (stage === "followup") {
       void submitFollowupAndProceed(option === "Yes");
@@ -460,7 +455,6 @@ export default function ChatPage() {
     flowStageRef.current = "idle";
     pendingDescriptionRef.current = "";
     pendingSkillRef.current = "";
-    pendingUrgencyRef.current = "";
     currentJobRef.current = null;
   };
 

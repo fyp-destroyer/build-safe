@@ -140,6 +140,12 @@ This file is a **living record** of what has actually been done, kept in sync wi
 - **Regression that real categories exposed, now fixed:** follow-ups could also be triggered by *category*, a fallback from when everything was tagged "general". Once categories became real it asked nonsense — "is the wall load-bearing?" for a flat-pack wardrobe (carpentry), "is the breaker off?" for changing a light bulb (electrical), and both jobs then **blocked at 409** because the question could never sensibly be answered. Category triggering removed; follow-ups are now purely hazard-rule-driven. Verified no cost: holdout still 24/24, recall on stated-hazard tasks still 1.000, 85 tests pass.
 - **Open product question raised by the user:** `urgency` is collected on every job (`POST /jobs` requires it, chat asks it) but **consumed by nothing** — excluded from the classifier as a non-safety feature in Phase 2, and unused by the rule engine. It exists only because `srs.md` FR-02 lists it. Decide whether to drop the question or give it a purpose.
 
+### Urgency removed from intake (2026-07-31)
+- **The "How urgent is this?" question is gone.** It was collected on every job and consumed by **nothing**: excluded from the classifier as a non-safety feature in Phase 2, ignored by the rule engine. It existed only because `srs.md` FR-02 listed it, so it cost the user a step in a safety flow and bought nothing. User decision after raising the question directly.
+- **Not deleted, downgraded.** `urgency` is now optional on `POST /jobs` and the column is **nullable** (migration `d3ab19f4c7e1`) rather than dropped — existing rows keep their values, any existing client still works, and the change is reversible. The downgrade backfills `'not_specified'` before restoring NOT NULL so it cannot fail on rows written after the upgrade.
+- Intake is now **description → skill level → assessment** (two steps, was three). `srs.md` FR-02 and §8.1 updated so the spec matches the code rather than silently drifting.
+- Two tests added: a job creates and assesses end-to-end without `urgency`, and one supplying it still works (backwards compatibility). 87 backend tests pass; frontend builds and lints clean; verified live in the browser.
+
 ### Phase 8 — Testing & Deployment
 - Status: **Not started**
 

@@ -99,7 +99,7 @@ Modern desktop and mobile web browsers over HTTPS. Backend deployed as a contain
 | ID | Title | Requirement | Priority |
 |---|---|---|---|
 | FR-01 | User Registration and Login | The system shall allow users to register and log in under a single `user` role (no professional or admin roles exist). | High |
-| FR-02 | Task Submission | The system shall allow a user to submit a task with description, category, location, skill level, budget, urgency, and optional photos. | High |
+| FR-02 | Task Submission | The system shall allow a user to submit a task with description, category, skill level, and optional photo. **Urgency is no longer collected** (2026-07-31): nothing consumed it — it is excluded from the risk classifier as a non-safety feature and the rule engine ignores it — so asking cost the user a step in a safety flow and bought nothing. The API still accepts `urgency` as optional and the column is retained (nullable) so existing clients and rows are unaffected. Location and budget were never implemented. | High |
 | FR-03 | Follow-Up Questions | The system shall generate follow-up questions specific to the task category and any risk factors not yet resolved (e.g., power isolation, load-bearing status). | High |
 | FR-04 | Risk Classification | The system shall classify each completed task into exactly one of five risk levels: Safe DIY, DIY with Supervision, Professional Recommended, Professional Required, Dangerous/Do Not Attempt. | High |
 | FR-05 | Risk Explanation | The system shall generate an explanation for every classification, listing the triggered safety factors and/or model rationale. | High |
@@ -212,7 +212,7 @@ The system follows a modular, layered architecture: a frontend web application; 
 final_risk = max( ML-predicted risk level, rule-engine risk level )
 ```
 
-The ML classifier operates on task text, category, user skill level, available tools/PPE, and follow-up answers — urgency is collected for UX purposes only and has no bearing on the risk decision. The rule engine evaluates the same context against hardcoded safety-critical conditions (e.g., electrical wiring + beginner user, gas connections, unknown load-bearing status, water near live electrical outlets) and can only escalate the final result upward on the five-level ordinal scale.
+The ML classifier operates on task text, category and user skill level. Available tools/PPE and urgency are not inputs: the backend has no tools field, and urgency is no longer collected at all (see FR-02). The rule engine evaluates the same context against hardcoded safety-critical conditions (e.g., electrical wiring + beginner user, gas connections, unknown load-bearing status, water near live electrical outlets) and can only escalate the final result upward on the five-level ordinal scale.
 
 ## 9. Safety Rule Catalog (Representative Set)
 

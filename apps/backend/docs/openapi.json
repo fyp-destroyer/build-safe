@@ -510,17 +510,22 @@
             "title": "Skill Level"
           },
           "urgency": {
-            "type": "string",
-            "maxLength": 50,
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Urgency"
           }
         },
         "type": "object",
         "required": [
           "description",
-          "skill_level",
-          "urgency"
+          "skill_level"
         ],
         "title": "JobCreateRequest",
         "description": "POST /jobs body.\n\n`category` is optional: when omitted, the frontend's conversational\nintake sends only free-text `description`, and the backend infers the\ncategory via Gemini tagging (a fixed, closed 9-value classification \u2014\nrules.md \u00a74, see ai/rule_engine/llm_assist.tag_category). When provided\nexplicitly, it's used as-is (still validated against the fixed Literal)."
@@ -562,7 +567,14 @@
             "title": "Skill Level"
           },
           "urgency": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Urgency"
           },
           "followup_answers": {
@@ -597,7 +609,6 @@
           "description",
           "category",
           "skill_level",
-          "urgency",
           "followup_answers",
           "status",
           "created_at"
@@ -801,6 +812,15 @@
             "type": "string",
             "format": "date-time",
             "title": "Created At"
+          },
+          "safety_notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Safety Notes",
+            "description": "Plain-language guidance for each triggered rule (FR-05).\n\nDerived at read time from `triggered_rules` via the rule engine's\nhardcoded explanation text - not persisted, so the wording stays in\none place (ai/rule_engine/catalog.py) and improves for existing\nassessments when the catalog does.\n\nWithout this the UI can only show the rule id, which is what it did\nbefore: a user reporting a gas smell was shown \"Active gas or co\"\nrather than \"leave the area, avoid switches and naked flames, and\ncontact your gas emergency service\". The text is deliberately\nhardcoded, never LLM-generated (rules.md 4).",
+            "readOnly": true
           }
         },
         "type": "object",
@@ -816,7 +836,8 @@
           "time",
           "difficulty",
           "status",
-          "created_at"
+          "created_at",
+          "safety_notes"
         ],
         "title": "RiskAssessmentOut",
         "description": "GET /assessments/{job_id} response."

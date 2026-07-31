@@ -344,6 +344,14 @@ export default function ChatPage() {
   }, [authChecked, refreshJobs]);
 
   const restoredRef = useRef(false);
+  // Which job to reopen, captured ONCE at mount. Re-reading localStorage
+  // later is wrong: starting a new chat writes the new job's id, so the
+  // restore effect would then "restore" the conversation already on screen
+  // and inject a resume prompt into the middle of it (observed live).
+  const jobToRestoreRef = useRef<string | null>(null);
+  useEffect(() => {
+    jobToRestoreRef.current = readActiveJob();
+  }, []);
 
   // ---- Small helpers ----
 
@@ -698,15 +706,21 @@ export default function ChatPage() {
   // stale or foreign id simply never matches and is dropped.
   useEffect(() => {
     if (!authChecked || restoredRef.current) return;
-    const jobId = readActiveJob();
+    const jobId = jobToRestoreRef.current;
     if (!jobId) return;
+    // The job list can arrive after the user has already started talking.
+    // Restoring on top of that would wipe a live conversation, so once the
+    // flow has left "idle" the restore is abandoned, not queued.
+    if (flowStageRef.current !== "idle") {
+      restoredRef.current = true;
+      return;
+    }
     const job = jobsById[jobId];
     if (!job) return; // job list hasn't arrived yet, or the job is gone
     restoredRef.current = true;
     // Same rationale as the auth-gate and job-list effects above: a one-time
     // fetch synchronized to an external system (the stored transcript) on
     // mount, not state derivable during render.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     void openJob(job);
     // `openJob` is recreated every render and is deliberately not a
     // dependency: restoredRef already limits this to one run, and listing it

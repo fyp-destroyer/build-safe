@@ -30,7 +30,7 @@ Two more fail-loud requirements worth internalizing before touching `ai/`:
 - **Backend**: FastAPI (Python) — chosen so the ML pipeline shares a runtime with the API.
 - **Database**: PostgreSQL + pgvector (semantic tool/material/task retrieval).
 - **ML**: scikit-learn baseline (TF-IDF + Logistic Regression) vs. sentence-transformer + classifier, compared in an eval report; both kept.
-- **LLM layer**: Google Gemini API, template- and schema-constrained prompts only (structured JSON output, never free text) — see rule above. Switched from Anthropic 2026-07-19, user's explicit choice; see `memory.md` decisions log.
+- **LLM layer**: Google Gemini API **or** Groq (OpenAI-compatible), selected by `LLM_PROVIDER` = `gemini` | `groq` | `auto`; template- and schema-constrained prompts only (structured JSON output, never free text) — see rule above. Switched from Anthropic 2026-07-19; Groq added as an alternative 2026-07-31 (both user's explicit choice; see `memory.md` decisions log). All provider code lives behind `ai/llm/client.py:generate_structured` — that is the only module in the codebase permitted to call an LLM, and every reply is validated against a Pydantic schema before any caller sees it, so the provider in use can never change a risk decision.
 - **Auth**: JWT, single `user` role — no `admin` or `professional` roles exist in this product.
 
 Non-negotiable flow rule (`architecture.md` §2): the frontend never calls the LLM directly; the backend never returns a risk level that skipped `max(ML, rules)`.

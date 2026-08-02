@@ -47,6 +47,44 @@ def anyio_backend() -> str:
     return "asyncio"
 
 
+@pytest.fixture(autouse=True)
+def _documented_risk_pipeline(monkeypatch):
+    """Pin `RISK_USE_ML_CLASSIFIER` on for every test that doesn't opt out.
+
+    `Settings` reads `apps/backend/.env`, and pytest runs from that
+    directory, so a developer's local `.env` silently becomes test
+    configuration. That is exactly what happened when rules-only mode was
+    switched on in dev (2026-08-01): `test_classifier_exception_writes_
+    failed_assessment_and_ai_log` flipped to green-but-meaningless, because
+    a classifier crash genuinely does not fail an assessment the classifier
+    is not part of. The suite must assert the DOCUMENTED pipeline
+    (`final_risk = max(ml, rules)`) regardless of how any one machine is
+    configured; rules-only mode gets its own explicit tests instead.
+
+    Use `set_risk_pipeline(monkeypatch, use_ml=False)` to opt out.
+    """
+    from core.config import get_settings
+
+    set_risk_pipeline(monkeypatch, use_ml=True)
+    yield
+    # Drop the cache again so the value this test forced cannot leak into
+    # the next one — monkeypatch restores the env var, not the lru_cache.
+    get_settings.cache_clear()
+
+
+def set_risk_pipeline(monkeypatch, *, use_ml: bool) -> None:
+    """Force RISK_USE_ML_CLASSIFIER for one test.
+
+    `get_settings` is `lru_cache`d, so setting the environment variable is
+    not enough on its own — the cache has to be dropped, or whichever test
+    touches settings first fixes the value for the entire session.
+    """
+    from core.config import get_settings
+
+    monkeypatch.setenv("RISK_USE_ML_CLASSIFIER", "true" if use_ml else "false")
+    get_settings.cache_clear()
+
+
 @pytest.fixture(scope="session")
 async def _create_schema():
     """Create all tables once for the test session, drop at the end.

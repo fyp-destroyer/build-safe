@@ -18,6 +18,8 @@ import {
   IconGrid,
   IconWind,
   IconWrench,
+  IconTrash,
+  IconX,
 } from "@/lib/icons";
 import { SettingsModal, type Profile } from "@/components/settings/SettingsModal";
 
@@ -43,6 +45,7 @@ export function Sidebar({
   onSelectHistory,
   history,
   onToggleFavourite,
+  onDeleteHistory,
   profile,
   onProfileChange,
   onClearHistory,
@@ -54,6 +57,7 @@ export function Sidebar({
   onSelectHistory: (id: string) => void;
   history: HistoryItem[];
   onToggleFavourite: (id: string) => void;
+  onDeleteHistory: (id: string) => void;
   profile: Profile;
   onProfileChange: (profile: Profile) => void;
   onClearHistory: () => void;
@@ -96,6 +100,7 @@ export function Sidebar({
             activeId={activeId}
             onSelectHistory={onSelectHistory}
             onToggleFavourite={onToggleFavourite}
+            onDeleteHistory={onDeleteHistory}
           />
         )}
         {chats.length > 0 && (
@@ -105,6 +110,7 @@ export function Sidebar({
             activeId={activeId}
             onSelectHistory={onSelectHistory}
             onToggleFavourite={onToggleFavourite}
+            onDeleteHistory={onDeleteHistory}
           />
         )}
         {history.length === 0 && (
@@ -147,13 +153,22 @@ function HistorySection({
   activeId,
   onSelectHistory,
   onToggleFavourite,
+  onDeleteHistory,
 }: {
   label: string;
   items: HistoryItem[];
   activeId: string | null;
   onSelectHistory: (id: string) => void;
   onToggleFavourite: (id: string) => void;
+  onDeleteHistory: (id: string) => void;
 }) {
+  // Deleting a conversation also deletes its assessment server-side and
+  // can't be undone, so it takes two clicks: the trash icon swaps the row
+  // for an inline "Delete?" confirmation. Inline rather than window.confirm
+  // — a native modal blocks the whole page and looks nothing like the rest
+  // of the app.
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
+
   return (
     <div className="mb-3">
       <div className="px-2 pb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-secondary)]">
@@ -199,17 +214,48 @@ function HistorySection({
                   {item.category}
                 </div>
               </button>
-              <button
-                onClick={() => onToggleFavourite(item.id)}
-                aria-label={item.favourite ? "Remove from favourites" : "Add to favourites"}
-                className={`relative shrink-0 cursor-pointer p-1 transition-colors ${
-                  item.favourite
-                    ? "text-[var(--color-accent)]"
-                    : "text-[var(--color-text-secondary)] opacity-0 group-hover:opacity-100 hover:text-[var(--color-accent)]"
-                }`}
-              >
-                <IconStar width={14} height={14} fill={item.favourite ? "currentColor" : "none"} />
-              </button>
+              {confirmingId === item.id ? (
+                <div className="relative flex shrink-0 items-center gap-1">
+                  <button
+                    onClick={() => {
+                      setConfirmingId(null);
+                      onDeleteHistory(item.id);
+                    }}
+                    aria-label={`Confirm delete ${item.title}`}
+                    className="cursor-pointer rounded-md bg-[var(--color-error)] px-1.5 py-0.5 text-[11px] font-semibold text-white"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => setConfirmingId(null)}
+                    aria-label="Cancel delete"
+                    className="cursor-pointer p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                  >
+                    <IconX width={13} height={13} />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <button
+                    onClick={() => onToggleFavourite(item.id)}
+                    aria-label={item.favourite ? "Remove from favourites" : "Add to favourites"}
+                    className={`relative shrink-0 cursor-pointer p-1 transition-colors ${
+                      item.favourite
+                        ? "text-[var(--color-accent)]"
+                        : "text-[var(--color-text-secondary)] opacity-0 group-hover:opacity-100 hover:text-[var(--color-accent)]"
+                    }`}
+                  >
+                    <IconStar width={14} height={14} fill={item.favourite ? "currentColor" : "none"} />
+                  </button>
+                  <button
+                    onClick={() => setConfirmingId(item.id)}
+                    aria-label={`Delete ${item.title}`}
+                    className="relative shrink-0 cursor-pointer p-1 text-[var(--color-text-secondary)] opacity-0 transition-colors group-hover:opacity-100 hover:text-[var(--color-error)]"
+                  >
+                    <IconTrash width={14} height={14} />
+                  </button>
+                </>
+              )}
             </div>
           );
         })}

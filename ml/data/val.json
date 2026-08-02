@@ -62,7 +62,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "how risky is it to go up on a wet, steep roof during the rain to fix a leak right now?",
     "category": "roofing",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "ladder"
     ],
@@ -110,7 +110,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "how risky is it to knock through the wall under the stairs to make more storage space?",
     "category": "carpentry",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "sledgehammer"
     ],
@@ -137,7 +137,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "the floor upstairs feels bouncy and a crack is appearing along the ceiling below it - can I sort this out myself?",
     "category": "carpentry",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [],
     "hazards": [
       "structural_collapse"
@@ -156,7 +156,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "fill a small crack in the render on the garden wall - do I need to get someone in?",
     "category": "masonry",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "trowel",
       "filler"
@@ -180,7 +180,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "thinking about trying to clean moss off the brick patio with a pressure washer",
     "category": "masonry",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "pressure washer"
     ],
@@ -204,7 +204,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "planning to clear moss and debris from the gutter of a single storey porch at ground level this weekend",
     "category": "roofing",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "step ladder"
     ],
@@ -227,7 +227,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I was going to seal a small crack in the felt roof of a low garden outbuilding - any reason not to?",
     "category": "roofing",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "step ladder",
       "brush"
@@ -253,7 +253,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I want to install a roof vent tile on a single storey extension",
     "category": "roofing",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "ladder",
       "saw"
@@ -278,7 +278,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "planning to strip and re-tile the entire roof of a two storey house this weekend",
     "category": "roofing",
-    "user_skill": "Experienced",
+    "user_skill": "Some experience",
     "tools_available": [
       "scaffolding",
       "hammer"
@@ -306,7 +306,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "is it safe for me to rebuild a sagging section of roof where a purlin has failed?",
     "category": "roofing",
-    "user_skill": "Experienced",
+    "user_skill": "Some experience",
     "tools_available": [
       "acrow props",
       "saw"
@@ -333,7 +333,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "how risky is it to remove the old asbestos cement corrugated sheets from the garage roof?",
     "category": "roofing",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [],
     "hazards": [
       "asbestos_exposure",
@@ -354,7 +354,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "the roof is sagging visibly in the middle and I can see daylight through the ceiling upstairs - can I sort this out myself?",
     "category": "roofing",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [],
     "hazards": [
       "structural_collapse",
@@ -374,7 +374,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "planning to walk across the fragile perspex roof panels on the conservatory to clean them this weekend",
     "category": "roofing",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [],
     "hazards": [
       "fall_from_height"
@@ -393,7 +393,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "is it safe for me to repaint a wooden garden gate with exterior paint?",
     "category": "painting",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "brush",
       "sandpaper"
@@ -438,7 +438,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "planning to sand back and repaint the exterior window frames on the ground floor this weekend",
     "category": "painting",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "sander",
       "brush"
@@ -463,7 +463,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "apply anti-mould paint in the bathroom after treating the mould with a bleach solution - is this something I can handle on my own?",
     "category": "painting",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "brush",
       "roller"
@@ -518,7 +518,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "stick self adhesive vinyl tiles on the utility room floor - is this something I can handle on my own?",
     "category": "tiling",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "utility knife"
     ],
@@ -566,7 +566,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "is it safe for me to tile around the window reveal in the kitchen?",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "tile cutter",
       "trowel"
@@ -591,7 +591,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "how risky is it to tile a wet room floor including the tanking membrane and forming the fall to the drain?",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "trowel",
       "tile cutter"
@@ -618,7 +618,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "tile a conservatory floor over an existing screed with movement joints - do I need to get someone in?",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "tile cutter",
       "trowel"
@@ -671,7 +671,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I was going to grind off old tile adhesive in a 1960s bathroom where the vinyl underneath may be asbestos backed - any reason not to?",
     "category": "tiling",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "angle grinder"
     ],
@@ -693,7 +693,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "bleed the upstairs radiators because they are cold at the top - is this something I can handle on my own?",
     "category": "hvac",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "radiator key"
     ],
@@ -716,7 +716,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I want to clean the filter on a portable air conditioning unit",
     "category": "hvac",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [],
     "hazards": [
       "none"
@@ -735,7 +735,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "thinking about trying to replace the plastic head on a thermostatic radiator valve, leaving the valve body in place",
     "category": "hvac",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [],
     "hazards": [
       "none"
@@ -754,7 +754,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I was going to clean the condenser coils on the outdoor heat pump unit, switched off at the isolator first - any reason not to?",
     "category": "hvac",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "brush",
       "hose"
@@ -778,7 +778,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I want to add two new radiators onto the existing central heating circuit",
     "category": "hvac",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "pipe cutter",
       "adjustable wrench"
@@ -831,7 +831,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "the gas fire is burning with a yellow lazy flame instead of blue and there are black marks around the surround - can I sort this out myself?",
     "category": "hvac",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [],
     "hazards": [
       "gas_leak",
@@ -852,7 +852,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "thinking about trying to fit draught excluder strips around the front door",
     "category": "general",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "scissors"
     ],
@@ -892,7 +892,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I want to put up a trampoline in the back garden",
     "category": "general",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "spanner"
     ],
@@ -915,7 +915,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "can I move a heavy wardrobe up to the first floor myself?",
     "category": "general",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "furniture straps"
     ],
@@ -939,7 +939,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "how risky is it to install loft insulation between and over the joists?",
     "category": "general",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "ladder",
       "knife"
@@ -1124,7 +1124,7 @@
     "id": "seed-0037",
     "task_text": "go up on a wet, steep roof during the rain to fix a leak right now",
     "category": "roofing",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "ladder"
     ],
@@ -1168,7 +1168,7 @@
     "id": "seed-0117",
     "task_text": "knock through the wall under the stairs to make more storage space",
     "category": "carpentry",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "sledgehammer"
     ],
@@ -1193,7 +1193,7 @@
     "id": "seed-0119",
     "task_text": "the floor upstairs feels bouncy and a crack is appearing along the ceiling below it",
     "category": "carpentry",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [],
     "hazards": [
       "structural_collapse"
@@ -1210,7 +1210,7 @@
     "id": "seed-0120",
     "task_text": "fill a small crack in the render on the garden wall",
     "category": "masonry",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "trowel",
       "filler"
@@ -1232,7 +1232,7 @@
     "id": "seed-0123",
     "task_text": "clean moss off the brick patio with a pressure washer",
     "category": "masonry",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "pressure washer"
     ],
@@ -1254,7 +1254,7 @@
     "id": "seed-0142",
     "task_text": "clear moss and debris from the gutter of a single storey porch at ground level",
     "category": "roofing",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "step ladder"
     ],
@@ -1275,7 +1275,7 @@
     "id": "seed-0146",
     "task_text": "seal a small crack in the felt roof of a low garden outbuilding",
     "category": "roofing",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "step ladder",
       "brush"
@@ -1299,7 +1299,7 @@
     "id": "seed-0151",
     "task_text": "install a roof vent tile on a single storey extension",
     "category": "roofing",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "ladder",
       "saw"
@@ -1322,7 +1322,7 @@
     "id": "seed-0152",
     "task_text": "strip and re-tile the entire roof of a two storey house",
     "category": "roofing",
-    "user_skill": "Experienced",
+    "user_skill": "Some experience",
     "tools_available": [
       "scaffolding",
       "hammer"
@@ -1348,7 +1348,7 @@
     "id": "seed-0155",
     "task_text": "rebuild a sagging section of roof where a purlin has failed",
     "category": "roofing",
-    "user_skill": "Experienced",
+    "user_skill": "Some experience",
     "tools_available": [
       "acrow props",
       "saw"
@@ -1373,7 +1373,7 @@
     "id": "seed-0157",
     "task_text": "remove the old asbestos cement corrugated sheets from the garage roof",
     "category": "roofing",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [],
     "hazards": [
       "asbestos_exposure",
@@ -1392,7 +1392,7 @@
     "id": "seed-0159",
     "task_text": "the roof is sagging visibly in the middle and I can see daylight through the ceiling upstairs",
     "category": "roofing",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [],
     "hazards": [
       "structural_collapse",
@@ -1410,7 +1410,7 @@
     "id": "seed-0162",
     "task_text": "walk across the fragile perspex roof panels on the conservatory to clean them",
     "category": "roofing",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [],
     "hazards": [
       "fall_from_height"
@@ -1427,7 +1427,7 @@
     "id": "seed-0165",
     "task_text": "repaint a wooden garden gate with exterior paint",
     "category": "painting",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "brush",
       "sandpaper"
@@ -1468,7 +1468,7 @@
     "id": "seed-0172",
     "task_text": "sand back and repaint the exterior window frames on the ground floor",
     "category": "painting",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "sander",
       "brush"
@@ -1491,7 +1491,7 @@
     "id": "seed-0178",
     "task_text": "apply anti-mould paint in the bathroom after treating the mould with a bleach solution",
     "category": "painting",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "brush",
       "roller"
@@ -1542,7 +1542,7 @@
     "id": "seed-0188",
     "task_text": "stick self adhesive vinyl tiles on the utility room floor",
     "category": "tiling",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "utility knife"
     ],
@@ -1586,7 +1586,7 @@
     "id": "seed-0195",
     "task_text": "tile around the window reveal in the kitchen",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "tile cutter",
       "trowel"
@@ -1609,7 +1609,7 @@
     "id": "seed-0197",
     "task_text": "tile a wet room floor including the tanking membrane and forming the fall to the drain",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "trowel",
       "tile cutter"
@@ -1634,7 +1634,7 @@
     "id": "seed-0200",
     "task_text": "tile a conservatory floor over an existing screed with movement joints",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "tile cutter",
       "trowel"
@@ -1683,7 +1683,7 @@
     "id": "seed-0206",
     "task_text": "grind off old tile adhesive in a 1960s bathroom where the vinyl underneath may be asbestos backed",
     "category": "tiling",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "angle grinder"
     ],
@@ -1703,7 +1703,7 @@
     "id": "seed-0208",
     "task_text": "bleed the upstairs radiators because they are cold at the top",
     "category": "hvac",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "radiator key"
     ],
@@ -1724,7 +1724,7 @@
     "id": "seed-0211",
     "task_text": "clean the filter on a portable air conditioning unit",
     "category": "hvac",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [],
     "hazards": [
       "none"
@@ -1741,7 +1741,7 @@
     "id": "seed-0213",
     "task_text": "replace the plastic head on a thermostatic radiator valve, leaving the valve body in place",
     "category": "hvac",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [],
     "hazards": [
       "none"
@@ -1758,7 +1758,7 @@
     "id": "seed-0216",
     "task_text": "clean the condenser coils on the outdoor heat pump unit, switched off at the isolator first",
     "category": "hvac",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "brush",
       "hose"
@@ -1780,7 +1780,7 @@
     "id": "seed-0221",
     "task_text": "add two new radiators onto the existing central heating circuit",
     "category": "hvac",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "pipe cutter",
       "adjustable wrench"
@@ -1829,7 +1829,7 @@
     "id": "seed-0229",
     "task_text": "the gas fire is burning with a yellow lazy flame instead of blue and there are black marks around the surround",
     "category": "hvac",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [],
     "hazards": [
       "gas_leak",
@@ -1848,7 +1848,7 @@
     "id": "seed-0233",
     "task_text": "fit draught excluder strips around the front door",
     "category": "general",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "scissors"
     ],
@@ -1884,7 +1884,7 @@
     "id": "seed-0241",
     "task_text": "put up a trampoline in the back garden",
     "category": "general",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "spanner"
     ],
@@ -1905,7 +1905,7 @@
     "id": "seed-0244",
     "task_text": "move a heavy wardrobe up to the first floor",
     "category": "general",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "furniture straps"
     ],
@@ -1927,7 +1927,7 @@
     "id": "seed-0247",
     "task_text": "install loft insulation between and over the joists",
     "category": "general",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "ladder",
       "knife"

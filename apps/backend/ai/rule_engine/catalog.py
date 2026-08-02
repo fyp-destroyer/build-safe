@@ -55,6 +55,21 @@ class Rule:
     # catalog express srs.md 9's "electrical wiring task + beginner user"
     # faithfully instead of approximating it by category.
     requires_skill: tuple[str, ...] = ()
+    # Follow-up fields whose CONFIRMED-SAFE answer (True) means this hazard
+    # does not apply to this job at all, so the rule never fires.
+    #
+    # This is NOT de-escalation and does not weaken rules.md §4.2. A gate
+    # refines the *trigger condition* - it is `excludes` sourced from a user
+    # answer instead of from the description text - and nothing anywhere
+    # lowers a risk level that was already assigned. The safety property that
+    # makes it sound is the default: an UNANSWERED gate still fires the rule,
+    # so the worst plausible case holds until the user rules it out. Silence
+    # never buys a lower risk level; only an explicit answer does.
+    #
+    # Only ever gate on a fact the user is genuinely authoritative about
+    # ("can you reach this from the floor?"). Never gate a hazard whose
+    # presence the user cannot reliably self-assess - see HARD_GATE_RULE_IDS.
+    gated_by: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         if not MIN_RISK_LEVEL <= self.floor <= MAX_RISK_LEVEL:
@@ -334,6 +349,36 @@ _RULES: tuple[Rule, ...] = (
             "binoculars",
         ),
     ),
+    # Split out of `work_at_height` on 2026-08-01. That rule's keywords are
+    # unambiguous ("roof", "two storey", "scaffold") and it stays ungated -
+    # asking "can you reach the roof from the floor?" is a nonsense question.
+    #
+    # This rule covers the case that actually broke: work that is plainly
+    # overhead but whose HEIGHT THE USER NEVER STATED. "How do I change my
+    # light bulb" was tagged `work_at_height` and came back level 3, because
+    # the tagger had nowhere to put "I don't know how high this is" except
+    # the tag itself. Now that uncertainty becomes a QUESTION: the rule fires
+    # while `height_access` is unanswered (worst plausible case), and a user
+    # who confirms the work is reachable from floor level closes the gate.
+    #
+    # No keywords by design - nothing in a description reliably signals
+    # "overhead but unstated height", so this is LLM-tag-only. That is safe
+    # because it is gated: the worst an over-eager tag can do is cause one
+    # extra question to be asked.
+    _r(
+        id="overhead_work_unknown_height",
+        hazard="fall_from_height",
+        floor=3,
+        summary="Overhead work whose working height has not been established",
+        explanation=(
+            "Overhead work needs stable, appropriate access equipment. "
+            "Standing on a chair, a worktop or the top step of a ladder "
+            "is a common cause of falls. Work from a stable platform you "
+            "can reach comfortably without stretching."
+        ),
+        keywords=(),
+        gated_by=("height_access",),
+    ),
     # Added after measuring which genuinely-dangerous tasks the engine was
     # still missing (ml/analyze_recall.py). Keywords are deliberately
     # multi-word: rules are the cheapest recall this system has precisely
@@ -542,6 +587,319 @@ _RULES: tuple[Rule, ...] = (
         ),
         keywords=("dig", "digging", "trench", "excavate", "break ground"),
     ),
+    # -----------------------------------------------------------------------
+    # Added 2026-08-01 after auditing the catalog against ml/data/*.json.
+    #
+    # The first 21 rules were all acute-catastrophic — gas, electrocution,
+    # collapse, falls, asbestos, confined space, buried services — and covered
+    # 9 of the 16 hazard families the dataset actually uses. Six families had
+    # NO rule at all (respiratory_hazard 90 rows, cuts_lacerations 71, fire
+    # 50, heavy_object_handling 45, burns 18, hearing_damage 10), which is why
+    # keyword rules under-called 37.7% of high-risk rows and why the tagger
+    # routed a blowtorch to `asbestos_disturbance`: it was picking the best
+    # option from a menu that did not contain the right answer.
+    #
+    # Keywords stay deliberately multi-word for the reason given above — this
+    # layer's value is that it almost never false-fires, and every added rule
+    # spends some of that. Floors follow the competence ladder in
+    # ml/data/README.md: 3 = needs some experience, 4 = professional only,
+    # 5 = nobody attempts this.
+    # ---- fire / burns -----------------------------------------------------
+    _r(
+        id="hot_works_ignition",
+        hazard="fire",
+        floor=3,
+        summary="Open flame or spark-producing work on or near a structure",
+        explanation=(
+            "Blowtorches, heat guns and grinder sparks start fires in "
+            "dust, cavities and old timber that can smoulder unseen for "
+            "hours. Clear combustibles, keep an extinguisher to hand and "
+            "check the area again well after finishing."
+        ),
+        keywords=(
+            "blow torch",
+            "blowtorch",
+            "heat gun",
+            "soldering torch",
+            "welding",
+            "angle grinder",
+            "cutting disc",
+            "burn off the paint",
+            "burning off paint",
+        ),
+    ),
+    _r(
+        id="flammable_vapour_enclosed",
+        hazard="fire",
+        floor=4,
+        summary="Solvent or fuel vapour in an enclosed space",
+        explanation=(
+            "Solvent, thinner and adhesive vapours are heavier than air, "
+            "pool at floor level and ignite from a pilot light, a switch "
+            "or a spark. In an enclosed room the mixture can reach "
+            "explosive concentration before you smell a problem."
+        ),
+        keywords=(
+            "solvent based",
+            "epoxy floor coating",
+            "paint stripper",
+            "petrol",
+            "white spirit",
+            "cellulose thinner",
+            "contact adhesive",
+        ),
+    ),
+    _r(
+        id="appliance_flex_overload",
+        hazard="fire",
+        floor=4,
+        summary="Overheating plug, socket, flex or extension lead",
+        explanation=(
+            "A plug, socket or lead that is hot, discoloured or smells "
+            "of burning has a loose or overloaded connection and is an "
+            "active fire risk. Stop using it, unplug it if you can do so "
+            "safely, and have the circuit checked before it is used again."
+        ),
+        keywords=(
+            "hot to touch",
+            "extension lead",
+            "extension cord",
+            "plug is warm",
+            "socket is warm",
+            "socket feels hot",
+            "smells of burning",
+            "burning smell",
+            "scorch mark",
+            "melted plug",
+        ),
+    ),
+    # ---- respiratory ------------------------------------------------------
+    _r(
+        id="silica_dust",
+        hazard="respiratory_hazard",
+        floor=3,
+        summary="Dry cutting or grinding of masonry, concrete or tile",
+        explanation=(
+            "Cutting concrete, brick, stone or tile dry releases "
+            "respirable crystalline silica, which causes irreversible "
+            "lung disease. Use water suppression or on-tool extraction "
+            "and a fitted respirator — a nuisance dust mask is not enough."
+        ),
+        keywords=(
+            "cut concrete",
+            "cutting concrete",
+            "grind concrete",
+            "chase the brickwork",
+            "cut paving",
+            "cut tiles",
+            "cutting tiles",
+            "dry cut",
+        ),
+    ),
+    _r(
+        id="lead_paint_disturbance",
+        hazard="respiratory_hazard",
+        floor=4,
+        summary="Disturbing paint that may contain lead",
+        explanation=(
+            "Paint from before the 1990s often contains lead. Sanding or "
+            "burning it produces fumes and fine dust that are especially "
+            "harmful to children and during pregnancy, and in many places "
+            "removal from older buildings is a controlled activity."
+        ),
+        keywords=(
+            "lead paint",
+            "old paint",
+            "flaking paint",
+            "victorian",
+            "georgian",
+            "period property",
+            "listed building",
+        ),
+    ),
+    _r(
+        id="refrigerant_circuit_work",
+        hazard="chemical_exposure",
+        floor=4,
+        summary="Opening or charging a refrigerant circuit",
+        explanation=(
+            "Refrigerant causes cold burns and displaces oxygen, and "
+            "handling it is restricted to certified technicians almost "
+            "everywhere. Charging, recovering or breaking into a sealed "
+            "circuit is not DIY work."
+        ),
+        keywords=(
+            "refrigerant",
+            "regas",
+            "re-gas",
+            "recharge the air con",
+            "f-gas",
+            "freon",
+            "heat pump circuit",
+            "split system",
+        ),
+    ),
+    _r(
+        id="sewage_contamination",
+        hazard="respiratory_hazard",
+        floor=4,
+        summary="Contact with sewage or foul water",
+        explanation=(
+            "Sewage carries bacteria and viruses that cause serious "
+            "illness, and standing foul water may also be live with "
+            "nearby electrics. Contaminated areas need professional "
+            "cleaning and disinfection, not a mop."
+        ),
+        keywords=(
+            "sewage",
+            "foul water",
+            "raw waste",
+            "soil pipe leak",
+            "backing up through the",
+            "septic tank",
+        ),
+    ),
+    # ---- cuts / mechanical ------------------------------------------------
+    _r(
+        id="tree_felling",
+        hazard="heavy_object_handling",
+        floor=4,
+        summary="Felling or dismantling a tree near property",
+        explanation=(
+            "A tree near buildings, boundaries or overhead lines cannot "
+            "be dropped predictably without rigging. Chainsaw kickback "
+            "and uncontrolled fall direction are both routinely fatal — "
+            "this is arborist work."
+        ),
+        keywords=(
+            "fell a large",
+            "fell a tree",
+            "felling a tree",
+            "cut down the tree",
+            "chainsaw",
+            "take down a tree",
+        ),
+    ),
+    _r(
+        id="powered_cutting_tool",
+        hazard="cuts_lacerations",
+        floor=2,
+        summary="Hand-held powered cutting tool",
+        explanation=(
+            "Circular saws, grinders and multi-tools bind and kick back "
+            "without warning. Clamp the work rather than holding it, keep "
+            "both hands on the tool, and wear eye protection — most "
+            "injuries happen on the cut that felt routine."
+        ),
+        keywords=(
+            "circular saw",
+            "table saw",
+            "mitre saw",
+            "reciprocating saw",
+            "jigsaw",
+            "multi tool",
+            "bench grinder",
+        ),
+    ),
+    _r(
+        id="heavy_manual_handling",
+        hazard="heavy_object_handling",
+        floor=2,
+        summary="Lifting or moving a heavy load",
+        explanation=(
+            "Baths, slabs, lintels, glazing units and appliances cause "
+            "crush and back injuries when handled alone. Plan the route, "
+            "use lifting aids and get a second person — most of these "
+            "injuries happen in the last metre."
+        ),
+        keywords=(
+            "cast iron bath",
+            "paving slab",
+            "concrete lintel",
+            "kerb stone",
+            "glazing unit",
+            "railway sleeper",
+            "move the fridge",
+            "move a piano",
+        ),
+    ),
+    # ---- hearing ----------------------------------------------------------
+    # Floor 1 on purpose: sustained noise does not change WHO should attempt
+    # a task, so escalating would be wrong under the competence ladder. The
+    # rule still fires, so it still reaches `explain()` and the PPE
+    # recommendation — a hazard worth telling the user about without moving
+    # the risk level is exactly what a floor of MIN_RISK_LEVEL expresses.
+    # ---- burns / stored energy --------------------------------------------
+    # The last family the audit found with no rule at all (18 dataset rows).
+    # Two measured misses drove it: "replace the pressure relief valve on a
+    # sealed central heating system" and "replace the immersion heater element
+    # in the hot water cylinder", both scored level 1 by keyword rules.
+    _r(
+        id="pressurised_hot_water_system",
+        hazard="burns",
+        floor=4,
+        summary="Work on a stored or pressurised hot water system",
+        explanation=(
+            "A sealed or unvented hot water system stores scalding water "
+            "under pressure. Opening one that has not been drained and "
+            "depressurised can release it violently, and the safety "
+            "controls that prevent that are the whole reason these "
+            "systems are restricted to qualified installers."
+        ),
+        keywords=(
+            "pressure relief valve",
+            "unvented cylinder",
+            "sealed central heating",
+            "expansion vessel",
+            "immersion heater",
+            "hot water cylinder",
+            "system pressure",
+            "megaflo",
+        ),
+    ),
+    _r(
+        id="hot_surface_or_liquid",
+        hazard="burns",
+        floor=2,
+        summary="Contact with hot surfaces, liquids or materials",
+        explanation=(
+            "Flue pipes, radiators, stripped paint and freshly mixed "
+            "cement all cause burns that are easy to underestimate. Let "
+            "hot work cool before handling it, and wear gloves rated for "
+            "the material rather than ordinary work gloves."
+        ),
+        keywords=(
+            "hot flue",
+            "molten",
+            "boiling water",
+            "steam pipe",
+            "wet cement",
+            "quicklime",
+            "hot bitumen",
+            "torch on felt",
+        ),
+    ),
+    _r(
+        id="sustained_noise_exposure",
+        hazard="hearing_damage",
+        floor=1,
+        summary="Prolonged use of loud power tools",
+        explanation=(
+            "Breakers, planers, routers and disc cutters exceed safe "
+            "noise levels within minutes, and the hearing loss they cause "
+            "is permanent and painless as it happens. Wear defenders, not "
+            "plugs, for anything sustained."
+        ),
+        keywords=(
+            "breaker hire",
+            "kango",
+            "jackhammer",
+            "disc cutter",
+            "planer",
+            "router",
+            "impact wrench",
+        ),
+    ),
 )
 
 RULES: dict[str, Rule] = {r.id: r for r in _RULES}
@@ -614,6 +972,54 @@ FOLLOWUPS: tuple[Followup, ...] = (
         applies_when_rule=("buried_services",),
         applies_to_categories=(),
     ),
+    # The gate for `overhead_work_unknown_height`. Answering True (reachable
+    # from floor level) closes that gate and the hazard does not apply;
+    # answering False means real height work, which is what the floors below
+    # escalate. Leaving it unanswered keeps the rule firing at its own floor.
+    Followup(
+        field="height_access",
+        question=(
+            "Can you reach this comfortably from floor level or a step "
+            "ladder, without needing roof or upper-storey access?"
+        ),
+        floor_when_missing=3,
+        floor_when_denied=3,
+        applies_when_rule=("overhead_work_unknown_height",),
+    ),
 )
 
 FOLLOWUPS_BY_FIELD: dict[str, Followup] = {f.field: f for f in FOLLOWUPS}
+
+
+# ---------------------------------------------------------------------------
+# Hazards that no user answer may ever gate away.
+#
+# `Rule.gated_by` lets a confirmed-safe answer stop a rule firing, which is
+# right for facts the user is authoritative about (can you reach it?). It is
+# wrong for these: a user is not a reliable judge of whether a gas escape,
+# live conductor or asbestos exposure is really happening, and the cost of
+# believing them wrongly is somebody's life. Enforced by a test, not just by
+# convention - see tests/test_rule_catalog.py.
+# ---------------------------------------------------------------------------
+HARD_GATE_RULE_IDS: frozenset[str] = frozenset(
+    {
+        "active_gas_or_co",
+        "water_at_live_electrics",
+        "exposed_live_conductor",
+        "gas_appliance_work",
+        "asbestos_disturbance",
+    }
+)
+
+
+# ---------------------------------------------------------------------------
+# Follow-up fields the LLM may ASK FOR on its own initiative.
+#
+# The LLM cannot invent a question, and it cannot suppress one: whatever
+# `rules.required_followups()` derives from the fired hazards is asked
+# regardless. This set is purely ADDITIVE - it lets the tagger say "the
+# description is ambiguous about height, ask about it" instead of resolving
+# that ambiguity itself by guessing a tag (rules.md §4: the LLM may phrase
+# questions and select from closed sets, never decide risk).
+# ---------------------------------------------------------------------------
+LLM_SELECTABLE_FOLLOWUP_FIELDS: frozenset[str] = frozenset(FOLLOWUPS_BY_FIELD)

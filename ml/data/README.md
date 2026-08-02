@@ -146,15 +146,71 @@ See the four `"install a ceiling fan"` entries in `seed_examples.json` for this 
 
 ### 5 risk levels
 
-| `risk_level` | `risk_label` | Meaning |
+**`risk_level` answers one question: what competence does THIS TASK demand?**
+
+It is a property of the task and nothing else. It does **not** vary with who is
+asking. The same job carries the same `risk_level` whether the person describing
+it is a beginner or a professional — what changes is the *advice they are given*,
+which is computed afterwards by comparing this level against their stated skill
+(`apps/backend/ai/rule_engine/competence.py`), not baked into the label.
+
+| `risk_level` | `risk_label` | Competence the task demands |
 |---|---|---|
-| 1 | `safe_diy` | Safe DIY — no special precautions beyond common sense |
-| 2 | `diy_with_supervision` | DIY with Supervision — doable but benefits from a second pair of hands / basic guidance |
-| 3 | `professional_recommended` | Professional Recommended — a competent DIYer *could* do it, but a pro is advisable |
-| 4 | `professional_required` | Professional Required — should not be attempted without a licensed professional |
-| 5 | `dangerous` | Dangerous / Do Not Attempt |
+| 1 | `safe_diy` | Anyone. No relevant experience needed. |
+| 2 | `diy_with_supervision` | Anyone, provided someone more experienced is on hand. |
+| 3 | `professional_recommended` | Some relevant experience. A competent DIYer *could* do it; a pro is advisable. |
+| 4 | `professional_required` | A licensed/qualified professional. Not for any DIYer, however experienced. |
+| 5 | `dangerous` | **Nobody — this is not a DIY task at all.** |
+
+#### Level 5 is not "the top of the ladder"
+
+Levels 1–4 are a competence ladder: each step demands more of the person. **Level
+5 is not the next rung.** It means the task is outside the scope of "who should
+attempt this" entirely — an active emergency (a suspected gas escape, a sparking
+conductor, a wall visibly moving) where the correct action is evacuate and call
+for help, or work that is legally restricted regardless of skill.
+
+Concretely: level 5 is the one tier where **the user's experience is irrelevant**.
+An experienced professional who smells gas should still leave the building. Never
+label an example 5 because it is "very hard" or "needs a real expert" — that is
+level 4. Reserve 5 for *nobody does this by hand right now*.
 
 **`risk_level: 5` examples should always have `suggested_ppe: []`.** At this tier the correct action is "stop and call a professional / emergency services," not "here's the PPE to handle it yourself" — recommending PPE for an active emergency (e.g. a sparking live wire) could be read as encouraging hands-on mitigation, which contradicts the do-not-attempt framing. Keep `hazards`/`professional_category` populated as normal; only `suggested_ppe` is forced empty at this tier.
+
+#### `user_skill` is an annotation, not a label input
+
+Every row still carries a `user_skill`, because `task_text` is written in a real
+person's voice and that person has some level of experience. But it must **not**
+influence `risk_level`, and the validator enforces this statistically (see
+"Skill/label independence" below).
+
+This rule exists because the opposite happened. The original seed data chose
+`user_skill` "to fit the narrative" of each example — an experienced narrator for
+a professional-tier job, a beginner for a simple one. The result, measured on
+2026-08-01 across all 555 rows: 77 of the 85 `Experienced` rows (91%) were level
+4, and there was not a single `Experienced` example at level 1, 2 or 3. The
+classifier learned exactly that, and returned level 4 for an experienced user
+changing a light bulb while returning level 1 for a beginner rewiring a consumer
+unit. `user_skill` had become a proxy for the answer.
+
+Skill-based escalation has not been lost — it lives in the rule engine, where it
+is deterministic and unit-tested (`Rule.requires_skill`,
+`electrical_work_by_beginner`, `srs.md` §9), exactly as follow-up escalation
+does. The classifier's job is to judge the task; the engine's job is to judge the
+match between task and person.
+
+#### Skill/label independence
+
+`python ml/validate_dataset.py` fails the dataset if `user_skill` and
+`risk_level` are statistically dependent. Practical guidance when authoring:
+
+- Pick `risk_level` from the task **first**, without looking at `user_skill`.
+- Then pick a `user_skill` that is plausible for someone typing that sentence —
+  and across a batch, vary it. A beginner can ask about a level-4 job (that is
+  precisely the user this product exists for); an experienced person can ask
+  whether a level-1 job is worth doing themselves.
+- If you find yourself reaching for `Experienced` *because* the task is hard,
+  stop. That is the confound re-forming.
 
 ### Hazard taxonomy (extend if a real seed example needs a tag not listed)
 

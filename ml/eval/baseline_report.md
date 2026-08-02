@@ -1,8 +1,8 @@
 # Baseline Model — Evaluation Report (Phase 3)
 
 TF-IDF + Logistic Regression. Reproduce with `python ml/train_baseline.py`.
-Selected on the validation split: `C=4.0`,
-word n-grams `(1, 1)` (val macro-F1 0.581).
+Selected on the validation split: `C=10.0`,
+word n-grams `(1, 1)` (val macro-F1 0.368).
 
 ## Features — and what was deliberately excluded
 
@@ -37,13 +37,13 @@ the task, so the hand-written subset is the number to trust.
 
 | | test (all 81) | test (hand-written 40) |
 |---|---|---|
-| accuracy | 0.630 | 0.625 |
-| macro F1 | 0.620 | 0.614 |
-| high-risk recall (≥4 caught as ≥4) | 0.514 | 0.529 |
-| 95% CI on that recall | [0.356, 0.67] | [0.31, 0.738] |
-| under-prediction rate (all) | 0.284 | 0.275 |
-| under-prediction rate (high-risk) | 0.486 | 0.471 |
-| under-predicted by ≥2 levels | 17 | 8 |
+| accuracy | 0.432 | 0.425 |
+| macro F1 | 0.415 | 0.411 |
+| high-risk recall (≥4 caught as ≥4) | 0.571 | 0.529 |
+| 95% CI on that recall | [0.409, 0.72] | [0.31, 0.738] |
+| under-prediction rate (all) | 0.346 | 0.350 |
+| under-prediction rate (high-risk) | 0.571 | 0.588 |
+| under-predicted by ≥2 levels | 15 | 8 |
 
 ### The classifier is not the whole safety story
 
@@ -55,8 +55,8 @@ on top of these predictions:
 
 | | ML alone | max(ML, rules) |
 |---|---|---|
-| high-risk recall, test (all) | 0.514 | **0.629** |
-| high-risk recall, hand-written | 0.529 | **0.588** |
+| high-risk recall, test (all) | 0.571 | **0.686** |
+| high-risk recall, hand-written | 0.529 | **0.647** |
 | high-risk rows rescued by the rule | — | 4 |
 
 That is still a floor, not a ceiling: only the follow-up rule is simulated here.
@@ -68,8 +68,8 @@ escalates strictly more than this table shows.
 A single 82-row test split is thin. This CV groups by `group_id`, so a seed and
 its variants never straddle a fold — it is the more stable estimate.
 
-- macro F1 **0.620 ± 0.065**
-- high-risk recall **0.652 ± 0.045**
+- macro F1 **0.349 ± 0.076**
+- high-risk recall **0.647 ± 0.055**
 
 ## Why "high-risk recall" is reported collapsed
 
@@ -84,21 +84,21 @@ measure of the failure mode `prd.md` §7 targets.
 
 | risk level | precision | recall | F1 | support |
 |---|---|---|---|---|
-| 1 — safe_diy | 0.69 | 1.00 | 0.82 | 20 |
-| 2 — diy_with_supervision | 0.39 | 0.64 | 0.49 | 14 |
-| 3 — professional_recommended | 0.67 | 0.33 | 0.44 | 12 |
-| 4 — professional_required | 1.00 | 0.83 | 0.91 | 12 |
-| 5 — dangerous | 0.62 | 0.35 | 0.44 | 23 |
+| 1 — safe_diy | 0.67 | 0.70 | 0.68 | 20 |
+| 2 — diy_with_supervision | 0.30 | 0.43 | 0.35 | 14 |
+| 3 — professional_recommended | 0.29 | 0.33 | 0.31 | 12 |
+| 4 — professional_required | 0.44 | 0.33 | 0.38 | 12 |
+| 5 — dangerous | 0.41 | 0.30 | 0.35 | 23 |
 
 ### Confusion matrix — test (all rows)
 
 | true \ pred | 1 | 2 | 3 | 4 | 5 |
 |---|---|---|---|---|---|
-| **1** | 20 | 0 | 0 | 0 | 0 |
-| **2** | 0 | 9 | 2 | 0 | 3 |
-| **3** | 0 | 6 | 4 | 0 | 2 |
-| **4** | 0 | 2 | 0 | 10 | 0 |
-| **5** | 9 | 6 | 0 | 0 | 8 |
+| **1** | 14 | 4 | 2 | 0 | 0 |
+| **2** | 2 | 6 | 2 | 0 | 4 |
+| **3** | 2 | 4 | 4 | 0 | 2 |
+| **4** | 1 | 1 | 2 | 4 | 4 |
+| **5** | 2 | 5 | 4 | 5 | 7 |
 
 ![confusion matrix](baseline_confusion.png)
 
@@ -106,11 +106,11 @@ measure of the failure mode `prd.md` §7 targets.
 
 | risk level | precision | recall | F1 | support |
 |---|---|---|---|---|
-| 1 — safe_diy | 0.67 | 1.00 | 0.80 | 10 |
-| 2 — diy_with_supervision | 0.40 | 0.57 | 0.47 | 7 |
-| 3 — professional_recommended | 0.67 | 0.33 | 0.44 | 6 |
-| 4 — professional_required | 1.00 | 0.83 | 0.91 | 6 |
-| 5 — dangerous | 0.57 | 0.36 | 0.44 | 11 |
+| 1 — safe_diy | 0.70 | 0.70 | 0.70 | 10 |
+| 2 — diy_with_supervision | 0.30 | 0.43 | 0.35 | 7 |
+| 3 — professional_recommended | 0.25 | 0.33 | 0.29 | 6 |
+| 4 — professional_required | 0.50 | 0.33 | 0.40 | 6 |
+| 5 — dangerous | 0.38 | 0.27 | 0.32 | 11 |
 
 ## Limitations
 

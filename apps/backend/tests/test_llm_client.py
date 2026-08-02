@@ -54,9 +54,7 @@ def _response(status_code: int, content: str = "", json_body=None):
     resp = MagicMock()
     resp.status_code = status_code
     resp.json.return_value = (
-        json_body
-        if json_body is not None
-        else {"choices": [{"message": {"content": content}}]}
+        json_body if json_body is not None else {"choices": [{"message": {"content": content}}]}
     )
     return resp
 
@@ -98,9 +96,12 @@ def test_no_provider_configured_returns_none_without_raising():
 
 
 def test_groq_structured_success():
-    with _patch_settings(GROQ_API_KEY="q"), patch(
-        "ai.llm.client.httpx.post", return_value=_response(200, '{"category": "electrical"}')
-    ) as post:
+    with (
+        _patch_settings(GROQ_API_KEY="q"),
+        patch(
+            "ai.llm.client.httpx.post", return_value=_response(200, '{"category": "electrical"}')
+        ) as post,
+    ):
         result = generate_structured("tag this", _Schema)
 
     assert isinstance(result, _Schema)
@@ -115,9 +116,10 @@ def test_groq_falls_back_to_json_object_mode_when_schema_mode_rejected():
     with a 400). That's a recoverable config mismatch, not an outage: retry
     in json_object mode with the schema carried in the prompt."""
     responses = [_response(400), _response(200, '{"category": "plumbing"}')]
-    with _patch_settings(GROQ_API_KEY="q"), patch(
-        "ai.llm.client.httpx.post", side_effect=responses
-    ) as post:
+    with (
+        _patch_settings(GROQ_API_KEY="q"),
+        patch("ai.llm.client.httpx.post", side_effect=responses) as post,
+    ):
         result = generate_structured("tag this", _Schema)
 
     assert result is not None and result.category == "plumbing"
@@ -134,17 +136,23 @@ def test_groq_off_schema_response_returns_none():
     never reach a caller. Validation is what makes a second provider safe to
     add at all — an unconstrained reply degrades to the same `None` as an
     outage, and callers answer from hardcoded defaults."""
-    with _patch_settings(GROQ_API_KEY="q"), patch(
-        "ai.llm.client.httpx.post",
-        return_value=_response(200, '{"risk_level": 1, "verdict": "totally safe"}'),
+    with (
+        _patch_settings(GROQ_API_KEY="q"),
+        patch(
+            "ai.llm.client.httpx.post",
+            return_value=_response(200, '{"risk_level": 1, "verdict": "totally safe"}'),
+        ),
     ):
         assert generate_structured("tag this", _Schema) is None
 
 
 def test_groq_prose_instead_of_json_returns_none():
-    with _patch_settings(GROQ_API_KEY="q"), patch(
-        "ai.llm.client.httpx.post",
-        return_value=_response(200, "Sure! Here's the category: electrical"),
+    with (
+        _patch_settings(GROQ_API_KEY="q"),
+        patch(
+            "ai.llm.client.httpx.post",
+            return_value=_response(200, "Sure! Here's the category: electrical"),
+        ),
     ):
         assert generate_structured("tag this", _Schema) is None
 
@@ -162,8 +170,9 @@ def test_groq_json_wrapped_in_fences_or_prose_is_still_accepted(content):
     """json_object mode is the fallback for models WITHOUT server-side schema
     enforcement — the ones most likely to wrap the object in markdown fences.
     A right-shaped answer shouldn't be thrown away over packaging."""
-    with _patch_settings(GROQ_API_KEY="q"), patch(
-        "ai.llm.client.httpx.post", side_effect=[_response(400), _response(200, content)]
+    with (
+        _patch_settings(GROQ_API_KEY="q"),
+        patch("ai.llm.client.httpx.post", side_effect=[_response(400), _response(200, content)]),
     ):
         result = generate_structured("tag this", _Schema)
 
@@ -173,9 +182,12 @@ def test_groq_json_wrapped_in_fences_or_prose_is_still_accepted(content):
 def test_unwrapping_does_not_weaken_schema_validation():
     """Unwrapping normalises TEXT only. A fenced object of the wrong shape
     must still be rejected — otherwise the leniency would be a hole."""
-    with _patch_settings(GROQ_API_KEY="q"), patch(
-        "ai.llm.client.httpx.post",
-        return_value=_response(200, '```json\n{"risk_level": 1}\n```'),
+    with (
+        _patch_settings(GROQ_API_KEY="q"),
+        patch(
+            "ai.llm.client.httpx.post",
+            return_value=_response(200, '```json\n{"risk_level": 1}\n```'),
+        ),
     ):
         assert generate_structured("tag this", _Schema) is None
 
@@ -183,8 +195,9 @@ def test_unwrapping_does_not_weaken_schema_validation():
 @pytest.mark.parametrize("status", [401, 429, 500])
 def test_groq_http_error_returns_none(status):
     """Bad key, rate limit, provider outage — all the same to the caller."""
-    with _patch_settings(GROQ_API_KEY="q"), patch(
-        "ai.llm.client.httpx.post", return_value=_response(status)
+    with (
+        _patch_settings(GROQ_API_KEY="q"),
+        patch("ai.llm.client.httpx.post", return_value=_response(status)),
     ):
         assert generate_structured("tag this", _Schema) is None
 
@@ -192,23 +205,28 @@ def test_groq_http_error_returns_none(status):
 def test_groq_400_on_both_attempts_returns_none():
     """A 400 that isn't about response_format (e.g. a retired model id) must
     terminate, not loop."""
-    with _patch_settings(GROQ_API_KEY="q"), patch(
-        "ai.llm.client.httpx.post", side_effect=[_response(400), _response(400)]
-    ) as post:
+    with (
+        _patch_settings(GROQ_API_KEY="q"),
+        patch("ai.llm.client.httpx.post", side_effect=[_response(400), _response(400)]) as post,
+    ):
         assert generate_structured("tag this", _Schema) is None
     assert post.call_count == 2
 
 
 def test_groq_network_exception_never_escapes():
-    with _patch_settings(GROQ_API_KEY="q"), patch(
-        "ai.llm.client.httpx.post", side_effect=OSError("connection reset")
+    with (
+        _patch_settings(GROQ_API_KEY="q"),
+        patch("ai.llm.client.httpx.post", side_effect=OSError("connection reset")),
     ):
         assert generate_structured("tag this", _Schema) is None
 
 
 def test_groq_unexpected_response_shape_returns_none():
-    with _patch_settings(GROQ_API_KEY="q"), patch(
-        "ai.llm.client.httpx.post", return_value=_response(200, json_body={"unexpected": True})
+    with (
+        _patch_settings(GROQ_API_KEY="q"),
+        patch(
+            "ai.llm.client.httpx.post", return_value=_response(200, json_body={"unexpected": True})
+        ),
     ):
         assert generate_structured("tag this", _Schema) is None
 

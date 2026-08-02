@@ -6,6 +6,15 @@ and writes both a RiskAssessment and an AiLog row on every attempt,
 including failures — an AI pipeline exception must never silently produce a
 "safe" result (CLAUDE.md / rules.md §4).
 
+RULES-ONLY MODE (`RISK_USE_ML_CLASSIFIER=false`, off in dev since
+2026-08-01): the classifier still runs and its prediction is still written to
+`ai_logs`, but it is excluded from the max() and `final_risk = rule_risk`.
+Because a max() can only shrink when a term is removed, this is strictly a
+reduction in escalation: a task matching no keyword and receiving no LLM
+hazard tag now returns level 1 unopposed. See `core/config.py` for why that
+was judged acceptable (the classifier is currently a near-constant function
+of `user_skill`) and what would restore the documented pipeline.
+
 LLM hazard tags are resolved ONCE, at job creation, and persisted on
 `jobs.llm_hazard_ids`. Everything downstream — the follow-up gate, the
 question shown to the user, and the rule engine at assessment — reads that
@@ -25,14 +34,15 @@ import asyncio
 import logging
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ai.classifier import classify
 from ai.rule_engine import evaluate, llm_assist
 from ai.rule_engine.rules import required_followups
+from core.config import get_settings
 from core.errors import ApiError
-from models import AiLog, Job, RiskAssessment
+from models import AiLog, ChatMessage, Job, RiskAssessment
 from schemas.job import FollowupPrompt, JobCreateRequest, JobFollowupRequest, JobOut
 
 logger = logging.getLogger(__name__)
@@ -70,9 +80,7 @@ async def create_job(db: AsyncSession, user_id: UUID, payload: JobCreateRequest)
 
     # Resolve LLM hazard tags HERE, once, and persist them — see
     # `_hazard_ids` for why this must not be re-derived per step.
-    hazard_ids = await asyncio.to_thread(
-        llm_assist.tag_hazards_result, payload.description, category
-    )
+    tagged = await asyncio.to_thread(llm_assist.tag_hazards_result, payload.description, category)
 
     job = Job(
         user_id=user_id,
@@ -81,7 +89,8 @@ async def create_job(db: AsyncSession, user_id: UUID, payload: JobCreateRequest)
         skill_level=payload.skill_level,
         urgency=payload.urgency,  # optional; nothing consumes it (srs.md FR-02)
         followup_answers={},
-        llm_hazard_ids=hazard_ids,
+        llm_hazard_ids=None if tagged is None else tagged.rule_ids,
+        llm_followup_fields=None if tagged is None else tagged.ask_fields,
         status="pending_followup",
     )
     job.status = "pending_followup" if _missing_required_followups(job) else "ready_to_assess"
@@ -125,23 +134,34 @@ def _hazard_ids(job: Job) -> list[str]:
     return job.llm_hazard_ids or []
 
 
+def _asked_fields(job: Job) -> list[str]:
+    """Follow-up fields the tagger asked for, or [].
+
+    Read from the persisted column for the same reason as `_hazard_ids`: the
+    questions the user is shown and the fields assessment scores against must
+    be one set, not two derivations that can disagree. Unioned with the
+    catalog-derived fields inside `required_followups`, never subtracted —
+    the LLM widens the question set and can never narrow it.
+    """
+    return job.llm_followup_fields or []
+
+
 async def ensure_hazard_ids(db: AsyncSession, job: Job) -> Job:
     """Tag and persist hazard ids for a job that has none yet (NULL).
 
     Covers jobs created before this column existed and jobs whose creation
-    happened during a Gemini outage. Re-tagging can only ADD hazards, so it
-    can only widen the required follow-up set — never narrow it. Callers
-    must therefore run this BEFORE the follow-up gate, so any newly
-    discovered question is asked rather than silently penalised.
+    happened during an LLM outage. Re-tagging can only ADD hazards and
+    questions, so it can only widen the required follow-up set — never
+    narrow it. Callers must therefore run this BEFORE the follow-up gate, so
+    any newly discovered question is asked rather than silently penalised.
     """
     if job.llm_hazard_ids is not None:
         return job
-    hazard_ids = await asyncio.to_thread(
-        llm_assist.tag_hazards_result, job.description, job.category
-    )
-    if hazard_ids is None:
+    tagged = await asyncio.to_thread(llm_assist.tag_hazards_result, job.description, job.category)
+    if tagged is None:
         return job  # still unavailable; stay NULL and retry on the next pass
-    job.llm_hazard_ids = hazard_ids
+    job.llm_hazard_ids = tagged.rule_ids
+    job.llm_followup_fields = tagged.ask_fields
     if job.status in ("pending_followup", "ready_to_assess"):
         job.status = "pending_followup" if _missing_required_followups(job) else "ready_to_assess"
     await db.commit()
@@ -169,6 +189,8 @@ def _missing_required_followups(job: Job) -> set[str]:
         job.category,
         _hazard_ids(job),
         user_skill=job.skill_level,
+        followup_answers=job.followup_answers,
+        llm_asked_fields=_asked_fields(job),
     )
     return {field for field in required if field not in job.followup_answers}
 
@@ -205,6 +227,27 @@ async def list_jobs(db: AsyncSession, user_id: UUID) -> list[Job]:
         select(Job).where(Job.user_id == user_id).order_by(Job.created_at.desc())
     )
     return list(result.scalars().all())
+
+
+async def delete_job(db: AsyncSession, job: Job) -> None:
+    """Delete a job and everything that hangs off it, in FK order.
+
+    Child rows are removed explicitly rather than via ORM cascades: none of
+    the relationships declare one, and every child table's `job_id` is NOT
+    NULL, so a bare job delete would just raise a FK violation.
+
+    The `ai_logs` rows go too. rules.md §4 point 6 requires that every
+    assessment attempt IS logged (no sampling) — it does not require the log
+    to outlive the user's own task, and those rows embed the task
+    description, so keeping them after the user deletes the conversation
+    would leave the user data behind precisely where they asked for it to be
+    gone.
+    """
+    await db.execute(delete(ChatMessage).where(ChatMessage.job_id == job.id))
+    await db.execute(delete(RiskAssessment).where(RiskAssessment.job_id == job.id))
+    await db.execute(delete(AiLog).where(AiLog.job_id == job.id))
+    await db.delete(job)
+    await db.commit()
 
 
 async def _next_followup_prompt(job: Job) -> FollowupPrompt | None:
@@ -267,8 +310,26 @@ async def assess_job(db: AsyncSession, job: Job) -> RiskAssessment:
         "followup_answers": job.followup_answers,
     }
 
+    use_ml = get_settings().RISK_USE_ML_CLASSIFIER
+
     try:
-        ml_risk, confidence = classify(job.description, job.category, job.skill_level)
+        # The classifier runs either way, so its prediction is always on
+        # record in ai_logs and a broken model is always visible. Only its
+        # CONTRIBUTION to the decision is gated (see RISK_USE_ML_CLASSIFIER).
+        ml_risk: int | None = None
+        confidence = 0.0
+        ml_error: str | None = None
+        try:
+            ml_risk, confidence = classify(job.description, job.category, job.skill_level)
+        except Exception as exc:  # noqa: BLE001 - re-raised below when it matters
+            if use_ml:
+                # The documented pipeline depends on this number; failing to
+                # get it must fail the assessment, never default to "safe".
+                raise
+            # Rules-only mode: the classifier has no say, so its failure
+            # cannot make the result wrong. Recorded rather than swallowed.
+            logger.warning("classifier unavailable (rules-only mode active): %s", exc)
+            ml_error = f"{type(exc).__name__}: {exc}"
 
         # LLM hazard tagging (rules.md §4.1): the LLM may only SELECT ids
         # from the hardcoded catalog, and every id is filtered against it
@@ -285,14 +346,22 @@ async def assess_job(db: AsyncSession, job: Job) -> RiskAssessment:
             job.followup_answers,
             llm_hazard_ids,
             user_skill=job.skill_level,
+            llm_asked_fields=_asked_fields(job),
         )
 
         # THE non-negotiable invariant: rules only ever escalate.
-        final_risk = max(ml_risk, rule_risk)
+        #
+        # With the classifier enabled this is the documented
+        # `final_risk = max(ml_risk, rule_risk)`. With it disabled the rule
+        # floor stands alone — strictly lower or equal, never higher, which
+        # is exactly the coverage cost documented on RISK_USE_ML_CLASSIFIER.
+        final_risk = max(ml_risk, rule_risk) if (use_ml and ml_risk is not None) else rule_risk
         if not (1 <= final_risk <= 5):
             raise ValueError(f"final_risk out of bounds: {final_risk}")
 
-        explanation = _build_explanation(ml_risk, rule_risk, final_risk, triggered_rules)
+        explanation = _build_explanation(
+            ml_risk, rule_risk, final_risk, triggered_rules, use_ml=use_ml
+        )
         hazard_tags = list(triggered_rules)
 
         model_output = {
@@ -300,7 +369,13 @@ async def assess_job(db: AsyncSession, job: Job) -> RiskAssessment:
             "ml_confidence": confidence,
             "rule_risk": rule_risk,
             "final_risk": final_risk,
+            # Explicit, not inferred: a future reader of ai_logs must be able
+            # to tell "the classifier agreed" from "the classifier was not
+            # consulted", which ml_risk alone cannot express.
+            "ml_used": use_ml,
         }
+        if ml_error:
+            model_output["ml_error"] = ml_error
 
         assessment = RiskAssessment(
             job_id=job.id,
@@ -343,16 +418,39 @@ async def assess_job(db: AsyncSession, job: Job) -> RiskAssessment:
 
 
 def _build_explanation(
-    ml_risk: int, rule_risk: int, final_risk: int, triggered_rules: list[str]
+    ml_risk: int | None,
+    rule_risk: int,
+    final_risk: int,
+    triggered_rules: list[str],
+    *,
+    use_ml: bool = True,
 ) -> str:
     """Templated explanation text — facts inserted, never freely generated
-    (rules.md §4 point 3). No LLM call in this placeholder pipeline."""
+    (rules.md §4 point 3). No LLM call in this placeholder pipeline.
+
+    The text must describe the pipeline that actually ran. When the
+    classifier is not contributing (RISK_USE_ML_CLASSIFIER=false) it must not
+    be cited as a reason — telling a user "Classifier predicted 4" for a
+    number the classifier had no part in is a false explanation of a safety
+    decision, which is worse than a terse one.
+    """
+    rule_list = ", ".join(triggered_rules)
+
+    if not use_ml or ml_risk is None:
+        if not triggered_rules:
+            return (
+                f"No safety rules were triggered for this task. Final risk " f"level: {final_risk}."
+            )
+        return (
+            f"The following safety rules were triggered: {rule_list}. "
+            f"Final risk level: {final_risk}."
+        )
+
     if not triggered_rules:
         return (
             f"Classifier predicted risk level {ml_risk}. No safety rules were "
             f"triggered. Final risk level: {final_risk}."
         )
-    rule_list = ", ".join(triggered_rules)
     return (
         f"Classifier predicted risk level {ml_risk}. The following safety rules "
         f"were triggered: {rule_list} (rule engine risk level {rule_risk}). "

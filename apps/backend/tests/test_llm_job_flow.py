@@ -15,7 +15,7 @@ from unittest.mock import patch
 import pytest
 from sqlalchemy import update
 
-from ai.rule_engine.llm_assist import CategoryTag, HazardTags, PhrasedQuestion
+from ai.rule_engine.llm_assist import CategoryTag, HazardTag, HazardTags, PhrasedQuestion
 from models import Job
 from schemas.job import TASK_CATEGORIES
 from tests.conftest import register_and_login
@@ -28,7 +28,22 @@ async def _auth_headers(client, email: str) -> dict:
     return {"Authorization": f"Bearer {token}"}
 
 
-def _make_llm_stub(*, category="carpentry", question=None, hazards=()):
+def _description_from_prompt(prompt: str) -> str:
+    """Pull the task description back out of the tagging prompt.
+
+    Tags now have to quote the user's own words, and that quote is verified
+    as a literal substring before the tag is accepted (llm_assist.
+    `_evidence_supports`). A stub returning canned evidence would therefore
+    have every tag discarded — so the stub quotes the description it was
+    actually given, which is what a well-behaved model does.
+    """
+    marker = "Task description: "
+    if marker not in prompt:
+        return ""
+    return prompt.split(marker, 1)[1].split("\n", 1)[0].strip()
+
+
+def _make_llm_stub(*, category="carpentry", question=None, hazards=(), ask=()):
     """Build a generate_structured stub that dispatches on the requested
     schema, the way a real Gemini call does.
 
@@ -44,7 +59,11 @@ def _make_llm_stub(*, category="carpentry", question=None, hazards=()):
         if response_schema is CategoryTag:
             return CategoryTag(category=category)
         if response_schema is HazardTags:
-            return HazardTags(rule_ids=list(hazards))
+            evidence = _description_from_prompt(prompt)
+            return HazardTags(
+                tags=[HazardTag(rule_id=h, evidence=evidence) for h in hazards],
+                ask=list(ask),
+            )
         return PhrasedQuestion(question=default_question)
 
     return _stub
@@ -282,3 +301,103 @@ async def test_hazard_tagging_failure_at_creation_never_escalates_on_unasked_fie
             f"/jobs/{job_id}/followup", json={"answers": {}}, headers=headers
         )
         assert refreshed.json()["next_followup"]["field"] == "power_isolated"
+
+
+async def test_ambiguous_height_becomes_a_question_not_an_assumed_hazard(client):
+    """End-to-end regression for the bulb case (observed live, 2026-08-01).
+
+    "how do i change my light bulb", beginner, power off -> level 3, because
+    the tagger inferred `work_at_height` from a ceiling nobody mentioned and
+    `fixed_wiring_work` from a bulb that is a consumable, not an installation.
+    Neither rule keyword-matches; both were the model filling in facts.
+
+    The intended behaviour, and what this asserts: an unstated height becomes
+    a QUESTION. The user answers it, the gate closes, and a bulb swap comes
+    back as safe DIY.
+    """
+    headers = await _auth_headers(client, "bulb_height@example.com")
+    # A well-behaved tagger: it cannot quote any height, so instead of
+    # guessing `work_at_height` it tags the gated rule and asks.
+    stub = _make_llm_stub(
+        category="electrical",
+        question="Can you reach it from floor level or a step ladder?",
+        hazards=["overhead_work_unknown_height"],
+        ask=["height_access"],
+    )
+
+    with patch("ai.rule_engine.llm_assist.generate_structured", side_effect=stub):
+        create_resp = await client.post(
+            "/jobs",
+            json={"description": "how do i change my light bulb", "skill_level": "beginner"},
+            headers=headers,
+        )
+        assert create_resp.status_code == 201
+        body = create_resp.json()
+        job_id = body["id"]
+
+        # Asked, not assumed.
+        assert body["status"] == "pending_followup"
+        assert body["next_followup"]["field"] == "height_access"
+
+        # Unanswered, the hazard stands: assessment is blocked, never
+        # silently resolved in the user's favour.
+        assert (await client.post(f"/jobs/{job_id}/assess", headers=headers)).status_code == 409
+
+        answered = await client.patch(
+            f"/jobs/{job_id}/followup",
+            json={"answers": {"height_access": True}},
+            headers=headers,
+        )
+        assert answered.status_code == 200
+        assert answered.json()["status"] == "ready_to_assess"
+
+        assess_resp = await client.post(f"/jobs/{job_id}/assess", headers=headers)
+
+    assert assess_resp.status_code == 200
+    result = assess_resp.json()
+    assert result["status"] == "completed"
+
+    get_resp = await client.get(f"/assessments/{job_id}", headers=headers)
+    assessment = get_resp.json()
+    triggered = assessment["triggered_rules"]
+
+    assert "work_at_height" not in triggered, "height was never stated and must not be assumed"
+    assert "fixed_wiring_work" not in triggered, "a bulb is a consumable, not fixed wiring"
+    assert "overhead_work_unknown_height" not in triggered, "the user closed this gate"
+    assert assessment["risk_level"] == 1, f"a bulb swap should be safe DIY, got {assessment}"
+
+
+async def test_denied_height_access_keeps_the_hazard_in_force(client):
+    """The other half of the gate: answering "no, I need roof access" must
+    keep the hazard firing. A gate is a refinement, not an escape hatch."""
+    headers = await _auth_headers(client, "bulb_height_denied@example.com")
+    stub = _make_llm_stub(
+        category="electrical",
+        question="Can you reach it from floor level or a step ladder?",
+        hazards=["overhead_work_unknown_height"],
+        ask=["height_access"],
+    )
+
+    with patch("ai.rule_engine.llm_assist.generate_structured", side_effect=stub):
+        create_resp = await client.post(
+            "/jobs",
+            json={
+                "description": "change the bulb in the stairwell light",
+                "skill_level": "beginner",
+            },
+            headers=headers,
+        )
+        job_id = create_resp.json()["id"]
+
+        await client.patch(
+            f"/jobs/{job_id}/followup",
+            json={"answers": {"height_access": False}},
+            headers=headers,
+        )
+        assess_resp = await client.post(f"/jobs/{job_id}/assess", headers=headers)
+
+    assert assess_resp.status_code == 200
+    get_resp = await client.get(f"/assessments/{job_id}", headers=headers)
+    assessment = get_resp.json()
+    assert "overhead_work_unknown_height" in assessment["triggered_rules"]
+    assert assessment["risk_level"] >= 3

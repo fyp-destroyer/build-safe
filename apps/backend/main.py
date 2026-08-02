@@ -18,6 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from ai.classifier import warmup as classifier_warmup
+from core.config import get_settings
 from routers import assessments, auth, jobs, recommendations
 
 
@@ -52,7 +53,7 @@ app = FastAPI(title="BuildSafe AI API", version="0.0.1", lifespan=lifespan)
 # Authorization bearer header) are involved.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=get_settings().cors_origin_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

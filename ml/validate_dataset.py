@@ -12,9 +12,18 @@ this in sync with README.md whenever a rule changes.
 from __future__ import annotations
 
 import json
+import math
 import sys
 from collections import Counter
 from pathlib import Path
+
+# Ceiling on how much `user_skill` may predict `risk_level`, as normalised
+# mutual information. Not zero: with a few hundred rows some correlation
+# arises by chance, and forcing exact independence would mean contorting
+# `user_skill` values into implausible ones. 0.05 is loose enough to survive
+# sampling noise and tight enough that the 0.35 the original seed data scored
+# could never pass. Tighten as the corpus grows.
+NMI_LIMIT = 0.05
 
 DATA = Path(__file__).parent / "data" / "seed_examples.json"
 GENERATED = Path(__file__).parent / "data" / "generated_examples.json"
@@ -247,6 +256,61 @@ def validate(examples: list[dict], *, generated: bool = False,
     return errors
 
 
+def check_skill_label_independence(rows: list[dict], *, label: str) -> list[str]:
+    """`user_skill` must carry no information about `risk_level`.
+
+    `risk_level` describes what the TASK demands (ml/data/README.md, "5 risk
+    levels"); who happens to be asking must not move it. This check exists
+    because the opposite shipped: seed rows picked `user_skill` to fit each
+    example's narrative, which put 91% of `Experienced` rows on level 4 and
+    left levels 1-3 with no `Experienced` rows at all. The classifier learned
+    the dropdown instead of the task and returned level 4 for an experienced
+    user changing a light bulb.
+
+    Measured as normalised mutual information between the two columns —
+    prose in a README did not prevent this the first time, so it is a build
+    failure now. NMI is 0 when skill tells you nothing about the label and 1
+    when it tells you everything. The original seed data scored **0.657**;
+    after `ml/rebalance_skill.py` it is 0.000.
+
+    Also reports empty cells, because a (skill, level) combination with no
+    examples is one the model can only ever guess at.
+    """
+    errors: list[str] = []
+    if not rows:
+        return errors
+
+    skills = sorted({e["user_skill"] for e in rows})
+    levels = sorted({e["risk_level"] for e in rows})
+    n = len(rows)
+
+    def entropy(counts) -> float:
+        return -sum((c / n) * math.log(c / n) for c in counts if c)
+
+    joint = Counter((e["user_skill"], e["risk_level"]) for e in rows)
+    h_skill = entropy(Counter(e["user_skill"] for e in rows).values())
+    h_level = entropy(Counter(e["risk_level"] for e in rows).values())
+    h_joint = entropy(joint.values())
+    mutual_information = h_skill + h_level - h_joint
+    denominator = min(h_skill, h_level)
+    nmi = mutual_information / denominator if denominator else 0.0
+
+    empty = [(s, lv) for s in skills for lv in levels if not joint[(s, lv)]]
+
+    print(f"\n  skill/label independence ({label}):")
+    print(f"    normalised mutual information: {nmi:.3f}  (0 = independent, target < {NMI_LIMIT})")
+    if empty:
+        print(f"    {len(empty)} empty (skill, level) cell(s): {empty}")
+
+    if nmi > NMI_LIMIT:
+        errors.append(
+            f"user_skill predicts risk_level too well in {label}: normalised mutual "
+            f"information {nmi:.3f} > {NMI_LIMIT}. risk_level must describe the task, "
+            f"not who is asking — see ml/data/README.md, '5 risk levels'."
+        )
+    return errors
+
+
 def summarise(name: str, rows: list[dict]) -> None:
     print(f"{len(rows)} examples in {name}")
     print(f"  by category: {dict(sorted(Counter(e['category'] for e in rows).items()))}")
@@ -281,6 +345,11 @@ def main() -> int:
 
         print(f"\nTOTAL: {len(seeds) + len(generated)} "
               f"({len(seeds)} hand-written + {len(generated)} generated)")
+
+    # Checked on the COMBINED corpus, which is what actually gets trained on.
+    # Seeds alone could look balanced while paraphrase variants reintroduce
+    # the skew, since every variant inherits its parent's skill.
+    errors += check_skill_label_independence(seeds + generated, label="seed + generated")
 
     if errors:
         print(f"\n{len(errors)} RULE VIOLATION(S):")

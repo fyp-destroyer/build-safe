@@ -5,6 +5,7 @@
   4. GET /jobs                      — list the caller's jobs, most recent first
   5. GET/POST /jobs/{id}/messages   — the chat transcript for a job, so a page
                                       refresh doesn't lose the conversation
+  6. DELETE /jobs/{id}              — remove a job and its transcript/assessment
 
 All ownership-scoped: a job not owned by the caller 404s (never leaks
 existence). Missing safety-critical follow-up answers are never silently
@@ -46,6 +47,20 @@ async def list_jobs(
 ) -> list[JobOut]:
     jobs = await job_service.list_jobs(db, current_user.id)
     return [await job_service.build_job_out(job) for job in jobs]
+
+
+@router.delete("/{job_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_job(
+    job_id: UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> None:
+    """Delete one of the caller's jobs and its transcript/assessment/logs.
+
+    Same ownership rule as every other route here: someone else's job 404s.
+    """
+    job = await job_service.get_owned_job(db, job_id, current_user.id)
+    await job_service.delete_job(db, job)
 
 
 @router.patch("/{job_id}/followup", response_model=JobOut)

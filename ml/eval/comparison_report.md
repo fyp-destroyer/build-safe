@@ -20,19 +20,19 @@ partly measure the generator.
 
 | metric | baseline | embedding | change |
 |---|---|---|---|
-| accuracy | 0.630 | 0.580 | ▼ -0.049 |
-| macro F1 | 0.620 | 0.570 | ▼ -0.050 |
-| high-risk recall (≥4 as ≥4) | 0.514 | 0.371 | ▼ -0.143 |
-| under-prediction rate | 0.284 | 0.309 | ▲ +0.025 |
+| accuracy | 0.432 | 0.420 | ▼ -0.012 |
+| macro F1 | 0.415 | 0.394 | ▼ -0.021 |
+| high-risk recall (≥4 as ≥4) | 0.571 | 0.571 | = +0.000 |
+| under-prediction rate | 0.346 | 0.321 | ▼ -0.025 |
 
 **Hand-written test rows only (n=40)**
 
 | metric | baseline | embedding | change |
 |---|---|---|---|
-| accuracy | 0.625 | 0.575 | ▼ -0.050 |
-| macro F1 | 0.614 | 0.562 | ▼ -0.051 |
-| high-risk recall (≥4 as ≥4) | 0.529 | 0.353 | ▼ -0.176 |
-| under-prediction rate | 0.275 | 0.300 | ▲ +0.025 |
+| accuracy | 0.425 | 0.400 | ▼ -0.025 |
+| macro F1 | 0.411 | 0.371 | ▼ -0.040 |
+| high-risk recall (≥4 as ≥4) | 0.529 | 0.588 | ▲ +0.059 |
+| under-prediction rate | 0.350 | 0.325 | ▼ -0.025 |
 
 ⚠️ **Do not decide from this table alone.** With n=40 the 95% CI on high-risk
 recall spans roughly ±0.2, which is wider than any plausible difference between
@@ -46,22 +46,22 @@ so a seed and its variants never straddle a fold.
 
 | fold | base macro-F1 | emb macro-F1 | Δ | base HR recall | emb HR recall | Δ |
 |---|---|---|---|---|---|---|
-| 1 | 0.668 | 0.623 | -0.045 | 0.725 | 0.675 | -0.050 |
-| 2 | 0.675 | 0.603 | -0.072 | 0.634 | 0.683 | +0.049 |
-| 3 | 0.645 | 0.667 | +0.022 | 0.659 | 0.683 | +0.024 |
-| 4 | 0.613 | 0.578 | -0.036 | 0.585 | 0.659 | +0.073 |
-| 5 | 0.498 | 0.584 | +0.086 | 0.659 | 0.634 | -0.024 |
+| 1 | 0.288 | 0.315 | +0.027 | 0.650 | 0.650 | +0.000 |
+| 2 | 0.420 | 0.363 | -0.057 | 0.561 | 0.634 | +0.073 |
+| 3 | 0.456 | 0.400 | -0.056 | 0.732 | 0.659 | -0.073 |
+| 4 | 0.316 | 0.326 | +0.010 | 0.659 | 0.488 | -0.171 |
+| 5 | 0.262 | 0.288 | +0.026 | 0.634 | 0.512 | -0.122 |
 
 | | baseline | embedding | mean Δ | folds embedding wins |
 |---|---|---|---|---|
-| macro F1 | 0.620 ± 0.065 | 0.611 ± 0.032 | **-0.009** ± 0.056 | 2/5 |
-| high-risk recall | 0.652 ± 0.045 | 0.667 ± 0.019 | **+0.014** ± 0.046 | 3/5 |
+| macro F1 | 0.349 ± 0.076 | 0.338 ± 0.039 | **-0.010** ± 0.039 | 3/5 |
+| high-risk recall | 0.647 ± 0.055 | 0.589 ± 0.073 | **-0.059** ± 0.087 | 1/5 |
 
 ## Decision — which model ships
 
 **Ships:** the **baseline (TF-IDF + Logistic Regression)**.
 
-neither difference clears the fold-to-fold noise — macro F1 -0.009 (±0.056), high-risk recall +0.014 (±0.046). With no measurable gain, the tie is broken on cost: the baseline is a few hundred KB of scikit-learn with no extra runtime dependency, while the embedding model adds torch and a ~90 MB download to the serving path. Complexity that does not buy accuracy is not worth deploying.
+neither difference clears the fold-to-fold noise — macro F1 -0.010 (±0.039), high-risk recall -0.059 (±0.087). With no measurable gain, the tie is broken on cost: the baseline is a few hundred KB of scikit-learn with no extra runtime dependency, while the embedding model adds torch and a ~90 MB download to the serving path. Complexity that does not buy accuracy is not worth deploying.
 
 Both artifacts are kept (`ml/eval/baseline_model.joblib`, `ml/eval/embedding_model.joblib`) per `architecture.md` §1, which specifies keeping both models and an evaluation report comparing them.
 
@@ -69,21 +69,21 @@ Both artifacts are kept (`ml/eval/baseline_model.joblib`, `ml/eval/embedding_mod
 
 | risk level | precision | recall | F1 | support |
 |---|---|---|---|---|
-| 1 — safe_diy | 0.62 | 1.00 | 0.77 | 20 |
-| 2 — diy_with_supervision | 0.44 | 0.57 | 0.50 | 14 |
-| 3 — professional_recommended | 0.46 | 0.50 | 0.48 | 12 |
-| 4 — professional_required | 1.00 | 0.83 | 0.91 | 12 |
-| 5 — dangerous | 0.38 | 0.13 | 0.19 | 23 |
+| 1 — safe_diy | 0.61 | 0.70 | 0.65 | 20 |
+| 2 — diy_with_supervision | 0.21 | 0.29 | 0.24 | 14 |
+| 3 — professional_recommended | 0.15 | 0.17 | 0.16 | 12 |
+| 4 — professional_required | 0.50 | 0.42 | 0.45 | 12 |
+| 5 — dangerous | 0.56 | 0.39 | 0.46 | 23 |
 
 ### Confusion matrix
 
 | true \ pred | 1 | 2 | 3 | 4 | 5 |
 |---|---|---|---|---|---|
-| **1** | 20 | 0 | 0 | 0 | 0 |
-| **2** | 0 | 8 | 4 | 0 | 2 |
-| **3** | 0 | 3 | 6 | 0 | 3 |
-| **4** | 0 | 2 | 0 | 10 | 0 |
-| **5** | 12 | 5 | 3 | 0 | 3 |
+| **1** | 14 | 2 | 4 | 0 | 0 |
+| **2** | 3 | 4 | 5 | 0 | 2 |
+| **3** | 4 | 2 | 2 | 3 | 1 |
+| **4** | 1 | 2 | 0 | 5 | 4 |
+| **5** | 1 | 9 | 2 | 2 | 9 |
 
 ![embedding confusion matrix](embedding_confusion.png)
 

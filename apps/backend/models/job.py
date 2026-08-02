@@ -48,6 +48,13 @@ class Job(Base):
     # NULL means "not tagged yet" (LLM unavailable at creation), which is
     # distinct from [] meaning "tagged, no hazards found".
     llm_hazard_ids: Mapped[list | None] = mapped_column(JSON, nullable=True, default=None)
+    # Follow-up fields the tagger asked for because the description was
+    # ambiguous about them (e.g. "change a light bulb" says nothing about
+    # height). Unioned into the catalog-derived set, never subtracted from
+    # it. Persisted alongside llm_hazard_ids and for the same reason: the set
+    # of questions the user is ASKED must match the set assessment scores
+    # against, or a job escalates on a field nobody was shown.
+    llm_followup_fields: Mapped[list | None] = mapped_column(JSON, nullable=True, default=None)
     status: Mapped[str] = mapped_column(String(30), nullable=False, default="pending_followup")
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

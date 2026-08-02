@@ -35,6 +35,35 @@ def test_model_artifact_loads():
     assert warmup() is True
 
 
+def test_skill_and_category_casing_does_not_change_the_prediction():
+    """Regression (2026-08-01): the one-hot encoder is
+    `handle_unknown="ignore"`, so an off-vocabulary value emitted an all-zero
+    block and the prediction silently fell back to the task text alone.
+
+    Measured on the shipped artifact, "how do i change my light bulb" scored
+    1 with user_skill "Beginner" and 5 with "beginner" — the same job, a
+    four-level swing, with nothing logged. `skill_level` is a free `str` at
+    the API boundary, so only a UI convention was keeping the two aligned.
+    """
+    desc = "how do i change my light bulb"
+    canonical = classify(desc, "electrical", "Beginner")
+    assert classify(desc, "electrical", "beginner") == canonical
+    assert classify(desc, "electrical", "  BEGINNER  ") == canonical
+    assert classify(desc, "ELECTRICAL", "Beginner") == canonical
+
+    multiword = classify(desc, "electrical", "Some experience")
+    assert classify(desc, "electrical", "some experience") == multiword
+
+
+def test_unknown_skill_is_passed_through_not_guessed():
+    """A value that matches nothing trained is left alone (the encoder
+    ignores it) rather than being mapped to a guess — a wrong guess would be
+    a silent, invented input to a safety decision."""
+    risk, confidence = classify("replace a socket", "electrical", "Wizard")
+    assert MIN_RISK_LEVEL <= risk <= MAX_RISK_LEVEL
+    assert 0.0 <= confidence <= 1.0
+
+
 def test_predictions_are_in_range_and_carry_a_confidence():
     for desc, cat, skill in [
         ("paint a bedroom wall with a roller", "painting", "Beginner"),

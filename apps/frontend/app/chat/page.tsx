@@ -248,7 +248,16 @@ export default function ChatPage() {
     return stored ? { name: stored.name, email: stored.email } : { name: "", email: "" };
   });
 
+  // The stage is kept in a ref because async handlers read it synchronously
+  // mid-flow, and mirrored into state because the composer has to re-render
+  // when the flow finishes. `setStage` writes both — never assign to the ref
+  // directly, or the UI and the flow will disagree about where we are.
   const flowStageRef = useRef<FlowStage>("idle");
+  const [flowStage, setFlowStageState] = useState<FlowStage>("idle");
+  const setStage = (stage: FlowStage) => {
+    flowStageRef.current = stage;
+    setFlowStageState(stage);
+  };
   const pendingDescriptionRef = useRef<string>("");
   const pendingSkillRef = useRef<string>("");
   const currentJobRef = useRef<JobOut | null>(null);
@@ -403,7 +412,7 @@ export default function ChatPage() {
   const followupRecoveryRef = useRef(0);
 
   const runAssessment = async (job: JobOut) => {
-    flowStageRef.current = "assessing";
+    setStage("assessing");
     setIsTyping(true);
     setAwaitingReplyOptions(null);
     try {
@@ -423,7 +432,7 @@ export default function ChatPage() {
       setMessages((prev) => [...prev, { id: nextId(), role: "assistant", riskCard, createdAt: Date.now() }]);
       // Marker only — the card is rebuilt from the assessment on reload.
       queueTranscript({ role: "assistant", kind: "risk_card" });
-      flowStageRef.current = "done";
+      setStage("done");
       void refreshJobs();
     } catch (err) {
       // The backend can discover a safety-critical follow-up at assessment
@@ -450,19 +459,19 @@ export default function ChatPage() {
       }
       setIsTyping(false);
       pushErrorMessage(err);
-      flowStageRef.current = "done";
+      setStage("done");
     }
   };
 
   const processJobFollowup = async (job: JobOut) => {
     currentJobRef.current = job;
     if (job.next_followup) {
-      flowStageRef.current = "followup";
+      setStage("followup");
       await showBotMessage(job.next_followup.question, ["Yes", "No"]);
     } else if (job.status === "assessed" || job.status === "failed") {
       // Re-entering an already-finished job (e.g. via the resume prompt) —
       // nothing left to drive here.
-      flowStageRef.current = "done";
+      setStage("done");
     } else {
       // next_followup is null and status isn't a terminal one yet — ready
       // to assess (covers both "ready_to_assess" and, defensively, any
@@ -499,7 +508,7 @@ export default function ChatPage() {
     } catch (err) {
       setIsTyping(false);
       pushErrorMessage(err);
-      flowStageRef.current = "idle";
+      setStage("idle");
     }
   };
 
@@ -529,7 +538,7 @@ export default function ChatPage() {
     } catch (err) {
       setIsTyping(false);
       pushErrorMessage(err);
-      flowStageRef.current = "done";
+      setStage("done");
     }
   };
 
@@ -613,9 +622,16 @@ export default function ChatPage() {
       handleQuickReply(text);
       return;
     }
+    // One chat = one job = one assessment (the backend enforces the last
+    // part: `risk_assessments.job_id` is unique). Typing after a verdict used
+    // to start a whole new task flow inside the finished conversation, which
+    // silently spawned a second sidebar entry the user never asked for. The
+    // composer is disabled in this stage; this guard covers the paths that
+    // don't go through it (quick-reply chips, example prompts).
+    if (flowStageRef.current === "done") return;
     pushUserMessage(text);
     pendingDescriptionRef.current = text;
-    flowStageRef.current = "ask_skill";
+    setStage("ask_skill");
     void showBotMessage("What's your experience level with this kind of task?", [
       "Beginner",
       "Some experience",
@@ -653,7 +669,7 @@ export default function ChatPage() {
     setMessages([]);
     setAwaitingReplyOptions(null);
     setActiveHistoryId(null);
-    flowStageRef.current = "idle";
+    setStage("idle");
     pendingDescriptionRef.current = "";
     pendingSkillRef.current = "";
     currentJobRef.current = null;
@@ -686,10 +702,10 @@ export default function ChatPage() {
     }
 
     if (job.status === "assessed" || job.status === "failed") {
-      flowStageRef.current = "done";
+      setStage("done");
       if (!replayed) await loadFinishedJob(job);
     } else {
-      flowStageRef.current = "resume_prompt";
+      setStage("resume_prompt");
       await showBotMessage("This assessment wasn't finished — continue?", ["Continue"], 500, {
         persist: false,
       });
@@ -731,9 +747,63 @@ export default function ChatPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authChecked, jobsById]);
 
-  const handleClearHistory = () => {
-    setHistory([]);
-    setActiveHistoryId(null);
+  /** Forget a job locally — shared by single-chat delete and clear-all. */
+  const dropJobLocally = (id: string) => {
+    setHistory((prev) => prev.filter((h) => h.id !== id));
+    setJobsById((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    if (readActiveJob() === id) forgetActiveJob();
+    if (currentJobRef.current?.id === id) {
+      // Drop the queue BEFORE clearing the job reference: those messages
+      // belong to a job that no longer exists, and flushing them would POST
+      // to a deleted id.
+      transcriptQueueRef.current = [];
+      currentJobRef.current = null;
+      setMessages([]);
+      setAwaitingReplyOptions(null);
+      setActiveHistoryId(null);
+      setStage("idle");
+      pendingDescriptionRef.current = "";
+      pendingSkillRef.current = "";
+    }
+  };
+
+  const handleDeleteHistory = async (id: string) => {
+    try {
+      await apiFetch(`/jobs/${id}`, { method: "DELETE" });
+    } catch (err) {
+      // Deleting is destructive and user-initiated: if the server refused,
+      // say so rather than removing the row locally and letting it reappear
+      // on the next refresh.
+      pushErrorMessage(err);
+      return;
+    }
+    dropJobLocally(id);
+  };
+
+  const handleClearHistory = async () => {
+    // Delete server-side, not just locally: this used to empty the sidebar
+    // in place and every chat came straight back on the next page load.
+    const ids = history.map((h) => h.id);
+    const results = await Promise.allSettled(
+      ids.map((id) => apiFetch(`/jobs/${id}`, { method: "DELETE" })),
+    );
+    results.forEach((result, i) => {
+      if (result.status === "fulfilled") dropJobLocally(ids[i]);
+    });
+    const failed = results.filter((r) => r.status === "rejected");
+    if (failed.length > 0) {
+      pushErrorMessage(
+        new ApiError(
+          500,
+          "clear_history_partial",
+          `${failed.length} of ${ids.length} conversations couldn't be deleted. Please try again.`,
+        ),
+      );
+    }
   };
 
   const handleToggleFavourite = (id: string) => {
@@ -766,6 +836,9 @@ export default function ChatPage() {
   }
 
   const isEmpty = messages.length === 0;
+  // A chat that has reached its verdict takes no further input — see the
+  // guard in handleSend for why.
+  const isFinished = flowStage === "done";
 
   return (
     <div className="flex h-screen bg-[var(--color-bg)] text-[var(--color-text-primary)]">
@@ -775,6 +848,7 @@ export default function ChatPage() {
         onSelectHistory={handleSelectHistory}
         history={history}
         onToggleFavourite={handleToggleFavourite}
+        onDeleteHistory={(id) => void handleDeleteHistory(id)}
         profile={profile}
         onProfileChange={setProfile}
         onClearHistory={handleClearHistory}
@@ -844,7 +918,24 @@ export default function ChatPage() {
                 )}
               </div>
             </div>
-            <Composer onSend={handleSend} disabled={!!awaitingReplyOptions || isTyping} />
+            {/* A finished chat accepts no further input, so the composer is
+                removed outright rather than shown disabled — this notice
+                takes its place. See handleSend's `done` guard. */}
+            {isFinished ? (
+              <div className="w-full px-4 pb-4">
+                <div className="mx-auto flex max-w-[680px] flex-col items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-inset)] px-4 py-4 text-center text-sm text-[var(--color-text-secondary)]">
+                  <span>This assessment is complete. Start a new chat to assess another task.</span>
+                  <button
+                    onClick={handleNewChat}
+                    className="cursor-pointer rounded-lg bg-[var(--color-accent)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+                  >
+                    New chat
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <Composer onSend={handleSend} disabled={!!awaitingReplyOptions || isTyping} />
+            )}
           </>
         )}
       </div>

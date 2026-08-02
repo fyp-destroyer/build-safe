@@ -3,16 +3,35 @@
 **What this module is allowed to do, and nothing more** (rules.md §4 /
 CLAUDE.md): (a) pick a category string from the fixed, closed 9-value
 `TASK_CATEGORIES` set for a free-text task description ("tagging"), (b) tag
-which *existing* catalog hazard rule ids apply to a description, and (c)
-phrase the natural-language wording of a question about an
-*already-hardcoded* follow-up field.
+which *existing* catalog hazard rule ids apply to a description, (c) select
+which *existing* follow-up fields to ask about when the description is
+ambiguous, and (d) phrase the natural-language wording of a question about
+an *already-hardcoded* follow-up field.
 
-It cannot invent a rule, cannot assign or suggest a risk number, and cannot
-change any escalation floor: every id it proposes is filtered against
-`catalog.VALID_RULE_IDS` inside `ai/rule_engine/rules.py` before it can
-influence anything, and the floors themselves are hardcoded in
-`catalog.py`. Tagging is additive only — it can cause a hardcoded rule to
-fire that keyword matching missed, never suppress one that matched.
+It cannot invent a rule or a question, cannot assign or suggest a risk
+number, and cannot change any escalation floor: every id it proposes is
+filtered against `catalog.VALID_RULE_IDS` (or
+`LLM_SELECTABLE_FOLLOWUP_FIELDS`) before it can influence anything, and the
+floors themselves are hardcoded in `catalog.py`. Every contribution is
+additive only — it can cause a hardcoded rule to fire that keyword matching
+missed, or a hardcoded question to be asked that the catalog did not derive,
+never suppress either.
+
+EVIDENCE GROUNDING (2026-08-01)
+-------------------------------
+Every proposed hazard must quote the user's own words that justify it, and
+that quote is verified as a literal substring of the description before the
+tag is accepted. A model cannot quote text the user never wrote, so a hazard
+it merely inferred is discarded mechanically rather than argued out of it in
+the prompt.
+
+This exists because prose alone did not hold. The previous prompt already
+said "do not tag a hazard the description does not report" and still
+returned `work_at_height` for "how do I change my light bulb" — the model
+reasoned bulb -> ceiling -> overhead -> height and tagged a level-3 hazard
+the user had said nothing about. Where a hazard depends on a fact the user
+has not stated, the model now puts the matching follow-up field in `ask`
+instead of guessing: uncertainty becomes a question, not a tag.
 
 Because which follow-ups are required is derived from which hazard rules
 fired (`rules.required_followups`), tagging does indirectly widen the set of
@@ -51,6 +70,10 @@ _DEFAULT_FOLLOWUP_QUESTIONS: dict[str, str] = {
         "Have you confirmed the wall or structure involved is NOT load-bearing?"
     ),
     "gas_line_present": "Have you confirmed there is no gas line present near this work area?",
+    "height_access": (
+        "Can you reach this comfortably from floor level or a step ladder, "
+        "without needing roof or upper-storey access?"
+    ),
 }
 
 
@@ -146,36 +169,94 @@ def phrase_followup_question(field: str, category: str) -> str:
 # rules still run, so the engine degrades to "no LLM" rather than to "no
 # hazards".
 # ---------------------------------------------------------------------------
+class HazardTag(BaseModel):
+    """One proposed hazard, with the user's own words that justify it.
+
+    `evidence` must be a verbatim span from the task description. It is
+    verified as a substring before the tag is accepted - see
+    `_evidence_supports`. This is what stops the model from tagging a hazard
+    it merely imagined: it cannot quote text the user never wrote.
+    """
+
+    rule_id: str
+    evidence: str
+
+
 class HazardTags(BaseModel):
-    """Structured-output schema for Gemini's hazard tagging call."""
+    """Structured-output schema for the hazard tagging call.
+
+    `ask` lets the model route an AMBIGUITY into a question instead of
+    resolving it by guessing a tag. Fields are validated against the closed
+    `LLM_SELECTABLE_FOLLOWUP_FIELDS` set and are additive only - see
+    `rules.required_followups`.
+    """
+
+    tags: list[HazardTag] = []
+    ask: list[str] = []
+
+
+class TagResult(BaseModel):
+    """What the tagger resolved for a job: hazards, plus questions to ask."""
 
     rule_ids: list[str] = []
+    ask_fields: list[str] = []
+
+
+def _normalize(text: str) -> str:
+    """Lowercase and collapse whitespace, for substring evidence checking."""
+    return " ".join((text or "").lower().split())
+
+
+def _evidence_supports(description: str, evidence: str) -> bool:
+    """Is `evidence` actually a span of what the user wrote?
+
+    The check is deliberately mechanical rather than semantic. A prompt
+    instruction not to assume is weak - the previous prompt already said "DO
+    NOT tag a hazard the description does not report" and still produced
+    `work_at_height` for "how do I change my light bulb", because the model
+    inferred bulb -> ceiling -> overhead -> height. Requiring a quote the
+    model cannot produce is what actually closes that path.
+
+    Whitespace and case are normalised so trivial reformatting does not
+    reject an otherwise-honest quote; nothing else is relaxed.
+    """
+    ev = _normalize(evidence)
+    if not ev:
+        return False
+    return ev in _normalize(description)
 
 
 def tag_hazards(description: str, category: str) -> list[str]:
     """Ask the LLM which hardcoded catalog rules apply. Never trusts the reply.
 
-    Returns only ids that exist in the catalog. Returns [] if Gemini is
-    unavailable, returns nothing usable, or returns only invalid ids - the
-    caller's keyword matching is unaffected either way.
+    Returns only ids that exist in the catalog and whose evidence checks out.
+    Returns [] if the LLM is unavailable, returns nothing usable, or returns
+    only invalid ids - the caller's keyword matching is unaffected either way.
 
-    Callers that need to tell "Gemini was down" apart from "Gemini ran and
-    found no hazards" must use `tag_hazards_result` instead: the two cases
-    are indistinguishable here and conflating them would let a job cache an
-    empty hazard set produced by an outage.
+    Callers that need to tell "the LLM was down" apart from "it ran and found
+    no hazards" must use `tag_hazards_result` instead: the two cases are
+    indistinguishable here and conflating them would let a job cache an empty
+    hazard set produced by an outage.
     """
-    return tag_hazards_result(description, category) or []
+    result = tag_hazards_result(description, category)
+    return [] if result is None else list(result.rule_ids)
 
 
-def tag_hazards_result(description: str, category: str) -> list[str] | None:
-    """`tag_hazards`, but returns None when the LLM produced no usable reply.
+def tag_hazards_result(description: str, category: str) -> TagResult | None:
+    """`tag_hazards`, but returns None when the LLM produced no usable reply,
+    and carries the follow-up fields it wants asked.
 
-    None means "not tagged" (retry later); [] means "tagged, no hazards
-    apply". `services/job_service.py` persists the distinction so a job
-    tagged during a Gemini outage is re-tagged rather than permanently
-    treated as hazard-free.
+    None means "not tagged" (retry later); a TagResult with empty `rule_ids`
+    means "tagged, no hazards apply". `services/job_service.py` persists the
+    distinction so a job tagged during an outage is re-tagged rather than
+    permanently treated as hazard-free.
     """
-    from ai.rule_engine.catalog import RULES, VALID_RULE_IDS
+    from ai.rule_engine.catalog import (
+        FOLLOWUPS_BY_FIELD,
+        LLM_SELECTABLE_FOLLOWUP_FIELDS,
+        RULES,
+        VALID_RULE_IDS,
+    )
 
     # The menu carries each rule's full explanation and example wording, not
     # just its one-line summary. Summaries alone are too terse to scope a
@@ -190,32 +271,51 @@ def tag_hazards_result(description: str, category: str) -> list[str] | None:
         f'- id: "{r.id}"\n'
         f"    {r.summary}\n"
         f"    applies when: {r.explanation}\n"
-        f"    typical wording: {', '.join(r.keywords[:6])}"
+        f"    typical wording: {', '.join(r.keywords[:6]) or '(no typical wording)'}"
         for r in RULES.values()
     )
+    question_menu = "\n".join(
+        f'- field: "{FOLLOWUPS_BY_FIELD[f].field}"\n    asks: {FOLLOWUPS_BY_FIELD[f].question}'
+        for f in sorted(LLM_SELECTABLE_FOLLOWUP_FIELDS)
+    )
     prompt = (
-        "You are tagging which known hazards apply to a home improvement task.\n"
-        "Choose ONLY from this fixed list of hazard ids. Do not invent ids, do "
-        "not rate severity, and do not assign any risk level.\n\n"
-        "TAG every hazard that is inherent to the work being described. "
-        "Replacing a light fitting, a ceiling fan or a socket IS work on "
-        "fixed wiring, so tag it even if the description never uses the word "
-        "'wiring'. This is the main thing you are here for: catching hazards "
-        "that are obvious from the work itself.\n\n"
-        "DO NOT tag a hazard that describes a different location or a fault "
+        "You are tagging which known hazards apply to a home improvement "
+        "task, for a safety triage system.\n\n"
+        "HAZARDS YOU MAY TAG (choose ONLY from these ids):\n"
+        f"{menu}\n\n"
+        "QUESTIONS YOU MAY ASK (choose ONLY from these fields):\n"
+        f"{question_menu}\n\n"
+        "RULES:\n"
+        "1. Do not invent ids or fields. Do not rate severity. Do not assign "
+        "any risk level. Those are decided elsewhere.\n"
+        "2. Every tag MUST quote, in its `evidence` field, the exact words "
+        "from the task description that justify it. Copy them verbatim. A "
+        "tag whose evidence is not found in the description is discarded, so "
+        "an inferred hazard is the same as no hazard.\n"
+        "3. NEVER infer facts the user did not state — not height, not "
+        "access, not condition, not what else might be nearby. If the work "
+        "is plainly hazardous ONLY IF some unstated fact holds, do not tag "
+        "it: put the matching field in `ask` instead. That is what `ask` is "
+        "for.\n"
+        "4. TAG what is inherent to the work itself, even if the exact word "
+        "is absent: replacing a light FITTING, a ceiling fan or a socket is "
+        "work on fixed wiring. But a consumable that is designed to be "
+        "user-replaced — a light BULB, a filter, a battery, a fuse in a plug "
+        "— is NOT fixed-wiring work. Swapping one is not electrical work on "
+        "the installation.\n"
+        "5. Do not tag a hazard describing a different location, or a fault "
         "the description does not report. Work on a fitting is not work on "
-        "the incoming supply or consumer unit. Wiring that is simply "
-        "disconnected during routine work is not a reported live-conductor "
-        "fault — that hazard is for sparking, arcing or a wire found live, "
-        "which the user would have said.\n\n"
+        "the incoming supply or consumer unit. Wiring disconnected during "
+        "routine work is not a live-conductor fault — that is for sparking, "
+        "arcing or a wire found live, which the user would have said.\n\n"
         f"Task category: {category}\n"
         f"Task description: {description}\n\n"
-        "Return the ids that apply, copied EXACTLY as written above, "
-        'character for character — "fixed_wiring_work", not "fixed_wiring"; '
-        '"work_at_height", not "working_at_height". An id that is not an '
-        "exact match is discarded, so an approximate answer is the same as no "
-        "answer. Return an empty list if none apply.\n\n"
-        f"Valid ids: {', '.join(sorted(VALID_RULE_IDS))}"
+        "Copy ids and fields EXACTLY as written above, character for "
+        'character — "fixed_wiring_work", not "fixed_wiring". A value that '
+        "is not an exact match is discarded. Return empty lists if nothing "
+        "applies and nothing needs asking.\n\n"
+        f"Valid hazard ids: {', '.join(sorted(VALID_RULE_IDS))}\n"
+        f"Valid question fields: {', '.join(sorted(LLM_SELECTABLE_FOLLOWUP_FIELDS))}"
     )
 
     result = generate_structured(prompt, HazardTags)
@@ -223,15 +323,44 @@ def tag_hazards_result(description: str, category: str) -> list[str] | None:
         logger.info("tag_hazards: no LLM result, falling back to keyword rules only")
         return None
 
-    valid, invalid = [], []
-    for rid in result.rule_ids or []:
-        (valid if rid in VALID_RULE_IDS else invalid).append(rid)
+    valid, invalid, unsupported = [], [], []
+    for tag in result.tags or []:
+        if tag.rule_id not in VALID_RULE_IDS:
+            invalid.append(tag.rule_id)
+        elif not _evidence_supports(description, tag.evidence):
+            unsupported.append((tag.rule_id, tag.evidence[:80]))
+        else:
+            valid.append(tag.rule_id)
+
     if invalid:
         # A model returning ids outside the catalog is a model error, never a
         # new rule. Logged loudly because silent discards hide prompt drift.
         logger.warning(
-            "tag_hazards: discarded %d id(s) outside the hardcoded " "catalog: %s",
+            "tag_hazards: discarded %d id(s) outside the hardcoded catalog: %s",
             len(invalid),
             invalid,
         )
-    return list(dict.fromkeys(valid))
+    if unsupported:
+        # The model asserted a hazard it could not quote the user on. Logged
+        # at warning because a rising rate here means the prompt is drifting
+        # back toward inference.
+        logger.warning(
+            "tag_hazards: discarded %d ungrounded tag(s) (evidence not found "
+            "in the description): %s",
+            len(unsupported),
+            unsupported,
+        )
+
+    ask_valid = [f for f in (result.ask or []) if f in LLM_SELECTABLE_FOLLOWUP_FIELDS]
+    ask_invalid = [f for f in (result.ask or []) if f not in LLM_SELECTABLE_FOLLOWUP_FIELDS]
+    if ask_invalid:
+        logger.warning(
+            "tag_hazards: discarded %d follow-up field(s) outside the " "selectable set: %s",
+            len(ask_invalid),
+            ask_invalid,
+        )
+
+    return TagResult(
+        rule_ids=list(dict.fromkeys(valid)),
+        ask_fields=list(dict.fromkeys(ask_valid)),
+    )

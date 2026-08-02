@@ -97,6 +97,57 @@ def warmup() -> bool:
         return False
 
 
+@lru_cache(maxsize=1)
+def _trained_vocabularies() -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """The exact `category` / `user_skill` values the model was fitted on.
+
+    Read off the fitted OneHotEncoder rather than hardcoded, so this can
+    never drift from the artifact actually being served.
+    """
+    model = _load_model()
+    try:
+        encoder = model.named_steps["features"].named_transformers_["cat"]
+        categories, skills = encoder.categories_
+        return tuple(categories), tuple(skills)
+    except Exception:  # noqa: BLE001 - vocabulary is advisory, never fatal
+        logger.warning("classifier: could not read trained vocabularies from the model")
+        return (), ()
+
+
+def _canonicalize(value: str, vocabulary: tuple[str, ...], field: str) -> str:
+    """Snap `value` onto the trained vocabulary, case/whitespace-insensitively.
+
+    The encoder is `handle_unknown="ignore"`, so an off-vocabulary value does
+    not error - it emits an all-zero block and the prediction silently falls
+    back to the text features alone. That is not a small effect: "how do i
+    change my light bulb" scores 1 with user_skill "Beginner" and 5 with
+    "beginner", because the second matches nothing the model was fitted on.
+
+    The chat UI happens to send the three exact trained strings, so this has
+    not bitten in production - but `skill_level` is a free `str` at the API
+    boundary (schemas/job.py), so nothing enforces that. Casing is snapped
+    here; a genuinely unknown value is passed through unchanged (the encoder
+    still ignores it) and logged, because guessing which trained value the
+    caller meant would be worse than a loud degradation.
+    """
+    if not vocabulary or not value:
+        return value
+    if value in vocabulary:
+        return value
+    folded = value.strip().casefold()
+    for known in vocabulary:
+        if known.casefold() == folded:
+            return known
+    logger.warning(
+        "classifier: %s=%r is not one of the trained values %s; the model will "
+        "ignore it and predict from the task text alone",
+        field,
+        value,
+        vocabulary,
+    )
+    return value
+
+
 def classify(description: str, category: str, user_skill: str = "") -> tuple[int, float]:
     """Predict (risk_level, confidence) for a job.
 
@@ -108,6 +159,7 @@ def classify(description: str, category: str, user_skill: str = "") -> tuple[int
     prediction. Never returns a fallback risk level.
     """
     model = _load_model()
+    known_categories, known_skills = _trained_vocabularies()
 
     try:
         import pandas as pd
@@ -115,8 +167,8 @@ def classify(description: str, category: str, user_skill: str = "") -> tuple[int
         frame = pd.DataFrame(
             {
                 "task_text": [description or ""],
-                "category": [category or "general"],
-                "user_skill": [user_skill or "Beginner"],
+                "category": [_canonicalize(category or "general", known_categories, "category")],
+                "user_skill": [_canonicalize(user_skill or "Beginner", known_skills, "user_skill")],
             }
         )
         risk = int(model.predict(frame)[0])

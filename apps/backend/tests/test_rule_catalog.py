@@ -17,8 +17,17 @@ from unittest.mock import patch
 import pytest
 
 from ai.rule_engine import evaluate, explain, next_followup, required_followups
-from ai.rule_engine.catalog import FOLLOWUPS, MAX_RISK_LEVEL, MIN_RISK_LEVEL, RULES, VALID_RULE_IDS
-from ai.rule_engine.llm_assist import HazardTags, tag_hazards
+from ai.rule_engine.catalog import (
+    FOLLOWUPS,
+    FOLLOWUPS_BY_FIELD,
+    HARD_GATE_RULE_IDS,
+    LLM_SELECTABLE_FOLLOWUP_FIELDS,
+    MAX_RISK_LEVEL,
+    MIN_RISK_LEVEL,
+    RULES,
+    VALID_RULE_IDS,
+)
+from ai.rule_engine.llm_assist import HazardTag, HazardTags, tag_hazards, tag_hazards_result
 
 # A spread of descriptions covering every hazard family plus benign tasks.
 DESCRIPTIONS = [
@@ -137,7 +146,13 @@ def test_llm_tagging_is_additive_and_cannot_suppress_a_keyword_match():
 
 
 def test_tag_hazards_filters_invalid_ids_from_the_model():
-    reply = HazardTags(rule_ids=["active_gas_or_co", "made_up_hazard", "DROP TABLE"])
+    reply = HazardTags(
+        tags=[
+            HazardTag(rule_id="active_gas_or_co", evidence="smell of gas"),
+            HazardTag(rule_id="made_up_hazard", evidence="smell of gas"),
+            HazardTag(rule_id="DROP TABLE", evidence="smell of gas"),
+        ]
+    )
     with patch("ai.rule_engine.llm_assist.generate_structured", return_value=reply):
         out = tag_hazards("smell of gas", "plumbing")
     assert out == ["active_gas_or_co"]
@@ -150,6 +165,145 @@ def test_tag_hazards_returns_empty_when_llm_unavailable():
     # Keyword rules still fire without the LLM.
     risk, triggered = evaluate("I can smell gas near the cooker", "plumbing", {}, [])
     assert risk == 5 and "active_gas_or_co" in triggered
+
+
+# ------------------------------------------------------- evidence grounding
+def test_tag_without_evidence_in_the_description_is_discarded():
+    """THE bulb regression (observed live, 2026-08-01).
+
+    "how do i change my light bulb" was returned as `fixed_wiring_work` +
+    `work_at_height` and assessed at level 3. Neither rule keyword-matches;
+    both came from the tagger, which reasoned bulb -> ceiling -> overhead ->
+    height and wiring from a fitting it was never told about.
+
+    A tag now has to quote the user. The model cannot quote words the user
+    never wrote, so an inferred hazard is dropped mechanically instead of
+    being argued out of it in the prompt.
+    """
+    description = "how do i change my light bulb"
+    reply = HazardTags(
+        tags=[
+            # Nothing in the description mentions height at all.
+            HazardTag(rule_id="work_at_height", evidence="the ceiling is high up"),
+            HazardTag(rule_id="fixed_wiring_work", evidence="rewiring the fitting"),
+        ]
+    )
+    with patch("ai.rule_engine.llm_assist.generate_structured", return_value=reply):
+        assert tag_hazards(description, "electrical") == []
+
+    # ...and end to end, the task comes back at the floor, not at 3.
+    risk, triggered = evaluate(description, "electrical", {}, [], user_skill="Beginner")
+    assert risk == MIN_RISK_LEVEL, f"a bulb swap should not escalate, got {risk}: {triggered}"
+
+
+def test_evidence_matching_ignores_case_and_whitespace_only():
+    """Trivial reformatting of an honest quote must not reject it — but
+    nothing beyond that is relaxed."""
+    description = "I need to  Rewire   the consumer unit"
+    reply = HazardTags(
+        tags=[HazardTag(rule_id="supply_side_electrical", evidence="rewire the CONSUMER unit")]
+    )
+    with patch("ai.rule_engine.llm_assist.generate_structured", return_value=reply):
+        assert tag_hazards(description, "electrical") == ["supply_side_electrical"]
+
+
+def test_llm_may_only_ask_for_followups_in_the_closed_set():
+    """`ask` is selection from a fixed catalog, not question invention."""
+    reply = HazardTags(
+        tags=[],
+        ask=["height_access", "is_the_user_feeling_lucky", "power_isolated"],
+    )
+    with patch("ai.rule_engine.llm_assist.generate_structured", return_value=reply):
+        result = tag_hazards_result("change a bulb in the stairwell", "electrical")
+
+    assert result is not None
+    assert result.ask_fields == ["height_access", "power_isolated"]
+    assert "is_the_user_feeling_lucky" not in result.ask_fields
+
+
+def test_llm_asked_followups_are_additive_only():
+    """The LLM can widen the question set; it can never narrow the one the
+    catalog derived from fired hazards."""
+    desc, cat = "replace a wall outlet", "electrical"
+    derived = required_followups(desc, cat)
+    assert "power_isolated" in derived
+
+    widened = required_followups(desc, cat, llm_asked_fields=["height_access"])
+    assert set(derived) <= set(widened)
+    assert "height_access" in widened
+
+
+# --------------------------------------------- LLM tags obey catalog gates
+def test_llm_tag_cannot_bypass_a_rules_exclude_list():
+    """Regression (2026-08-01): an LLM-proposed id used to skip `_matches`
+    entirely, so `excludes`, `categories` and `requires_skill` applied to
+    keyword matches only. `work_at_height` excludes "step ladder" and an LLM
+    tag ignored it."""
+    desc, cat = "reach the vent from a step ladder in the hallway", "general"
+    _, triggered = evaluate(desc, cat, {}, llm_hazard_ids=["work_at_height"])
+    assert "work_at_height" not in triggered
+
+
+def test_llm_tag_cannot_bypass_a_skill_gate():
+    """`electrical_work_by_beginner` is gated to beginners; a tag must not
+    fire it for an expert."""
+    desc, cat = "replace a socket", "electrical"
+    _, expert = evaluate(
+        desc,
+        cat,
+        {"power_isolated": True},
+        ["electrical_work_by_beginner"],
+        user_skill="Experienced",
+    )
+    _, beginner = evaluate(
+        desc, cat, {"power_isolated": True}, ["electrical_work_by_beginner"], user_skill="Beginner"
+    )
+    assert "electrical_work_by_beginner" not in expert
+    assert "electrical_work_by_beginner" in beginner
+
+
+# ------------------------------------------------------------------- gates
+def test_unanswered_gate_still_fires_the_rule():
+    """The safety property that makes gating sound: silence buys nothing.
+
+    An unanswered gate leaves the hazard in force at its full floor, so the
+    worst plausible case holds until the user actually rules it out.
+    """
+    desc, cat = "swap the bulb in the hallway", "electrical"
+    risk, triggered = evaluate(desc, cat, {}, ["overhead_work_unknown_height"])
+    assert "overhead_work_unknown_height" in triggered
+    assert risk >= RULES["overhead_work_unknown_height"].floor
+
+
+def test_confirmed_safe_gate_closes_the_rule_and_denied_does_not():
+    desc, cat = "swap the bulb in the hallway", "electrical"
+    tags = ["overhead_work_unknown_height"]
+
+    _, confirmed = evaluate(desc, cat, {"height_access": True}, tags)
+    _, denied = evaluate(desc, cat, {"height_access": False}, tags)
+    _, missing = evaluate(desc, cat, {}, tags)
+
+    assert "overhead_work_unknown_height" not in confirmed
+    assert "overhead_work_unknown_height" in denied
+    assert "overhead_work_unknown_height" in missing
+
+
+def test_gating_never_lowers_risk_below_an_ungated_hazard():
+    """A gate refines a trigger; it must not reach past its own rule.
+
+    Answering the height question cannot touch a gas or wiring hazard that
+    fired for unrelated reasons — that would be de-escalation wearing a
+    gate's clothes.
+    """
+    desc, cat = "smell of gas while changing a bulb", "electrical"
+    ungated, _ = evaluate(desc, cat, {}, ["overhead_work_unknown_height"])
+    gated, triggered = evaluate(
+        desc, cat, {"height_access": True}, ["overhead_work_unknown_height"]
+    )
+
+    assert "active_gas_or_co" in triggered
+    assert gated >= RULES["active_gas_or_co"].floor
+    assert ungated >= gated  # the gate may only remove its own rule's floor
 
 
 # ------------------------------------------------------- follow-up semantics
@@ -181,13 +335,175 @@ def test_followups_are_hazard_driven_not_only_category_driven():
     assert "power_isolated" in fields
 
 
+# --------------------------------------------- hazard-family coverage (2026-08-01)
+@pytest.mark.parametrize(
+    "desc,category,expected_rule",
+    [
+        # Each of these returned level 1 — "Safe DIY" — before the six missing
+        # hazard families were added. Measured, not hypothetical: see the
+        # catalog comment above the 2026-08-01 block.
+        (
+            "my extension lead is hot to touch when the heater is on",
+            "electrical",
+            "appliance_flex_overload",
+        ),
+        (
+            "burning off paint on the window frames with a blowtorch",
+            "painting",
+            "hot_works_ignition",
+        ),
+        (
+            "apply a solvent based epoxy floor coating in a closed garage",
+            "general",
+            "flammable_vapour_enclosed",
+        ),
+        (
+            "recharge the refrigerant in a split system air conditioner",
+            "hvac",
+            "refrigerant_circuit_work",
+        ),
+        ("fell a large mature tree close to the house", "general", "tree_felling"),
+        ("dry cut paving slabs for the new patio", "masonry", "silica_dust"),
+        (
+            "sanding the old paint off a victorian window frame",
+            "painting",
+            "lead_paint_disturbance",
+        ),
+        ("sewage is backing up through the shower drain", "plumbing", "sewage_contamination"),
+        ("cut the worktop with a circular saw", "carpentry", "powered_cutting_tool"),
+        ("move a cast iron bath out of the upstairs bathroom", "plumbing", "heavy_manual_handling"),
+        (
+            "replace the pressure relief valve on a sealed central heating system",
+            "plumbing",
+            "pressurised_hot_water_system",
+        ),
+        (
+            "replace the immersion heater element in the hot water cylinder",
+            "plumbing",
+            "pressurised_hot_water_system",
+        ),
+    ],
+)
+def test_previously_uncovered_hazards_now_fire(desc, category, expected_rule):
+    _, triggered = evaluate(desc, category, {}, None, user_skill="Some experience")
+    assert expected_rule in triggered, f"{expected_rule} did not fire for {desc!r}"
+
+
+def test_every_dataset_hazard_family_has_at_least_one_rule():
+    """The audit that found six empty families, kept as a standing check.
+
+    A hazard family the dataset uses but the catalog has no rule for is not a
+    neutral gap: the LLM tagger can only select from the catalog, so it routes
+    those tasks to the nearest rule that DOES exist. That is how a blowtorch
+    came back tagged `asbestos_disturbance` — the model was picking the best
+    option from a menu that did not contain the right answer.
+    """
+    import json
+    from pathlib import Path
+
+    data_dir = Path(__file__).resolve().parents[3] / "ml" / "data"
+    if not data_dir.exists():  # pragma: no cover - ml/ absent in some checkouts
+        pytest.skip("ml/data not present")
+
+    used: set[str] = set()
+    for split in ("train", "val", "test"):
+        path = data_dir / f"{split}.json"
+        if path.exists():
+            for row in json.loads(path.read_text(encoding="utf-8")):
+                used.update(row["hazards"])
+    used.discard("none")
+
+    covered = {rule.hazard for rule in RULES.values()}
+    missing = sorted(used - covered)
+    assert not missing, f"dataset hazard families with no catalog rule: {missing}"
+
+
+def test_new_rules_did_not_start_escalating_benign_tasks():
+    """The catalog's value is that it almost never false-fires.
+
+    Adding twelve rules cost 3 over-escalations across 242 low-risk dataset
+    rows; this pins the everyday cases so a future keyword loosened into a
+    single common word cannot quietly spend that advantage.
+    """
+    benign = [
+        ("change a light bulb in the kitchen", "electrical"),
+        ("paint a bedroom wall with a roller", "painting"),
+        ("hang a picture frame on the living room wall", "carpentry"),
+        ("assemble a flat pack wardrobe", "carpentry"),
+        ("put up a curtain pole above the window", "carpentry"),
+        ("replace the washer in a dripping tap", "plumbing"),
+    ]
+    for desc, category in benign:
+        risk, triggered = evaluate(desc, category, {}, None, user_skill="Beginner")
+        assert risk == MIN_RISK_LEVEL, f"{desc!r} escalated to {risk} via {triggered}"
+
+
+def test_noise_rule_advises_without_escalating():
+    """`sustained_noise_exposure` has floor 1 on purpose.
+
+    Hearing damage does not change WHO should attempt a task, so escalating
+    for it would be wrong under the competence ladder — but the user should
+    still be told. A floor of MIN_RISK_LEVEL is how the catalog expresses
+    "worth saying, not worth escalating": the rule fires, reaches explain(),
+    and moves nothing.
+    """
+    risk, triggered = evaluate(
+        "hire a jackhammer to break up the concrete path",
+        "masonry",
+        {},
+        None,
+        user_skill="Some experience",
+    )
+    assert "sustained_noise_exposure" in triggered
+    assert explain(["sustained_noise_exposure"]), "a fired rule must still explain itself"
+    risk_without = evaluate("break up the path", "masonry", {}, None)[0]
+    assert risk >= risk_without
+
+
 # ------------------------------------------------------------ catalog health
 def test_catalog_is_internally_consistent():
     for rule in RULES.values():
         assert MIN_RISK_LEVEL <= rule.floor <= MAX_RISK_LEVEL
-        assert rule.keywords, f"{rule.id} has no keywords and can never fire"
         assert rule.explanation.strip(), f"{rule.id} has no explanation"
         assert rule.id in VALID_RULE_IDS
+        # A keyword-less rule is LLM-tag-only, which is allowed but only
+        # when it is gated: nothing in the text can trigger it, so the sole
+        # check on an over-eager tag is a question the user can answer.
+        # Ungated AND keyword-less would be a rule that fires on the model's
+        # say-so alone with no way to contest it.
+        assert rule.keywords or rule.gated_by, (
+            f"{rule.id} has neither keywords nor a gate: it can only ever fire "
+            f"on an unchallengeable LLM tag"
+        )
+
+
+def test_gates_reference_real_followup_fields():
+    for rule in RULES.values():
+        for field in rule.gated_by:
+            assert (
+                field in FOLLOWUPS_BY_FIELD
+            ), f"{rule.id} is gated by unknown follow-up field {field!r}"
+            # The gate must be reachable: something has to ask the question,
+            # or the rule fires forever with no way to close it.
+            spec = FOLLOWUPS_BY_FIELD[field]
+            assert (
+                rule.id in spec.applies_when_rule or field in LLM_SELECTABLE_FOLLOWUP_FIELDS
+            ), f"{rule.id}'s gate {field!r} is never asked for, so it can never close"
+
+
+def test_catastrophic_hazards_can_never_be_gated_away():
+    """A user answer must not be able to dismiss the hazards that kill.
+
+    `gated_by` is right for facts the user is authoritative about ("can you
+    reach it from the floor?"). It is wrong for a suspected gas escape, a
+    live conductor or asbestos: people are poor judges of those, and being
+    wrong is fatal. Enforced here so a future edit cannot quietly add one.
+    """
+    for rule_id in HARD_GATE_RULE_IDS:
+        assert rule_id in RULES, f"HARD_GATE_RULE_IDS names unknown rule {rule_id}"
+        assert not RULES[
+            rule_id
+        ].gated_by, f"{rule_id} is catastrophic and must not be gateable by a user answer"
 
 
 def test_followups_reference_real_rules_and_escalate_upward():
@@ -206,13 +522,18 @@ def test_every_catalog_rule_can_actually_fire(rule_id):
     """A rule that no input can trigger is dead safety code.
 
     Builds valid conditions per rule: a skill-gated rule needs the skill it
-    requires, and a category-gated rule needs its category.
+    requires, and a category-gated rule needs its category. Keyword-less
+    rules are LLM-tag-only, so they are fired through that path instead.
     """
     rule = RULES[rule_id]
     cat = rule.categories[0] if rule.categories else "general"
     skill = rule.requires_skill[0] if rule.requires_skill else "Experienced"
-    _, triggered = evaluate(rule.keywords[0], cat, {}, user_skill=skill)
-    assert rule_id in triggered, f"{rule_id} never fires on its own first keyword"
+    if rule.keywords:
+        _, triggered = evaluate(rule.keywords[0], cat, {}, user_skill=skill)
+        assert rule_id in triggered, f"{rule_id} never fires on its own first keyword"
+    else:
+        _, triggered = evaluate("some task", cat, {}, [rule_id], user_skill=skill)
+        assert rule_id in triggered, f"{rule_id} never fires even when tagged"
 
 
 def test_beginner_gated_rule_fires_only_for_beginners():

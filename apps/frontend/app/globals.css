@@ -3,6 +3,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  /* Tells the browser which palette to paint native UI in — scrollbars above
+     all. Without it every scroll container (sidebar, message thread, composer,
+     settings modal) rendered a white scrollbar track in dark mode, because the
+     default is always "light" no matter what the page's own colours are. */
+  color-scheme: light;
+
   --color-bg: #FFFFFF;
   --color-bg-inset: #F7F7F8;
   --color-surface: #FFFFFF;
@@ -22,6 +28,8 @@
 }
 
 .dark {
+  color-scheme: dark;
+
   --color-bg: #060606;
   --color-bg-inset: #0F0F10;
   --color-surface: #131314;
@@ -69,6 +77,44 @@ body {
   color: var(--color-text-primary);
   margin: 0;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbars, themed from the same tokens as everything else: a transparent
+   track (so it takes on whatever surface it sits over — the sidebar's inset
+   background, the thread's page background) and a border-coloured thumb.
+   `color-scheme` above already makes the native scrollbar dark in dark mode;
+   this is what makes it match the app rather than the OS.
+
+   Applied globally, not per-container, deliberately: the message thread and
+   the composer both rely on `scrollbar-gutter: stable` to line up
+   pixel-for-pixel (design.md §10.4), so anything that changes scrollbar width
+   has to change it for both or that alignment drifts. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* Older WebKit (notably Safari) ignores the two standard properties above. */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-secondary);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {

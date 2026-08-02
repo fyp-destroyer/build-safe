@@ -90,12 +90,31 @@ def _check_calls() -> int:
     if not ok:
         print("       ('general' is the hardcoded fallback — the call likely failed)")
 
-    hazards = tag_hazards_result("i want to replace my ceiling fans", "electrical")
-    ok = hazards is not None
-    print(f"{'ok  ' if ok else 'FAIL'} tag_hazards             -> {hazards!r}")
+    tagged = tag_hazards_result("i want to replace my ceiling fans", "electrical")
+    ok = tagged is not None
+    summary = "None" if tagged is None else f"tags={tagged.rule_ids!r} ask={tagged.ask_fields!r}"
+    print(f"{'ok  ' if ok else 'FAIL'} tag_hazards             -> {summary}")
     failures += 0 if ok else 1
     if not ok:
-        print("       (None means the call failed; [] would mean 'ran, found nothing')")
+        print("       (None means the call failed; empty lists mean 'ran, found nothing')")
+
+    # Evidence grounding: a bulb swap must NOT come back tagged as fixed
+    # wiring or work at height. Both were observed live on 2026-07-31/08-01
+    # and are what the evidence requirement exists to stop, so a regression
+    # here is worth surfacing from the same one-command check.
+    bulb = tag_hazards_result("how do i change my light bulb", "electrical")
+    if bulb is None:
+        print("skip  bulb over-tagging    -> LLM unavailable")
+    else:
+        overtagged = [r for r in bulb.rule_ids if r in ("fixed_wiring_work", "work_at_height")]
+        ok = not overtagged
+        print(
+            f"{'ok  ' if ok else 'FAIL'} bulb over-tagging       -> "
+            f"tags={bulb.rule_ids!r} ask={bulb.ask_fields!r}"
+        )
+        failures += 0 if ok else 1
+        if not ok:
+            print(f"       (a light bulb is a consumable, not fixed wiring: {overtagged})")
 
     question = phrase_followup_question("power_isolated", "electrical")
     print(f"ok   phrase_followup_question -> {question!r}")

@@ -5,7 +5,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "can I dig a small trench in my backyard to run a new water line for a garden faucet myself?",
     "category": "plumbing",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "shovel",
       "pipe cutter"
@@ -33,7 +33,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "tile a large kitchen floor including cutting tiles near electrical outlets - do I need to get someone in?",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "tile cutter",
       "trowel"
@@ -62,7 +62,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "is it safe for me to install a hardwired dimmer switch in the dining room?",
     "category": "electrical",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "screwdriver"
     ],
@@ -89,7 +89,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I was going to run new wiring for an outdoor socket on the patio - any reason not to?",
     "category": "electrical",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "drill",
       "wire strippers"
@@ -118,7 +118,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I was going to remove a wall in a 1930s house - I have been told there might be asbestos in the old panelling - any reason not to?",
     "category": "carpentry",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "pry bar"
     ],
@@ -147,7 +147,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I want to point a few loose bricks on the front garden wall",
     "category": "masonry",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "trowel",
       "chisel"
@@ -172,7 +172,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "can I fill hairline cracks in the concrete garage floor myself?",
     "category": "masonry",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "trowel"
     ],
@@ -196,7 +196,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "a large diagonal crack is running through the brickwork above the front door and it keeps getting wider, how urgent is this?",
     "category": "masonry",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [],
     "hazards": [
       "structural_collapse"
@@ -215,7 +215,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "thinking about trying to sweep leaves off a low flat garage roof I can reach from a step ladder",
     "category": "roofing",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "step ladder",
       "brush"
@@ -404,7 +404,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I was going to paint the exterior render on the first floor from an extension ladder - any reason not to?",
     "category": "painting",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "extension ladder",
       "roller"
@@ -429,7 +429,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "paint the soffits and fascias along the roofline of a two storey house, is that a DIY job?",
     "category": "painting",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "extension ladder",
       "brush"
@@ -454,7 +454,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "can I spray solvent based paint in a sealed basement with no ventilation while the gas boiler is running in there myself?",
     "category": "painting",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "spray gun"
     ],
@@ -478,7 +478,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "is it safe for me to regrout a small area of tiles above the bathroom sink?",
     "category": "tiling",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "grout float",
       "sponge"
@@ -502,7 +502,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "clean off and reseal the silicone joint between the tiles and the bath, is that a DIY job?",
     "category": "tiling",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "scraper",
       "caulking gun"
@@ -526,7 +526,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "planning to lay ceramic floor tiles in the downstairs toilet this weekend",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "tile cutter",
       "trowel"
@@ -552,7 +552,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "how risky is it to lay an underfloor heating mat and tile over it - the electrician is wiring the thermostat separately?",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "trowel",
       "tile cutter"
@@ -577,7 +577,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "tile a large open plan kitchen diner floor with large format porcelain slabs - is this something I can handle on my own?",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "wet tile saw",
       "trowel"
@@ -605,7 +605,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "planning to lift old floor tiles that may have asbestos backing in a 1960s kitchen this weekend",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "chisel"
     ],
@@ -649,7 +649,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "can I install a plug-in extractor fan in the bathroom window myself?",
     "category": "hvac",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "screwdriver"
     ],
@@ -698,7 +698,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "planning to install a full air source heat pump system including the refrigerant lines this weekend",
     "category": "hvac",
-    "user_skill": "Experienced",
+    "user_skill": "Beginner",
     "tools_available": [
       "manifold gauges",
       "pipe cutter"
@@ -725,7 +725,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "is it safe for me to replace the flue on a gas boiler where it passes through the external wall?",
     "category": "hvac",
-    "user_skill": "Experienced",
+    "user_skill": "Beginner",
     "tools_available": [
       "core drill"
     ],
@@ -750,7 +750,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "how risky is it to service the gas boiler myself including opening the sealed combustion chamber?",
     "category": "hvac",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "screwdriver"
     ],
@@ -795,7 +795,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "is it safe for me to change the lock barrel on the front door?",
     "category": "general",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "screwdriver"
     ],
@@ -816,7 +816,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "install a battery powered doorbell - is this something I can handle on my own?",
     "category": "general",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "drill",
       "screwdriver"
@@ -838,7 +838,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "mount floating shelves on a plasterboard wall using heavy duty anchors, is that a DIY job?",
     "category": "general",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "drill",
       "stud finder"
@@ -862,7 +862,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "planning to lay decking boards onto an existing frame this weekend",
     "category": "general",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "drill",
       "saw"
@@ -888,7 +888,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "is it safe for me to cut down a small tree in the back garden with a chainsaw?",
     "category": "general",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "chainsaw"
     ],
@@ -941,7 +941,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "planning to dig out and repair a collapsed garden soakaway, working down in a deep pit this weekend",
     "category": "general",
-    "user_skill": "Experienced",
+    "user_skill": "Beginner",
     "tools_available": [
       "shovel"
     ],
@@ -967,7 +967,7 @@
     "generation_rule": "WL-1a:rephrase",
     "task_text": "I was going to burn a pile of old treated timber and painted offcuts in the back garden - any reason not to?",
     "category": "general",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [],
     "hazards": [
       "fire",
@@ -988,7 +988,7 @@
     "generation_rule": "WL-1b:room-substitution",
     "task_text": "install a hardwired dimmer switch in the hallway",
     "category": "electrical",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "screwdriver"
     ],
@@ -1013,7 +1013,7 @@
     "id": "seed-0014",
     "task_text": "dig a small trench in my backyard to run a new water line for a garden faucet",
     "category": "plumbing",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "shovel",
       "pipe cutter"
@@ -1039,7 +1039,7 @@
     "id": "seed-0030",
     "task_text": "tile a large kitchen floor including cutting tiles near electrical outlets",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "tile cutter",
       "trowel"
@@ -1066,7 +1066,7 @@
     "id": "seed-0065",
     "task_text": "install a hardwired dimmer switch in the dining room",
     "category": "electrical",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "screwdriver"
     ],
@@ -1091,7 +1091,7 @@
     "id": "seed-0066",
     "task_text": "run new wiring for an outdoor socket on the patio",
     "category": "electrical",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "drill",
       "wire strippers"
@@ -1118,7 +1118,7 @@
     "id": "seed-0118",
     "task_text": "remove a wall in a 1930s house - I have been told there might be asbestos in the old panelling",
     "category": "carpentry",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "pry bar"
     ],
@@ -1145,7 +1145,7 @@
     "id": "seed-0121",
     "task_text": "point a few loose bricks on the front garden wall",
     "category": "masonry",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "trowel",
       "chisel"
@@ -1168,7 +1168,7 @@
     "id": "seed-0124",
     "task_text": "fill hairline cracks in the concrete garage floor",
     "category": "masonry",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "trowel"
     ],
@@ -1190,7 +1190,7 @@
     "id": "seed-0138",
     "task_text": "a large diagonal crack is running through the brickwork above the front door and it keeps getting wider",
     "category": "masonry",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [],
     "hazards": [
       "structural_collapse"
@@ -1207,7 +1207,7 @@
     "id": "seed-0143",
     "task_text": "sweep leaves off a low flat garage roof I can reach from a step ladder",
     "category": "roofing",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "step ladder",
       "brush"
@@ -1380,7 +1380,7 @@
     "id": "seed-0176",
     "task_text": "paint the exterior render on the first floor from an extension ladder",
     "category": "painting",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "extension ladder",
       "roller"
@@ -1403,7 +1403,7 @@
     "id": "seed-0179",
     "task_text": "paint the soffits and fascias along the roofline of a two storey house",
     "category": "painting",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "extension ladder",
       "brush"
@@ -1426,7 +1426,7 @@
     "id": "seed-0184",
     "task_text": "spray solvent based paint in a sealed basement with no ventilation while the gas boiler is running in there",
     "category": "painting",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "spray gun"
     ],
@@ -1448,7 +1448,7 @@
     "id": "seed-0185",
     "task_text": "regrout a small area of tiles above the bathroom sink",
     "category": "tiling",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "grout float",
       "sponge"
@@ -1470,7 +1470,7 @@
     "id": "seed-0189",
     "task_text": "clean off and reseal the silicone joint between the tiles and the bath",
     "category": "tiling",
-    "user_skill": "Beginner",
+    "user_skill": "Experienced",
     "tools_available": [
       "scraper",
       "caulking gun"
@@ -1492,7 +1492,7 @@
     "id": "seed-0192",
     "task_text": "lay ceramic floor tiles in the downstairs toilet",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "tile cutter",
       "trowel"
@@ -1516,7 +1516,7 @@
     "id": "seed-0196",
     "task_text": "lay an underfloor heating mat and tile over it - the electrician is wiring the thermostat separately",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "trowel",
       "tile cutter"
@@ -1539,7 +1539,7 @@
     "id": "seed-0198",
     "task_text": "tile a large open plan kitchen diner floor with large format porcelain slabs",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "wet tile saw",
       "trowel"
@@ -1565,7 +1565,7 @@
     "id": "seed-0202",
     "task_text": "lift old floor tiles that may have asbestos backing in a 1960s kitchen",
     "category": "tiling",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "chisel"
     ],
@@ -1605,7 +1605,7 @@
     "id": "seed-0214",
     "task_text": "install a plug-in extractor fan in the bathroom window",
     "category": "hvac",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "screwdriver"
     ],
@@ -1650,7 +1650,7 @@
     "id": "seed-0222",
     "task_text": "install a full air source heat pump system including the refrigerant lines",
     "category": "hvac",
-    "user_skill": "Experienced",
+    "user_skill": "Beginner",
     "tools_available": [
       "manifold gauges",
       "pipe cutter"
@@ -1675,7 +1675,7 @@
     "id": "seed-0225",
     "task_text": "replace the flue on a gas boiler where it passes through the external wall",
     "category": "hvac",
-    "user_skill": "Experienced",
+    "user_skill": "Beginner",
     "tools_available": [
       "core drill"
     ],
@@ -1698,7 +1698,7 @@
     "id": "seed-0227",
     "task_text": "service the gas boiler myself including opening the sealed combustion chamber",
     "category": "hvac",
-    "user_skill": "Some experience",
+    "user_skill": "Experienced",
     "tools_available": [
       "screwdriver"
     ],
@@ -1739,7 +1739,7 @@
     "id": "seed-0235",
     "task_text": "change the lock barrel on the front door",
     "category": "general",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "screwdriver"
     ],
@@ -1758,7 +1758,7 @@
     "id": "seed-0238",
     "task_text": "install a battery powered doorbell",
     "category": "general",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [
       "drill",
       "screwdriver"
@@ -1778,7 +1778,7 @@
     "id": "seed-0239",
     "task_text": "mount floating shelves on a plasterboard wall using heavy duty anchors",
     "category": "general",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "drill",
       "stud finder"
@@ -1800,7 +1800,7 @@
     "id": "seed-0242",
     "task_text": "lay decking boards onto an existing frame",
     "category": "general",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "drill",
       "saw"
@@ -1824,7 +1824,7 @@
     "id": "seed-0245",
     "task_text": "cut down a small tree in the back garden with a chainsaw",
     "category": "general",
-    "user_skill": "Some experience",
+    "user_skill": "Beginner",
     "tools_available": [
       "chainsaw"
     ],
@@ -1873,7 +1873,7 @@
     "id": "seed-0252",
     "task_text": "dig out and repair a collapsed garden soakaway, working down in a deep pit",
     "category": "general",
-    "user_skill": "Experienced",
+    "user_skill": "Beginner",
     "tools_available": [
       "shovel"
     ],
@@ -1897,7 +1897,7 @@
     "id": "seed-0256",
     "task_text": "burn a pile of old treated timber and painted offcuts in the back garden",
     "category": "general",
-    "user_skill": "Beginner",
+    "user_skill": "Some experience",
     "tools_available": [],
     "hazards": [
       "fire",

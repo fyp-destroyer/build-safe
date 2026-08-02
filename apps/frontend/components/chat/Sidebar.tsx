@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { type HistoryItem, type TaskCategory } from "@/lib/chatData";
-import { clearToken } from "@/lib/auth";
+import { useClerk } from "@clerk/nextjs";
 import {
   IconPlus,
   IconLogOut,
@@ -65,10 +65,15 @@ export function Sidebar({
   onDeleteAccount: () => void;
 }) {
   const router = useRouter();
+  const { signOut } = useClerk();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const handleLogOut = () => {
-    clearToken();
-    router.push("/login");
+    // Clerk revokes the session server-side and clears its cookie, so the next
+    // request is genuinely unauthenticated. The old version only removed a
+    // localStorage key — the token itself stayed valid for its full 30-day life
+    // with no revocation list, so "log out" was local housekeeping rather than
+    // an actual end of session.
+    void signOut(() => router.push("/login"));
   };
 
   const byRecency = (a: HistoryItem, b: HistoryItem) => b.createdAt - a.createdAt;

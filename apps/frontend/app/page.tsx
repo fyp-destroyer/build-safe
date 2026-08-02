@@ -1,56 +1,26 @@
-import { apiFetch, ApiError } from "@/lib/api";
+import { redirect } from "next/navigation";
 
-// Phase 0 health-check page: server-fetches the backend's GET /health.
-// The backend isn't guaranteed to be running yet — force-dynamic keeps this
-// off the static build path so a failed fetch shows an error state at
-// request time instead of breaking `next build`.
-export const dynamic = "force-dynamic";
-
-interface HealthResponse {
-  status: string;
-  [key: string]: unknown;
-}
-
-async function getHealth(): Promise<
-  { ok: true; data: HealthResponse } | { ok: false; message: string }
-> {
-  try {
-    const data = await apiFetch<HealthResponse>("/health");
-    return { ok: true, data };
-  } catch (err) {
-    const message =
-      err instanceof ApiError
-        ? `${err.code}: ${err.message}`
-        : err instanceof Error
-          ? err.message
-          : "Unknown error contacting backend";
-    return { ok: false, message };
-  }
-}
-
-export default async function Home() {
-  const result = await getHealth();
-
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-zinc-50 p-8 font-sans dark:bg-black">
-      <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
-        BuildSafe AI — Frontend Scaffold
-      </h1>
-
-      {result.ok ? (
-        <p className="rounded-md bg-green-100 px-4 py-2 text-green-800 dark:bg-green-900/40 dark:text-green-300">
-          Backend: ok ({JSON.stringify(result.data)})
-        </p>
-      ) : (
-        <p className="rounded-md bg-red-100 px-4 py-2 text-red-800 dark:bg-red-900/40 dark:text-red-300">
-          Backend: unreachable — {result.message}
-        </p>
-      )}
-
-      <p className="max-w-md text-center text-sm text-zinc-500 dark:text-zinc-400">
-        Phase 0 scaffold. See docs/phases.md and docs/architecture.md for what
-        comes next.
-      </p>
-    </div>
-  );
+/**
+ * Entry point — always the sign-in screen.
+ *
+ * This used to be the Phase 0 scaffold page: it server-fetched the FastAPI
+ * backend's GET /health and rendered "Backend: ok" or "Backend: unreachable".
+ * That page existed to prove the frontend could reach the backend at all, and
+ * there is no longer a separate backend to reach — Convex is called directly by
+ * the components that need it, and its health is not something a user should be
+ * shown.
+ *
+ * It briefly redirected to /chat instead, letting `proxy.ts` bounce signed-out
+ * visitors onward to /login. That worked but cost a visible double hop on the
+ * deployed site (/ -> /chat -> /login) for the most common case: someone opening
+ * the URL for the first time. Going straight to /login makes the front door of
+ * the deployment a single, predictable redirect.
+ *
+ * Note this is unconditional, so an already-signed-in user opening the root also
+ * lands on /login rather than being taken to their chat. That is the intended
+ * behaviour here; if it should instead skip straight to /chat when a session
+ * exists, this becomes a server-side `auth()` check rather than a bare redirect.
+ */
+export default function Home() {
+  redirect("/login");
 }

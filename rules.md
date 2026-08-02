@@ -12,21 +12,23 @@ Conventions and hard boundaries for anyone (human or AI agent) writing code in t
 | `zod` for form/schema validation | Hand-rolled validation | Single source of truth for shapes shared with backend schemas |
 | `react-hook-form` for the remaining multi-field forms (auth) | Uncontrolled forms with manual state | Task intake itself is now conversational, not a form, but the auth forms still benefit |
 | `motion` (formerly `framer-motion`) for chat message/sidebar/composer animation | Ad-hoc CSS transitions for anything gesture- or sequence-driven | Matches the ChatGPT/Gemini-like feel `design.md` specifies; respects `prefers-reduced-motion` |
-| Native `fetch` wrapped in a small `lib/api.ts` client | Axios | One fewer dependency; fetch is sufficient |
+| Convex React hooks (`useQuery`/`useMutation`/`useAction`), or the `useConvex()` client via `lib/convexApi.ts` | Axios, hand-rolled fetch wrappers | Convex handles transport, auth and caching; the adapter exists only to keep the chat flow's promise-based shape |
+| Clerk's **headless** hooks (`useSignIn`/`useSignUp`) | Clerk's prebuilt `<SignIn />` / `<SignUp />` components | `design.md` is a requirement; the auth screens must not change appearance |
 
-### Backend
+### Backend (Convex)
 | Use | Avoid | Why |
 |---|---|---|
-| FastAPI + Pydantic v2 schemas | Manual dict validation | Type safety, auto-generated OpenAPI docs |
-| SQLAlchemy (async) + Alembic migrations | Raw SQL strings scattered in route handlers | Migrations must be reviewable and reversible |
-| `passlib` / `python-jose` for auth | Hand-rolled crypto or JWT signing | Don't reinvent auth primitives |
-| `pytest` for all backend tests | Skipping tests on `ai/rule_engine` and `ai/classifier` | These modules are safety-critical — see §4 |
-| scikit-learn for baseline model, `sentence-transformers` for embeddings | Training custom neural nets from scratch | Scope discipline for an FYP timeline |
+| Convex `query` / `mutation` with `v.*` argument validators | Unvalidated args, `v.any()` for user input | Type safety at the trust boundary |
+| Convex `action` for anything doing network I/O (LLM calls) | Network calls from a query or mutation | Not merely a convention — the runtime forbids it, which is what makes "the LLM never decides risk" structural |
+| `requireUser` + ownership scoping at the top of every user-facing function | Trusting an id passed from the client | Returns *not found*, never *forbidden*, so existence is not leaked |
+| Zod for validating every LLM reply before use | Trusting model output | A provider must never be able to inject a value the schema didn't allow |
+| Vitest for `convex/ai/ruleEngine` | Skipping these tests | These modules are safety-critical — see §4 |
+| scikit-learn (offline, in `ml/`) for the classifier, exported to JSON | Training custom neural nets from scratch; hand-editing the exported weights | Scope discipline; the export is verified against scikit-learn in CI |
 
 ### General
 - No new dependency without checking it's actively maintained and has no known critical CVEs.
 - Prefer the standard library over a package for anything trivial (date formatting, simple string ops).
-- Pin versions in `requirements.txt` / `package.json` — no floating `latest`.
+- Pin versions in `package.json` and `ml/requirements.txt` — no floating `latest`. The scikit-learn pin matters especially: `ml/eval/baseline_model.joblib` was fitted with 1.8.0, and the export script must run against that version.
 
 ## 2. Error Handling
 

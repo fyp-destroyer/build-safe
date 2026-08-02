@@ -23,10 +23,20 @@ import {
   type TaskCategory,
 } from "@/lib/chatData";
 import type { Profile } from "@/components/settings/SettingsModal";
-import { apiFetch, ApiError } from "@/lib/api";
-import { getToken, clearToken, getStoredUser } from "@/lib/auth";
+import { useConvex } from "convex/react";
+import { useUser } from "@clerk/nextjs";
+import {
+  appendMessages,
+  assessJob,
+  createJob,
+  deleteJob,
+  getAssessment,
+  getMessages,
+  getRecommendations,
+  listJobs,
+  submitFollowup as submitFollowupApi,
+} from "@/lib/convexApi";
 import type {
-  AssessJobResponse,
   ChatMessagesOut,
   JobOut,
   RecommendationsOut,
@@ -225,11 +235,14 @@ function buildRiskCardData(
 
 export default function ChatPage() {
   const router = useRouter();
+  const convex = useConvex();
 
-  // Gate: nothing renders until we've confirmed a token exists client-side
-  // (localStorage isn't readable by Next.js middleware/edge — see the
-  // useEffect below).
-  const [authChecked, setAuthChecked] = useState(false);
+  // Route protection now happens in middleware.ts, BEFORE this page is sent —
+  // an unauthenticated request never reaches this component. What remains is
+  // waiting for Clerk to hydrate the user on the client so the sidebar can show
+  // a real name instead of a flash of empty state.
+  const { user, isLoaded: userLoaded } = useUser();
+  const authChecked = userLoaded;
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -238,14 +251,12 @@ export default function ChatPage() {
   const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [jobsById, setJobsById] = useState<Record<string, JobOut>>({});
-  // Lazy initializer only (never touched by the SSR/hydration render that
-  // matters — the tree that reads `profile` is gated behind `authChecked`,
-  // which is always false until the client-only effect below flips it, so
-  // there's no hydration-mismatch risk from reading localStorage here).
-  const [profile, setProfile] = useState<Profile>(() => {
-    const stored = getStoredUser();
-    return stored ? { name: stored.name, email: stored.email } : { name: "", email: "" };
-  });
+  // Derived from Clerk's session rather than held in state: the user's name and
+  // email are Clerk's to own now, and a local copy could only go stale.
+  const profile: Profile = {
+    name: user?.fullName ?? user?.firstName ?? "",
+    email: user?.primaryEmailAddress?.emailAddress ?? "",
+  };
 
   // The stage is kept in a ref because async handlers read it synchronously
   // mid-flow, and mirrored into state because the composer has to re-render
@@ -285,10 +296,7 @@ export default function ChatPage() {
     const batch = transcriptQueueRef.current;
     transcriptQueueRef.current = [];
     try {
-      await apiFetch(`/jobs/${jobId}/messages`, {
-        method: "POST",
-        body: JSON.stringify({ messages: batch }),
-      });
+      await appendMessages(convex, jobId, batch);
     } catch {
       // Best-effort by design: the transcript is a record of the
       // conversation, never an input to an assessment (see the backend's
@@ -305,27 +313,16 @@ export default function ChatPage() {
   }, [messages, isTyping]);
 
   // ---- Auth gate ----
-  // Token lives in localStorage (client-only, not readable by middleware/
-  // edge — see AGENTS.md task spec §2), so this has to be a client-side
-  // effect rather than real route middleware. This is the textbook
-  // "synchronize with an external system" effect react.dev describes
-  // (https://react.dev/learn/you-might-not-need-an-effect#fetching-data)
-  // and has no reactive-derived-state alternative — the
-  // react-hooks/set-state-in-effect heuristic can't distinguish that from
-  // the anti-patterns it targets, hence the explicit suppression.
-  useEffect(() => {
-    if (!getToken()) {
-      router.replace("/login");
-      return;
-    }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setAuthChecked(true);
-  }, [router]);
+  // Deliberately empty now. The client-side gate that used to live here existed
+  // only because the JWT was in localStorage, which middleware cannot read, so
+  // the protected page shipped and hydrated before redirecting. Clerk's session
+  // is a cookie, so middleware.ts rejects unauthenticated requests at the edge
+  // and this component never renders for a signed-out visitor.
 
   // ---- Load sidebar history once auth passes ----
   const refreshJobs = useCallback(async () => {
     try {
-      const jobs = await apiFetch<JobOut[]>("/jobs");
+      const jobs = await listJobs(convex);
       setJobsById((prev) => {
         const next = { ...prev };
         for (const job of jobs) next[job.id] = job;
@@ -339,7 +336,7 @@ export default function ChatPage() {
       // Sidebar history is a nice-to-have on load; a failed fetch here
       // shouldn't block the rest of the chat UI from working.
     }
-  }, []);
+  }, [convex]);
 
   // Same rationale as the auth-gate effect above: a genuine one-time fetch
   // synchronized to an external system (the backend's job list) on mount,
@@ -368,8 +365,11 @@ export default function ChatPage() {
   };
 
   const pushErrorMessage = (err: unknown) => {
+    // Convex surfaces a thrown server-side Error as a client Error whose message
+    // carries the text we raised, so the user-facing wording written in the
+    // Convex functions reaches the user unchanged.
     const message =
-      err instanceof ApiError
+      err instanceof Error && err.message
         ? err.message
         : "Couldn't reach the server. Check your connection and try again.";
     setMessages((prev) => [
@@ -414,16 +414,14 @@ export default function ChatPage() {
     setIsTyping(true);
     setAwaitingReplyOptions(null);
     try {
-      await apiFetch<AssessJobResponse>(`/jobs/${job.id}/assess`, { method: "POST" });
-      const assessment = await apiFetch<RiskAssessmentOut>(`/assessments/${job.id}`);
+      await assessJob(convex, job.id);
+      const assessment = await getAssessment(convex, job.id);
 
-      // Never request recommendations for a failed assessment — that 409s
-      // (recommendation_service.py) and, more importantly, a failed
-      // pipeline must never imply real tool guidance exists.
+      // Never request recommendations for a failed assessment — that returns
+      // nothing and, more importantly, a failed pipeline must never imply real
+      // tool guidance exists.
       const recommendations =
-        assessment.status === "completed"
-          ? await apiFetch<RecommendationsOut>(`/recommendations/${job.id}`)
-          : null;
+        assessment.status === "completed" ? await getRecommendations(convex, job.id) : null;
 
       const riskCard = buildRiskCardData(job, assessment, recommendations);
       setIsTyping(false);
@@ -438,13 +436,16 @@ export default function ChatPage() {
       // after a Gemini outage). It refuses to assess rather than penalise an
       // unanswered question — so ask the question instead of dead-ending on
       // an error the user can't act on.
-      if (err instanceof ApiError && err.code === "followup_incomplete" && followupRecoveryRef.current < 3) {
+      if (
+        err instanceof Error &&
+        err.message.includes("follow-up questions must be answered") &&
+        followupRecoveryRef.current < 3
+      ) {
         followupRecoveryRef.current += 1;
         try {
-          const refreshed = await apiFetch<JobOut>(`/jobs/${job.id}/followup`, {
-            method: "PATCH",
-            body: JSON.stringify({ answers: {} }),
-          });
+          // Submitting no answers re-derives the required set and the next
+          // question — it never advances past anything unanswered.
+          const refreshed = await submitFollowupApi(convex, job.id, {});
           setJobsById((prev) => ({ ...prev, [refreshed.id]: refreshed }));
           if (refreshed.next_followup) {
             setIsTyping(false);
@@ -484,12 +485,7 @@ export default function ChatPage() {
     setIsTyping(true);
     setAwaitingReplyOptions(null);
     try {
-      const job = await apiFetch<JobOut>("/jobs", {
-        method: "POST",
-        body: JSON.stringify({
-          description: pendingDescriptionRef.current,
-        }),
-      });
+      const job = await createJob(convex, pendingDescriptionRef.current);
       setIsTyping(false);
       setJobsById((prev) => ({ ...prev, [job.id]: job }));
       setHistory((prev) => [jobToHistoryItem(job), ...prev]);
@@ -516,10 +512,7 @@ export default function ChatPage() {
     setIsTyping(true);
     setAwaitingReplyOptions(null);
     try {
-      const updated = await apiFetch<JobOut>(`/jobs/${job.id}/followup`, {
-        method: "PATCH",
-        body: JSON.stringify({ answers: { [field]: answer } }),
-      });
+      const updated = await submitFollowupApi(convex, job.id, { [field]: answer });
       setIsTyping(false);
       setJobsById((prev) => ({ ...prev, [updated.id]: updated }));
 
@@ -553,7 +546,7 @@ export default function ChatPage() {
   const replayStoredTranscript = async (job: JobOut): Promise<boolean> => {
     let stored: ChatMessagesOut;
     try {
-      stored = await apiFetch<ChatMessagesOut>(`/jobs/${job.id}/messages`);
+      stored = await getMessages(convex, job.id);
     } catch {
       return false;
     }
@@ -562,11 +555,9 @@ export default function ChatPage() {
     let riskCard: RiskCardData | null = null;
     if (stored.messages.some((m) => m.kind === "risk_card")) {
       try {
-        const assessment = await apiFetch<RiskAssessmentOut>(`/assessments/${job.id}`);
+        const assessment = await getAssessment(convex, job.id);
         const recommendations =
-          assessment.status === "completed"
-            ? await apiFetch<RecommendationsOut>(`/recommendations/${job.id}`)
-            : null;
+          assessment.status === "completed" ? await getRecommendations(convex, job.id) : null;
         riskCard = buildRiskCardData(job, assessment, recommendations);
       } catch {
         riskCard = null;
@@ -597,11 +588,9 @@ export default function ChatPage() {
   const loadFinishedJob = async (job: JobOut) => {
     setIsTyping(true);
     try {
-      const assessment = await apiFetch<RiskAssessmentOut>(`/assessments/${job.id}`);
+      const assessment = await getAssessment(convex, job.id);
       const recommendations =
-        assessment.status === "completed"
-          ? await apiFetch<RecommendationsOut>(`/recommendations/${job.id}`)
-          : null;
+        assessment.status === "completed" ? await getRecommendations(convex, job.id) : null;
       const riskCard = buildRiskCardData(job, assessment, recommendations);
       setIsTyping(false);
       setMessages((prev) => [...prev, { id: nextId(), role: "assistant", riskCard, createdAt: Date.now() }]);
@@ -765,7 +754,7 @@ export default function ChatPage() {
 
   const handleDeleteHistory = async (id: string) => {
     try {
-      await apiFetch(`/jobs/${id}`, { method: "DELETE" });
+      await deleteJob(convex, id);
     } catch (err) {
       // Deleting is destructive and user-initiated: if the server refused,
       // say so rather than removing the row locally and letting it reappear
@@ -781,7 +770,7 @@ export default function ChatPage() {
     // in place and every chat came straight back on the next page load.
     const ids = history.map((h) => h.id);
     const results = await Promise.allSettled(
-      ids.map((id) => apiFetch(`/jobs/${id}`, { method: "DELETE" })),
+      ids.map((id) => deleteJob(convex, id)),
     );
     results.forEach((result, i) => {
       if (result.status === "fulfilled") dropJobLocally(ids[i]);
@@ -789,9 +778,7 @@ export default function ChatPage() {
     const failed = results.filter((r) => r.status === "rejected");
     if (failed.length > 0) {
       pushErrorMessage(
-        new ApiError(
-          500,
-          "clear_history_partial",
+        new Error(
           `${failed.length} of ${ids.length} conversations couldn't be deleted. Please try again.`,
         ),
       );
@@ -812,11 +799,38 @@ export default function ChatPage() {
     URL.revokeObjectURL(url);
   };
 
-  const handleDeleteAccount = () => {
-    // No DELETE /users/me endpoint exists on the backend yet (out of scope
-    // for this pass) — this clears local state/session so the UI reflects
-    // "logged out" rather than silently doing nothing.
-    clearToken();
+  const handleProfileChange = async (next: Profile) => {
+    // The name now lives in Clerk, so editing it writes there rather than into
+    // local state. Previously this only updated a localStorage copy, which meant
+    // the change survived a refresh but was invisible to everything else and
+    // silently reverted on the next login.
+    //
+    // Email is deliberately not written: changing it in Clerk requires a
+    // verification round-trip this screen has no design for.
+    const [firstName, ...rest] = next.name.trim().split(/\s+/);
+    try {
+      await user?.update({
+        firstName: firstName || undefined,
+        lastName: rest.length > 0 ? rest.join(" ") : undefined,
+      });
+    } catch (err) {
+      pushErrorMessage(err);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    // This used to be a lie: with no delete endpoint, it cleared localStorage so
+    // the UI merely LOOKED logged out while the account and every job survived.
+    // Clerk can delete the account for real, and the `user.deleted` webhook
+    // cascades that through to the jobs, transcripts, assessments and AI logs
+    // (see convex/users.ts deleteFromClerk), so the promise the button makes is
+    // now the promise the system keeps.
+    try {
+      await user?.delete();
+    } catch (err) {
+      pushErrorMessage(err);
+      return;
+    }
     setHistory([]);
     setMessages([]);
     setActiveHistoryId(null);
@@ -842,7 +856,7 @@ export default function ChatPage() {
         onToggleFavourite={handleToggleFavourite}
         onDeleteHistory={(id) => void handleDeleteHistory(id)}
         profile={profile}
-        onProfileChange={setProfile}
+        onProfileChange={(next) => void handleProfileChange(next)}
         onClearHistory={handleClearHistory}
         onExportHistory={handleExportHistory}
         onDeleteAccount={handleDeleteAccount}

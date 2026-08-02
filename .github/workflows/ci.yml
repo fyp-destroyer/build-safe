@@ -2,33 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging]
   pull_request:
-    branches: [main]
+    branches: [main, staging]
 
 jobs:
-  backend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: pip install -r apps/backend/requirements.txt -r apps/backend/requirements-dev.txt
-
-      - name: Lint (ruff)
-        run: ruff check apps/backend
-
-      - name: Format check (black)
-        run: black --check apps/backend
-
-      - name: Tests (pytest)
-        run: pytest apps/backend/tests
-
   frontend:
     runs-on: ubuntu-latest
     steps:
@@ -49,6 +27,57 @@ jobs:
         working-directory: apps/frontend
         run: npm run lint
 
+      - name: Typecheck
+        working-directory: apps/frontend
+        run: npx tsc --noEmit
+
+      # The safety-critical suite: the catalog's invariants (rules only
+      # escalate, silence never buys safety, the LLM cannot exceed its
+      # authority) and the evidence-grounding check. rules.md §1 forbids
+      # shipping ai/ruleEngine without these.
+      - name: Safety tests
+        working-directory: apps/frontend
+        run: npm run test
+
       - name: Build
         working-directory: apps/frontend
         run: npm run build
+        env:
+          # Build-time placeholders. The real values live in Vercel's project
+          # settings; these only need to be well-formed for `next build` to
+          # prerender, and no request is made with them.
+          NEXT_PUBLIC_CONVEX_URL: https://example.convex.cloud
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2xlcmsuZXhhbXBsZS5jb20k
+
+  # Guards the two ports that carry the safety decision. Both replay the
+  # TypeScript implementations against the original Python ones, row by row,
+  # across the whole 579-row corpus.
+  #
+  # The Python side is NOT re-run here — apps/backend was removed once the ports
+  # were verified. Its outputs are committed instead (tools/*_python_results.json)
+  # and the TypeScript side is diffed against them, so a regression in the rule
+  # engine or the classifier fails the build rather than quietly changing what
+  # the product tells people is safe.
+  port-equivalence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: apps/frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: apps/frontend
+        run: npm ci
+
+      - name: Rule engine matches the Python original
+        working-directory: apps/frontend
+        run: npx tsx ../../tools/compare_rule_engines.mjs
+
+      - name: Classifier matches scikit-learn
+        working-directory: apps/frontend
+        run: npx tsx ../../tools/compare_classifiers.mjs

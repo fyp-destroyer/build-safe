@@ -101,11 +101,15 @@ Each phase has a clear deliverable and an exit check. Don't start a phase until 
 
 **Deliverable:** deployed, demo-ready system.
 
-- [ ] Unit tests for `ai/rule_engine`, `ai/classifier`, core services
+> Scope changed mid-phase: the deploy target is no longer "Vercel + Render/Railway/Fly.io + managed Postgres" but **Vercel + Convex + Clerk**, because the requirement became that nothing runs on a self-hosted server.
+
+- [x] Unit tests for the rule engine / catalog — 34 property tests in `convex/ai/ruleEngine/ruleEngine.test.ts` (Vitest), covering catalog integrity, escalate-only, missing-vs-denied, gates, LLM authority limits and evidence grounding. Run with `npm run test`.
+- [x] **Port-equivalence gates (new, and stronger than the tests they replace).** The rule engine and classifier were rewritten from Python to TypeScript, so both are diffed row-by-row against the originals: 2,316 rule-engine evaluations identical, and 579 classifier rows identical to 1.55e-15. Both run in CI (`tools/compare_*.mjs`); the frozen Python outputs are committed so the gate survives the deletion of `apps/backend`.
 - [ ] API integration tests
 - [ ] UI smoke tests for the 4 demo scenarios
-- [ ] Migrate auth from the current custom JWT implementation to Clerk — **planned, not started.** User's stated intent (2026-07-19): switch after the core flow (Phases 2-7) is working end-to-end, not before. Note this reverses an earlier same-day decision (see `memory.md` Decisions Log, 2026-07-19: "Considered switching auth to Clerk — decided against, kept JWT") made when the cost looked like ripping out already-built, already-tested auth mid-flow; revisit the webhook-based user-sync design (Clerk user → local `users` row as the FK target for jobs/assessments) once this phase is actually reached.
-- [ ] Deployed frontend (Vercel), backend (Render/Railway/Fly.io), DB (managed Postgres)
+- [x] **Migrate auth from custom JWT to Clerk — DONE (2026-08-03).** Driven through Clerk's headless hooks so the auth screens are visually unchanged; Google OAuth now works on the button that was previously decorative. The webhook-based user-sync design this item anticipated turned out to be **unnecessary for creation**: `ctx.auth.getUserIdentity()` supplies everything a `users` row needs, so `users.getOrCreateCurrent` creates it just-in-time with no window where a signed-in user has no row. A webhook is still wired, for the two things JIT cannot cover — `user.updated` (keep email/name fresh) and `user.deleted` (cascade-delete the user's jobs, transcripts, assessments and AI logs). Biggest structural win: route protection is now real. `/chat` is rejected at the edge in `proxy.ts` before any page code runs, replacing the client-side `useEffect` gate that could only redirect *after* the protected page had already shipped and hydrated.
+- [x] **Backend + database migrated to Convex (2026-08-03).** `apps/backend/`, `docker-compose.yml` and `infra/postgres-initdb/` removed. Motivated by a hard requirement that nothing run on a self-hosted machine. See `architecture.md` §1.1.
+- [ ] Deployed frontend (Vercel) + Convex production deployment
 - [ ] Seed/demo data loaded
   **Exit check:** all Acceptance Criteria in the SRS §11 pass in the deployed environment, not just locally.
 

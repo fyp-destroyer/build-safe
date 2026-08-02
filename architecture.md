@@ -4,17 +4,51 @@
 
 | Layer         | Choice                                                                                                | Notes                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Frontend      | Next.js (App Router) + TypeScript + Tailwind CSS                                                      | SSR for dashboards, easy deploy to Vercel                                                                               |
-| Backend       | FastAPI (Python)                                                                                      | Python chosen so the ML pipeline lives in the same language/runtime as the API — no cross-language model-serving layer |
-| Database      | PostgreSQL                                                                                            | Relational core; pgvector extension enabled                                                                             |
-| Vector search | pgvector + sentence-transformers embeddings                                                           | Semantic tool/material/task retrieval                                                                                   |
-| ML            | scikit-learn (baseline: TF-IDF + Logistic Regression) → sentence-transformer + classifier (improved) | Both versions kept; compare in eval report                                                                              |
-| LLM layer     | Google Gemini API **or** Groq (OpenAI-compatible chat completions), chosen via `LLM_PROVIDER`; template-constrained + schema-constrained (structured JSON output) prompts | Explanation wording, follow-up question phrasing, and hazard/category tagging ONLY — never the risk decision itself. Switched from Anthropic API to Gemini 2026-07-19; Groq added as a swappable alternative 2026-07-31 (see memory.md decisions log). Both sit behind the single `ai/llm/client.py` boundary and every reply is Pydantic-validated before use, so the configured provider cannot affect a risk decision — only tagging/wording quality, with the hardcoded fallbacks unchanged. |
-| File storage  | Supabase Storage (or S3-compatible)                                                                   | Task photos                                                                                                             |
-| Auth          | JWT-based session (single`user` role — no professional/admin roles)                                | Enforced at API middleware layer                                                                                        |
-| Deployment    | Frontend → Vercel; Backend → Render/Railway/Fly.io; DB → managed Postgres (Supabase/Neon)          |                                                                                                                         |
+| Frontend      | Next.js 16 (App Router) + TypeScript + Tailwind v4                                                    | Deployed to Vercel                                                                                                      |
+| Backend       | **Convex** (TypeScript queries/mutations/actions)                                                     | Hosted database *and* function runtime in one. Replaced FastAPI + PostgreSQL on 2026-08-03 (see §1.1)                    |
+| Database      | **Convex** documents                                                                                  | Same service as the backend; no separate DB to provision, no migrations to run                                          |
+| Vector search | *Not implemented*                                                                                     | pgvector was enabled but never used (no vector column, no embeddings). Convex has its own vector indexes if picked up    |
+| ML            | scikit-learn TF-IDF + Logistic Regression, **exported to JSON and evaluated in TypeScript**            | Trained offline in `ml/`; `ml/export_model_json.py` emits the weights and `convex/ai/classifier/` reproduces inference   |
+| LLM layer     | Google Gemini **or** Groq (OpenAI-compatible), chosen via `LLM_PROVIDER`; schema-constrained JSON only | Explanation wording, follow-up phrasing, and hazard/category tagging ONLY — never the risk decision. Both sit behind the single `convex/ai/llm/client.ts` boundary and every reply is Zod-validated before use, so the configured provider cannot affect a risk decision |
+| File storage  | *Not implemented*                                                                                     | Photo upload was specified but never built. Convex file storage if picked up                                            |
+| Auth          | **Clerk** (single `user` role — no professional/admin roles)                                          | Session cookie, verified by Convex via a JWT template; route protection in `apps/frontend/proxy.ts`                      |
+| Deployment    | Frontend → Vercel; backend + database → Convex; auth → Clerk                                          | Three managed services, nothing self-hosted                                                                             |
 
-> If the team prefers a single-language stack, Node.js/NestJS is an acceptable backend swap — but ML inference would then need to run as a separate Python microservice. Default to FastAPI unless the team has a strong reason to switch.
+### 1.1 Why this changed (2026-08-03)
+
+The original stack was Next.js → FastAPI → PostgreSQL, with the deliberate
+rationale that "Python is chosen so the ML pipeline lives in the same
+language/runtime as the API — no cross-language model-serving layer." That
+reasoning was sound and is worth recording rather than quietly overwriting.
+
+It was reversed for one requirement: **nothing may run on a self-hosted server.**
+Convex executes TypeScript only, so keeping Python would have meant deploying and
+paying for a fourth service purely to host the AI pipeline.
+
+The obstacle was that `final_risk = max(ML, rules)` is non-negotiable (rules.md
+§4.2), so the classifier could not simply be dropped — and it is not dead weight:
+after the `user_skill` confound was fixed and the model retrained (2026-08-02),
+test-split `max(ML, rules)` high-risk recall rose 0.686 → 0.743.
+
+The resolution is that the shipped model is only numbers. TF-IDF is a vocabulary,
+a set of IDF weights and a normalisation; logistic regression is a matrix multiply
+and a softmax. Both port to TypeScript **exactly**, and both were verified to do
+so before the Python was deleted:
+
+- **Rule engine** — 2,316 evaluations (579 tasks x 4 answer states) produce
+  identical risk levels, triggered rules, explanations and follow-ups.
+  (`tools/compare_rule_engines.mjs`)
+- **Classifier** — 579 rows produce identical predicted classes with a maximum
+  probability difference of 1.55e-15, i.e. floating-point noise.
+  (`tools/compare_classifiers.mjs`)
+
+Both run in CI against committed Python outputs, so a future regression fails the
+build rather than quietly changing what the product tells people is safe.
+
+The catalog itself was not retyped: `tools/generate_catalog_ts.py` generated the
+TypeScript from the Python source, because a dropped keyword or a floor typed as
+3 instead of 4 compiles, runs, looks fine on review, and silently under-escalates
+one hazard family forever.
 
 ## 2. High-Level App Flow
 
@@ -22,39 +56,53 @@
 User (browser)
    │
    ▼
-Next.js Frontend  ──────────────►  FastAPI Backend
-   │  (chat interface,                │
-   │   inline risk cards,             ├── /auth        (login, register)
-   │   dashboard)                     ├── /jobs         (submit task, follow-ups)
-   │                                  ├── /assessments  (risk classification results)
-   │                                  └── /recommendations (tools/materials/PPE)
-   │                                       │
-   │                                       ▼
-   │                              AI Decision Layer
-   │                              ┌───────────────────────────────────────────┐
-   │                              │ ML Classifier  ──────┐                    │
-   │                              │                      ├─► max() ──► final_risk
-   │                              │ Rule Engine       ────┘                   │
-   │                              │  ├─ hardcoded rubric (risk levels,        │
-   │                              │  │  escalation logic — code-reviewed,    │
-   │                              │  │  never runtime-editable)               │
-   │                              │  └─ LLM hazard classifier: tags which    │
-   │                              │     hardcoded hazard rules match the     │
-   │                              │     task text — never assigns a risk     │
-   │                              │     number itself (see rules.md §4.1)    │
-   │                              └───────────────────────────────────────────┘
-   │                                       │
-   │                                       ▼
-   │                              LLM Layer (templated)
-   │                              explanation text, follow-up wording
-   │                                       │
-   ▼                                       ▼
-Rendered chat + risk card       PostgreSQL (+ pgvector)
-                                 users, jobs, risk_assessments,
-                                 tools, materials, ai_logs
+Next.js Frontend (Vercel)                    Clerk
+   │  chat interface,          ◄────────────  session cookie, Google OAuth
+   │  inline risk cards        proxy.ts guards /chat and /dashboard
+   │
+   │  useQuery / useMutation / useAction  (Clerk JWT attached automatically)
+   ▼
+Convex  (database + functions, one service)
+   │
+   ├── users.ts            JIT user creation from the Clerk identity
+   ├── jobs.ts             create, list, follow-ups, delete
+   ├── chat.ts             transcript
+   ├── assessments.ts      the risk pipeline
+   ├── recommendations.ts  tools / materials / PPE (placeholder)
+   └── http.ts             Clerk webhook (user.updated / user.deleted)
+              │
+              ▼
+      AI Decision Layer  (convex/ai/, TypeScript)
+      ┌───────────────────────────────────────────┐
+      │ ML Classifier  ──────┐                    │
+      │  TF-IDF + LogReg     ├─► max() ──► finalRisk
+      │  weights in JSON     │                    │
+      │ Rule Engine       ────┘                   │
+      │  ├─ hardcoded catalog (34 rules, floors,  │
+      │  │  escalation logic — code-reviewed,     │
+      │  │  never runtime-editable)               │
+      │  └─ LLM hazard tagger: selects which      │
+      │     hardcoded rules match the task text,  │
+      │     quoting the user's own words as       │
+      │     evidence — never assigns a risk       │
+      │     number itself (rules.md §4.1)         │
+      └───────────────────────────────────────────┘
+              │
+              ▼
+      LLM Layer (convex/ai/llm/client.ts — actions only)
+      Gemini or Groq: follow-up wording, hazard/category tagging
+              │
+              ▼
+      Convex documents
+      users, jobs, riskAssessments, chatMessages, aiLogs
 ```
 
-**Non-negotiable flow rule:** the frontend never calls the LLM directly, and the backend never returns a risk level that didn't pass through `max(ML, rules)`. The LLM only ever formats output the rule engine/classifier already decided, or tags which hardcoded hazard rule(s) apply — it never invents a rule or a risk number. There is no admin dashboard and no runtime-editable rule table; the hardcoded rubric lives in code (`ai/rule_engine/`), authored with LLM assistance offline and reviewed like any other PR.
+Network I/O is only legal inside a Convex **action**, so a query or mutation
+physically cannot reach a model. The rule arithmetic lives in pure functions and
+mutations, which is what makes "the LLM never decides risk" a property of the
+runtime rather than a convention held up by a docstring.
+
+**Non-negotiable flow rule:** the frontend never calls the LLM directly, and the backend never returns a risk level that didn't pass through `max(ML, rules)`. The LLM only ever formats output the rule engine/classifier already decided, or tags which hardcoded hazard rule(s) apply — it never invents a rule or a risk number. There is no admin dashboard and no runtime-editable rule table; the hardcoded rubric lives in code (`apps/frontend/convex/ai/ruleEngine/`), authored with LLM assistance offline and reviewed like any other PR.
 
 ## 3. Repository Structure
 
@@ -76,55 +124,83 @@ buildsafe-ai/
 │   │   ├── lib/                    # api client, auth helpers, types
 │   │   └── styles/
 │   │
-│   └── backend/                    # FastAPI backend
-│       ├── main.py
-│       ├── routers/
-│       │   ├── auth.py
-│       │   ├── jobs.py
-│       │   ├── assessments.py
-│       │   └── recommendations.py
-│       ├── ai/
-│       │   ├── classifier/         # ML model load/predict
-│       │   ├── rule_engine/        # hardcoded rubric + hazard rules (code, not DB), escalation logic
-│       │   ├── explanation/        # LLM templating for explanations
-│       │   └── recommend/          # tool/material/PPE recommendation logic
-│       ├── models/                 # SQLAlchemy models (mirrors DB schema)
-│       ├── schemas/                # Pydantic request/response schemas
-│       ├── services/               # business logic, orchestrates ai/ + models/
-│       ├── core/                   # config, security/auth, db session
-│       └── tests/
+│   │   ├── lib/                    # convexApi adapter, types, chat helpers
+│   │   ├── proxy.ts                # route protection (Next 16 renamed middleware -> proxy)
+│   │   └── convex/                 # THE BACKEND — database schema + all server functions
+│   │       ├── schema.ts           # 5 tables: users, jobs, riskAssessments, aiLogs, chatMessages
+│   │       ├── auth.config.ts      # Clerk as the identity provider
+│   │       ├── http.ts             # Clerk webhook endpoint (.convex.site/clerk-webhook)
+│   │       ├── users.ts            # JIT user creation, cascade delete
+│   │       ├── jobs.ts             # create / list / follow-ups / delete
+│   │       ├── chat.ts             # transcript
+│   │       ├── assessments.ts      # max(ML, rules), aiLogs, fail-loud path
+│   │       ├── recommendations.ts  # tools/materials/PPE (placeholder)
+│   │       └── ai/
+│   │           ├── jobLogic.ts     # shared pure logic (the follow-up gate AND scorer)
+│   │           ├── ruleEngine/
+│   │           │   ├── catalog.ts  # GENERATED from the Python original — do not hand-edit
+│   │           │   ├── rules.ts    # evaluate / explain / follow-ups
+│   │           │   ├── llmAssist.ts# hazard tagging + evidence grounding
+│   │           │   └── ruleEngine.test.ts
+│   │           ├── classifier/
+│   │           │   ├── model.json  # exported TF-IDF + LogReg weights
+│   │           │   ├── tfidf.ts    # sklearn-identical vectorizer
+│   │           │   └── classify.ts # matrix multiply + softmax, fail-loud
+│   │           └── llm/client.ts   # the ONLY module that calls an LLM
 │
-├── ml/
-│   ├── data/                       # labeled dataset (raw + processed), never committed with PII
-│   ├── notebooks/                  # EDA, model comparison
-│   ├── train_baseline.py           # TF-IDF + Logistic Regression
-│   ├── train_embedding_model.py    # sentence-transformer + classifier
+├── ml/                             # offline training + evaluation (not served)
+│   ├── data/                       # labeled dataset (raw + processed)
+│   ├── train_baseline.py           # TF-IDF + Logistic Regression  <- the shipped model
+│   ├── train_embedding_model.py    # sentence-transformer + classifier (rejected, kept)
+│   ├── export_model_json.py        # emits convex/ai/classifier/model.json
 │   └── eval/                       # metrics, confusion matrix, reports
 │
-├── docs/
-│   ├── prd.md
-│   ├── architecture.md
-│   ├── rules.md
-│   ├── phases.md
-│   ├── design.md
-│   └── memory.md
+├── tools/                          # one-off porting + verification harnesses
+│   ├── generate_catalog_ts.py      # Python catalog -> TypeScript catalog
+│   ├── compare_rule_engines.mjs    # equivalence gate (CI)
+│   ├── compare_classifiers.mjs     # equivalence gate (CI)
+│   └── *_python_results.json       # frozen Python outputs the gates diff against
 │
-└── infra/                          # deployment configs (Vercel, Render, migrations)
+├── prd.md, architecture.md, rules.md, srs.md, phases.md, design.md, memory.md
+│
+└── infra/                          # no infrastructure; README documents env vars
 ```
+
+> The docs live at the repository root rather than in `docs/`, contrary to the
+> original plan above. Left as-is deliberately: every cross-reference in every
+> file already points at the root paths.
 
 ## 4. Data Flow for a Single Assessment
 
-1. `POST /jobs` — creates a `jobs` row from the task submission.
-2. Backend determines missing safety-critical fields → returns follow-up questions.
-3. `PATCH /jobs/{id}/followup` — user answers; repeat until context is complete.
-4. `POST /jobs/{id}/assess`:
-   - `ai/classifier` predicts risk + confidence from job context.
-   - `ai/rule_engine` independently evaluates job context against the hardcoded hazard rule set — an LLM call classifies which hardcoded rule(s) match the task text (hazard tagging only, never a risk number), then the hardcoded rubric maps matched hazards to an escalation floor.
-   - Service layer computes `final_risk = max(classifier_risk, rule_risk)`.
-   - `ai/explanation` generates templated explanation text (facts inserted, not invented).
-   - `ai/recommend` produces tool/material/PPE list + cost/time estimate.
-   - Everything is written to `risk_assessments` and `ai_logs`.
-5. Frontend renders the risk report from `GET /assessments/{job_id}`. If risk ≥ Professional Recommended, the card recommends hiring a licensed professional — there is no in-app quote request or professional matching; that happens outside the product.
+1. `jobs.create` (action) — the LLM tags a category and which hardcoded hazard
+   rules apply, quoting the user's own words as evidence for each. Tags are
+   resolved ONCE here and persisted, so the hazard set that decides what the
+   user is *asked* can never differ from the one that decides how the task is
+   *scored*.
+2. The catalog derives which safety-critical follow-ups are required from the
+   hazards that fired, and `jobs.ts` stores the next unanswered one with
+   LLM-phrased wording.
+3. `jobs.submitFollowup` (action) — user answers; repeat until nothing is
+   unresolved. An explicit "no" is an ANSWER and must not be re-asked; only an
+   absent key counts as missing.
+4. `assessments.assess` (action):
+   - `ai/classifier` predicts risk + confidence from the description and category.
+   - `ai/ruleEngine` independently evaluates the job against the hardcoded
+     catalog. LLM-proposed rule ids are filtered against the catalog and then
+     held to the same excludes / categories / gates as a keyword match, so a
+     hallucinated or out-of-scope tag is discarded.
+   - `finalRisk = max(mlRisk, ruleRisk)`.
+   - The explanation is templated from the triggered rules — and must not cite
+     the classifier when the classifier had no vote.
+   - `recommendations` produces a tool/material/PPE list (placeholder).
+   - An `aiLogs` row is written on EVERY attempt, including failures, with no
+     sampling. A pipeline exception writes `status: "failed"` and blocks the DIY
+     recommendation rather than falling back to anything that looks safe.
+5. The frontend renders the card from `assessments.get`, which derives
+   `safetyNotes` from the catalog at read time rather than storing a second copy
+   of safety text that could drift. If risk ≥ Professional Recommended, the card
+   recommends hiring a licensed professional — there is no in-app quote request
+   or professional matching; that happens outside the product.
 
 ## 5. Database (summary — see SRS for full schema)
 

@@ -5,7 +5,7 @@ A Risk-Aware Construction Task Assessment and Tool Recommendation Platform
 Version 1.0 | Prepared for: Final Year Project Supervisor | Status: Draft
 Conforms to IEEE 830-style SRS structure
 
-> **Note:** This SRS reflects the original project scope and requirements. Where §10 (Technology Stack) lists options still open at the time (e.g., "FastAPI or Node.js/NestJS"), `architecture.md` has since finalized those decisions — treat `architecture.md` as the source of truth for the actual tech stack in use. Scope has also since narrowed: the admin dashboard and professional/vendor accounts described in earlier drafts were cut (see `prd.md` §4, `phases.md` renumbering notes); this revision reflects that cut throughout.
+> **Note:** This SRS reflects the original project scope and requirements. Where §10 (Technology Stack) lists options that were still open at the time (e.g. "FastAPI or Node.js/NestJS"), `architecture.md` has since finalized them — treat `architecture.md` as the source of truth for the tech stack in use. **The stack changed materially on 2026-08-03**: the backend and database moved to Convex and auth moved to Clerk, so there is no longer a separate API service, no PostgreSQL, and no JWT session of our own. §10 below has been updated; `architecture.md` §1.1 records why. Scope has also since narrowed: the admin dashboard and professional/vendor accounts described in earlier drafts were cut (see `prd.md` §4, `phases.md` renumbering notes); this revision reflects that cut throughout.
 
 ## 1. Introduction
 
@@ -50,7 +50,7 @@ BuildSafe AI will be delivered as a deployed web platform with two principal sub
 
 ### 2.1 Product Perspective
 
-BuildSafe AI is a new, standalone product. It is not an extension of an existing platform. It integrates a frontend web application, a backend API, a hybrid AI decision layer, a PostgreSQL database (with pgvector for semantic retrieval), and file storage for task photos.
+BuildSafe AI is a new, standalone product. It is not an extension of an existing platform. It integrates a frontend web application, a backend function layer, a hybrid AI decision layer, and a document database. (Originally specified with a PostgreSQL database plus pgvector for semantic retrieval and object storage for task photos; as built, persistence is Convex, and neither semantic retrieval nor photo upload was implemented — see §10.)
 
 ### 2.2 Product Functions (Summary)
 
@@ -71,7 +71,7 @@ BuildSafe AI is a new, standalone product. It is not an extension of an existing
 
 ### 2.4 Operating Environment
 
-Modern desktop and mobile web browsers over HTTPS. Backend deployed as a containerized/managed service; PostgreSQL as the system of record; object storage for images. See §10 for the specific technology stack.
+Modern desktop and mobile web browsers over HTTPS. As built: the frontend is deployed to Vercel and the backend functions and database are hosted by Convex, which is the system of record. Nothing is self-hosted and there is no container to operate. See §10.
 
 ### 2.5 Design and Implementation Constraints
 
@@ -127,14 +127,14 @@ Modern desktop and mobile web browsers over HTTPS. Backend deployed as a contain
 ### 5.2 Software Interfaces
 
 - REST API between frontend and backend for all task, assessment, and recommendation operations
-- Database interface (PostgreSQL) for all persistent storage
-- Vector similarity interface (pgvector or equivalent) for semantic tool/material/task retrieval
+- Database interface (Convex documents) for all persistent storage
+- Vector similarity interface for semantic tool/material/task retrieval — **specified but not implemented**; no embeddings are computed or stored
 - Object storage interface for task photo upload and retrieval
 - LLM API interface used only for templated explanation wording and follow-up question phrasing, never for the final risk decision
 
 ### 5.3 Communications Interfaces
 
-All client-server communication over HTTPS. Authentication via token-based session (e.g., JWT) attached to API requests.
+All client-server communication over HTTPS. Authentication is delegated to Clerk: the browser holds a Clerk session cookie, and Convex verifies a Clerk-issued JWT on every call via the `convex` JWT template. The application no longer signs, stores or revokes tokens of its own — which also retires the documented weakness of the previous scheme, a long-lived token held in `localStorage` with no revocation list.
 
 ## 6. Data Requirements
 
@@ -142,9 +142,9 @@ All client-server communication over HTTPS. Authentication via token-based sessi
 
 | Entity | Purpose | Key Attributes |
 |---|---|---|
-| users | Registered users — single role, no admin/professional roles | id, name, contact, credentials |
+| users | Registered users — single role, no admin/professional roles | id, clerkUserId, name, email. **Credentials are not stored** — Clerk owns them |
 | task_categories | Task category taxonomy | id, name (electrical, plumbing, carpentry, …) |
-| jobs | User-submitted task and its context | id, user_id, description, category_id, skill_level, urgency, budget |
+| jobs | User-submitted task and its context | id, userId, description, category, followupAnswers, llmHazardIds, status. `skill_level`, `urgency` and `budget` were retired from the product and are not stored |
 | job_photos | Uploaded task images | id, job_id, url, caption |
 | risk_assessments | Output of the classification engine | id, job_id, risk_level, confidence, explanation, hazard_tags, cost, time, difficulty |
 | tools / materials | Catalog of recommendable items | id, name, category, price_range, ppe_flag |
@@ -204,7 +204,7 @@ A non-expert user shall be able to submit a task and receive a risk report witho
 
 ## 8. System Architecture Overview
 
-The system follows a modular, layered architecture: a frontend web application; a backend API layer; an AI decision layer combining a supervised ML classifier with a deterministic safety rule engine; a recommendation layer for tools/materials; and a PostgreSQL data layer with vector-search support. The natural-language interface is a thin layer over this pipeline — it is not itself the source of the risk decision.
+The system follows a modular, layered architecture: a frontend web application; a backend API layer; an AI decision layer combining a supervised ML classifier with a deterministic safety rule engine; a recommendation layer for tools/materials; and a document data layer (Convex). The natural-language interface is a thin layer over this pipeline — it is not itself the source of the risk decision.
 
 ### 8.1 Hybrid Risk Decision Logic
 
@@ -232,13 +232,14 @@ Note: this is a representative starting set. The full rule catalog is hardcoded 
 | Layer | Technology | Purpose |
 |---|---|---|
 | Frontend | Next.js / React, Tailwind CSS | Conversational task-intake UI and assessment-history dashboard |
-| Backend | FastAPI or Node.js/NestJS | REST APIs for jobs, assessments, users, tools, materials |
-| Database | PostgreSQL | Structured storage for all core entities |
-| Vector Search | pgvector / sentence embeddings | Semantic retrieval for similar tasks, tools, materials |
-| ML Models | TF-IDF + Logistic Regression baseline; transformer/sentence-embedding classifier | Risk classification |
+| Backend | **Convex** (TypeScript functions) | Queries/mutations/actions for jobs, assessments, users, chat. No REST layer — the client calls functions directly |
+| Database | **Convex** documents | Storage for all core entities; same service as the backend |
+| Vector Search | *Not implemented* | Semantic retrieval was specified but never built |
+| ML Models | TF-IDF + Logistic Regression (the shipped model) | Risk classification. Trained offline in `ml/`, exported to JSON and evaluated in TypeScript so it runs inside Convex. The sentence-embedding alternative was built, compared and rejected (Phase 4) |
 | LLM Layer | Controlled prompting with templates | Explanation and follow-up question wording only |
-| Storage | Supabase Storage / Cloudinary | Task images and attachments |
-| Deployment | Vercel + Render/Railway/Fly.io + managed Postgres | Deployable FYP demo environment |
+| Storage | *Not implemented* | Task image upload was specified but never built |
+| Auth | **Clerk** | Email+password and Google sign-in, rendered in this app's own UI via Clerk's headless hooks |
+| Deployment | **Vercel + Convex + Clerk** | Three managed services; nothing self-hosted |
 
 ## 11. Acceptance Criteria for MVP Sign-Off
 

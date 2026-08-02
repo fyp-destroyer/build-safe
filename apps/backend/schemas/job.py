@@ -48,7 +48,23 @@ class JobCreateRequest(BaseModel):
 
     description: str = Field(min_length=1, max_length=5000)
     category: TaskCategory | None = None
-    skill_level: str = Field(min_length=1, max_length=50)
+    # Optional since 2026-08-02, and no longer collected by the chat flow —
+    # the same retirement `urgency` got, for the same reason: nothing
+    # consumes it any more, so asking cost the user a step in a safety flow
+    # and bought nothing.
+    #
+    # It stopped being a classifier feature when the seed data was rebalanced
+    # (ml/rebalance_skill.py): with skill and label made independent, its
+    # coefficient mass fell to the weakest block in the model, and the
+    # prediction became identical across all three values. The one rule that
+    # used it, `electrical_work_by_beginner`, is gone — `fixed_wiring_work`
+    # now carries its floor of 3 for everyone, which is the more honest
+    # number anyway given srs.md §3 concedes the input is unverifiable
+    # self-report.
+    #
+    # Still accepted, and the column retained (nullable), so existing clients
+    # and rows are unaffected and the change is reversible.
+    skill_level: str | None = Field(default=None, max_length=50)
     # Optional, and no longer collected by the chat flow. Nothing consumes
     # it: it is excluded from the classifier as a non-safety feature
     # (ml/train_baseline.py) and the rule engine ignores it. Kept on the API
@@ -88,7 +104,7 @@ class JobOut(BaseModel):
     user_id: UUID
     description: str
     category: str
-    skill_level: str
+    skill_level: str | None = None
     urgency: str | None = None
     followup_answers: dict
     status: str

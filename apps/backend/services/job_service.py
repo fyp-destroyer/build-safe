@@ -320,7 +320,7 @@ async def assess_job(db: AsyncSession, job: Job) -> RiskAssessment:
         confidence = 0.0
         ml_error: str | None = None
         try:
-            ml_risk, confidence = classify(job.description, job.category, job.skill_level)
+            ml_risk, confidence = classify(job.description, job.category)
         except Exception as exc:  # noqa: BLE001 - re-raised below when it matters
             if use_ml:
                 # The documented pipeline depends on this number; failing to

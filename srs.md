@@ -81,7 +81,7 @@ Modern desktop and mobile web browsers over HTTPS. Backend deployed as a contain
 
 ### 2.6 Assumptions and Dependencies
 
-- Users self-report skill level and task details honestly; the system has no independent means of verification
+- Users describe their task honestly; the system has no independent means of verification. **Self-reported skill level is no longer collected** (2026-08-02) — precisely because it could not be verified and had stopped affecting any outcome (see FR-02, §8)
 - A labeled dataset of sufficient size and quality (see §7.3) can be produced within the project timeline
 
 ## 3. System Features — Use Case Overview
@@ -99,7 +99,7 @@ Modern desktop and mobile web browsers over HTTPS. Backend deployed as a contain
 | ID | Title | Requirement | Priority |
 |---|---|---|---|
 | FR-01 | User Registration and Login | The system shall allow users to register and log in under a single `user` role (no professional or admin roles exist). | High |
-| FR-02 | Task Submission | The system shall allow a user to submit a task with description, category, skill level, and optional photo. **Urgency is no longer collected** (2026-07-31): nothing consumed it — it is excluded from the risk classifier as a non-safety feature and the rule engine ignores it — so asking cost the user a step in a safety flow and bought nothing. The API still accepts `urgency` as optional and the column is retained (nullable) so existing clients and rows are unaffected. Location and budget were never implemented. | High |
+| FR-02 | Task Submission | The system shall allow a user to submit a task with description, category, and optional photo. **Skill level is no longer collected** (2026-08-02) and **urgency is no longer collected** (2026-07-31): nothing consumed it — it is excluded from the risk classifier as a non-safety feature and the rule engine ignores it — so asking cost the user a step in a safety flow and bought nothing. Both are for the same reason: nothing consumed them, so asking cost the user a step in a safety flow and bought nothing. Skill level specifically had become a *proxy for the label* — 91% of `Experienced` training rows were level 4, so the classifier returned 4 for an experienced user changing a light bulb and 1 for a beginner rewiring a consumer unit (`ml/analyze_skill_bias.py`). After the data was rebalanced it became the weakest feature in the model and the prediction was identical across all three values. The API still accepts both as optional and both columns are retained (nullable) so existing clients and rows are unaffected. Location and budget were never implemented. | High |
 | FR-03 | Follow-Up Questions | The system shall generate follow-up questions specific to the task category and any risk factors not yet resolved (e.g., power isolation, load-bearing status). | High |
 | FR-04 | Risk Classification | The system shall classify each completed task into exactly one of five risk levels: Safe DIY, DIY with Supervision, Professional Recommended, Professional Required, Dangerous/Do Not Attempt. | High |
 | FR-05 | Risk Explanation | The system shall generate an explanation for every classification, listing the triggered safety factors and/or model rationale. | High |
@@ -212,13 +212,13 @@ The system follows a modular, layered architecture: a frontend web application; 
 final_risk = max( ML-predicted risk level, rule-engine risk level )
 ```
 
-The ML classifier operates on task text, category and user skill level. Available tools/PPE and urgency are not inputs: the backend has no tools field, and urgency is no longer collected at all (see FR-02). The rule engine evaluates the same context against hardcoded safety-critical conditions (e.g., electrical wiring + beginner user, gas connections, unknown load-bearing status, water near live electrical outlets) and can only escalate the final result upward on the five-level ordinal scale.
+The ML classifier operates on task text and category. Available tools/PPE, urgency and user skill level are not inputs: the backend has no tools field, and urgency and skill level are no longer collected at all (see FR-02). The rule engine evaluates the same context against hardcoded safety-critical conditions (e.g., work on fixed wiring, gas connections, unknown load-bearing status, water near live electrical outlets) and can only escalate the final result upward on the five-level ordinal scale.
 
 ## 9. Safety Rule Catalog (Representative Set)
 
 | Rule Condition | Resulting Escalation |
 |---|---|
-| Electrical wiring task + beginner user | Minimum risk becomes Professional Recommended |
+| Work on fixed wiring (any user) | Minimum risk becomes Professional Recommended |
 | Main electrical panel, live wiring, or unknown power isolation | Professional Required or Dangerous/Do Not Attempt |
 | Gas pipe, gas leak, or gas appliance connection | Professional Required or Dangerous/Do Not Attempt |
 | Wall demolition with unknown load-bearing status | Professional Required; structural assessment recommended |

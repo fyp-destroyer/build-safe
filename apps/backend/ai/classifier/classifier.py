@@ -6,15 +6,29 @@ sentence-embedding alternative was evaluated and rejected — with features
 matched the two were statistically indistinguishable, so the tie was broken
 on deployment cost (see `ml/eval/comparison_report.md`).
 
-FEATURES — and why there are only three
----------------------------------------
-`task_text`, `category`, `user_skill`. The model is trained on exactly these
-and nothing else, because they are exactly what a `Job` carries at assessment
-time. In particular it does NOT use `tools_available`: the dataset records it
-but `Job` has no such column and intake never asks, so training on it would
-be train/serve skew (measured: fitting with tools scored macro-F1 0.613 but
-served blanked — all production could do — it fell to 0.549). Everything else
-on a dataset row is an *output* of assessment and would leak the label.
+FEATURES — and why there are only two
+--------------------------------------
+`task_text` and `category`. The model is trained on exactly these and nothing
+else, because they are exactly what a `Job` carries at assessment time.
+
+It does NOT use `tools_available`: the dataset records it but `Job` has no
+such column and intake never asks, so training on it would be train/serve
+skew (measured: fitting with tools scored macro-F1 0.613 but served blanked —
+all production could do — it fell to 0.549). Everything else on a dataset row
+is an *output* of assessment and would leak the label.
+
+It no longer uses `user_skill` either, dropped 2026-08-02 with the field
+itself. That feature was a leaked label: the seed data chose it to fit each
+example's narrative, putting 91% of `Experienced` rows on level 4 with none
+at all on levels 1-3, so the model returned 4 for an experienced user
+changing a light bulb and 1 for a beginner rewiring a consumer unit. Once the
+data was rebalanced (`ml/rebalance_skill.py`) it became the weakest
+coefficient block in the model and the prediction was identical across all
+three values — it had stopped earning its place, and it was unverifiable
+self-report regardless (srs.md §3). Removing it moved grouped-CV macro-F1
+0.349 -> 0.344 and high-risk recall 0.647 -> 0.633, both inside noise.
+Skill-based escalation was always the rule engine's job and stays there:
+`fixed_wiring_work` now carries floor 3 for everyone.
 
 FAILURE IS LOUD, NEVER "SAFE"
 -----------------------------
@@ -98,20 +112,21 @@ def warmup() -> bool:
 
 
 @lru_cache(maxsize=1)
-def _trained_vocabularies() -> tuple[tuple[str, ...], tuple[str, ...]]:
-    """The exact `category` / `user_skill` values the model was fitted on.
+def _trained_categories() -> tuple[str, ...]:
+    """The exact `category` values the model was fitted on.
 
     Read off the fitted OneHotEncoder rather than hardcoded, so this can
-    never drift from the artifact actually being served.
+    never drift from the artifact actually being served. `user_skill` used to
+    be the second column here; it was dropped as a feature on 2026-08-02 (see
+    the module docstring).
     """
     model = _load_model()
     try:
         encoder = model.named_steps["features"].named_transformers_["cat"]
-        categories, skills = encoder.categories_
-        return tuple(categories), tuple(skills)
+        return tuple(encoder.categories_[0])
     except Exception:  # noqa: BLE001 - vocabulary is advisory, never fatal
-        logger.warning("classifier: could not read trained vocabularies from the model")
-        return (), ()
+        logger.warning("classifier: could not read trained vocabulary from the model")
+        return ()
 
 
 def _canonicalize(value: str, vocabulary: tuple[str, ...], field: str) -> str:
@@ -119,16 +134,17 @@ def _canonicalize(value: str, vocabulary: tuple[str, ...], field: str) -> str:
 
     The encoder is `handle_unknown="ignore"`, so an off-vocabulary value does
     not error - it emits an all-zero block and the prediction silently falls
-    back to the text features alone. That is not a small effect: "how do i
-    change my light bulb" scores 1 with user_skill "Beginner" and 5 with
-    "beginner", because the second matches nothing the model was fitted on.
+    back to the text features alone. That is not a small effect: measured on
+    the pre-2026-08-02 model, "how do i change my light bulb" scored 1 with
+    user_skill "Beginner" and 5 with "beginner", purely because the second
+    matched nothing it was fitted on. `user_skill` is gone now, but
+    `category` is still one-hot encoded and reaches this the same way - via
+    LLM tagging, which is constrained to the fixed set but normalises to
+    lowercase, so the guard stays.
 
-    The chat UI happens to send the three exact trained strings, so this has
-    not bitten in production - but `skill_level` is a free `str` at the API
-    boundary (schemas/job.py), so nothing enforces that. Casing is snapped
-    here; a genuinely unknown value is passed through unchanged (the encoder
-    still ignores it) and logged, because guessing which trained value the
-    caller meant would be worse than a loud degradation.
+    A genuinely unknown value is passed through unchanged (the encoder still
+    ignores it) and logged, because guessing which trained value the caller
+    meant would be worse than a loud degradation.
     """
     if not vocabulary or not value:
         return value
@@ -148,7 +164,7 @@ def _canonicalize(value: str, vocabulary: tuple[str, ...], field: str) -> str:
     return value
 
 
-def classify(description: str, category: str, user_skill: str = "") -> tuple[int, float]:
+def classify(description: str, category: str) -> tuple[int, float]:
     """Predict (risk_level, confidence) for a job.
 
     `confidence` is the model's probability for the predicted class. It is
@@ -159,7 +175,7 @@ def classify(description: str, category: str, user_skill: str = "") -> tuple[int
     prediction. Never returns a fallback risk level.
     """
     model = _load_model()
-    known_categories, known_skills = _trained_vocabularies()
+    known_categories = _trained_categories()
 
     try:
         import pandas as pd
@@ -168,7 +184,6 @@ def classify(description: str, category: str, user_skill: str = "") -> tuple[int
             {
                 "task_text": [description or ""],
                 "category": [_canonicalize(category or "general", known_categories, "category")],
-                "user_skill": [_canonicalize(user_skill or "Beginner", known_skills, "user_skill")],
             }
         )
         risk = int(model.predict(frame)[0])

@@ -244,22 +244,29 @@ def test_llm_tag_cannot_bypass_a_rules_exclude_list():
     assert "work_at_height" not in triggered
 
 
-def test_llm_tag_cannot_bypass_a_skill_gate():
-    """`electrical_work_by_beginner` is gated to beginners; a tag must not
-    fire it for an expert."""
-    desc, cat = "replace a socket", "electrical"
-    _, expert = evaluate(
-        desc,
-        cat,
-        {"power_isolated": True},
-        ["electrical_work_by_beginner"],
-        user_skill="Experienced",
-    )
-    _, beginner = evaluate(
-        desc, cat, {"power_isolated": True}, ["electrical_work_by_beginner"], user_skill="Beginner"
-    )
-    assert "electrical_work_by_beginner" not in expert
-    assert "electrical_work_by_beginner" in beginner
+def test_llm_tag_cannot_bypass_an_exclude_list():
+    """An LLM-proposed id is held to the same conditions as a keyword match.
+
+    Before 2026-08-01 the LLM path checked catalog membership and nothing
+    else, so `excludes`, `categories` and `requires_skill` applied to keyword
+    matches only. `work_at_height` lists "step ladder" in its excludes and an
+    LLM tag ignored it.
+
+    `excludes` is the gate exercised here because it is the only one any rule
+    currently uses: `requires_skill` lost its last user when
+    `electrical_work_by_beginner` was deleted (2026-08-02), and no rule sets
+    `categories`. Both remain supported on `Rule` and are still enforced by
+    `_gates_allow`.
+    """
+    excluding = [r for r in RULES.values() if r.excludes]
+    assert excluding, "no rule with excludes left to exercise this path"
+    rule = excluding[0]
+    veto = rule.excludes[0]
+
+    _, blocked = evaluate(f"a task mentioning {veto}", "general", {}, [rule.id])
+    _, allowed = evaluate("a task mentioning nothing in particular", "general", {}, [rule.id])
+    assert rule.id not in blocked, f"{rule.id} fired despite its exclude {veto!r}"
+    assert rule.id in allowed
 
 
 # ------------------------------------------------------------------- gates
@@ -536,15 +543,24 @@ def test_every_catalog_rule_can_actually_fire(rule_id):
         assert rule_id in triggered, f"{rule_id} never fires even when tagged"
 
 
-def test_beginner_gated_rule_fires_only_for_beginners():
-    """srs.md §9: 'electrical wiring task + beginner user' raises the floor."""
-    desc, cat = "replace a light switch", "electrical"
-    beginner, trig_b = evaluate(desc, cat, {"power_isolated": True}, user_skill="Beginner")
-    expert, trig_e = evaluate(desc, cat, {"power_isolated": True}, user_skill="Experienced")
+def test_fixed_wiring_carries_the_professional_recommended_floor_for_everyone():
+    """srs.md §9's intent, after `user_skill` was removed (2026-08-02).
 
-    assert "electrical_work_by_beginner" in trig_b
-    assert "electrical_work_by_beginner" not in trig_e
-    assert beginner > expert, "beginner doing wiring work should score higher"
+    The rule used to read "electrical wiring task + beginner user -> at least
+    Professional Recommended", implemented as `electrical_work_by_beginner`
+    (floor 3) stacked on `fixed_wiring_work` (floor 2). With the skill field
+    gone, `fixed_wiring_work` carries floor 3 directly: beginners land
+    exactly where they did, and the outcome no longer depends on an
+    unverifiable self-report (srs.md §3).
+    """
+    desc, cat = "replace a light switch", "electrical"
+    risk, triggered = evaluate(desc, cat, {"power_isolated": True})
+
+    assert "fixed_wiring_work" in triggered
+    assert risk >= 3, "fixed wiring must still reach Professional Recommended"
+    # And it must not depend on who is asking any more.
+    for skill in ("Beginner", "Some experience", "Experienced", "", None):
+        assert evaluate(desc, cat, {"power_isolated": True}, user_skill=skill)[0] == risk
 
 
 def test_explain_returns_only_hardcoded_text_and_skips_unknown_ids():

@@ -44,17 +44,16 @@ const EXAMPLE_PROMPTS = [
 ];
 
 // Drives the multi-step conversational flow. "idle" -> user hasn't sent a
-// task description yet. ask_skill -> the one quick-reply question asked
-// before a Job is created (urgency used to be asked here too; it was
-// removed because nothing consumed it - see srs.md FR-02). followup ->
-// waiting on a
+// task description yet. A Job is created straight from the description now:
+// the experience-level quick-reply that used to sit between them was removed
+// on 2026-08-02, as urgency was before it, because nothing consumed it (see
+// srs.md FR-02). followup -> waiting on a
 // yes/no answer to `next_followup` from the backend (may loop). assessing
 // -> POST /assess + GET /assessments (+ /recommendations) in flight.
 // resume_prompt -> user picked an unfinished job from history and is being
 // asked whether to continue it. done -> final RiskCard (or error) shown.
 type FlowStage =
   | "idle"
-  | "ask_skill"
   | "followup"
   | "assessing"
   | "resume_prompt"
@@ -259,7 +258,6 @@ export default function ChatPage() {
     setFlowStageState(stage);
   };
   const pendingDescriptionRef = useRef<string>("");
-  const pendingSkillRef = useRef<string>("");
   const currentJobRef = useRef<JobOut | null>(null);
 
   // ---- Transcript persistence ----
@@ -490,7 +488,6 @@ export default function ChatPage() {
         method: "POST",
         body: JSON.stringify({
           description: pendingDescriptionRef.current,
-          skill_level: pendingSkillRef.current,
         }),
       });
       setIsTyping(false);
@@ -631,12 +628,12 @@ export default function ChatPage() {
     if (flowStageRef.current === "done") return;
     pushUserMessage(text);
     pendingDescriptionRef.current = text;
-    setStage("ask_skill");
-    void showBotMessage("What's your experience level with this kind of task?", [
-      "Beginner",
-      "Some experience",
-      "Experienced",
-    ]);
+    // Straight to the job — no interstitial question. The experience-level
+    // quick-reply used to sit here; it was removed on 2026-08-02 once
+    // nothing consumed it, exactly as urgency was (srs.md FR-02). Any
+    // safety question the task actually warrants now comes from the backend
+    // as `next_followup`, derived from the hazards that fired.
+    void createJobAndProceed();
   };
 
   const handleQuickReply = (option: string) => {
@@ -647,10 +644,7 @@ export default function ChatPage() {
     // its question would replay as an orphan "Continue" bubble.
     pushUserMessage(option, { persist: stage !== "resume_prompt" });
 
-    if (stage === "ask_skill") {
-      pendingSkillRef.current = option;
-      void createJobAndProceed();
-    } else if (stage === "followup") {
+    if (stage === "followup") {
       void submitFollowupAndProceed(option === "Yes");
     } else if (stage === "resume_prompt") {
       const job = currentJobRef.current;
@@ -671,7 +665,6 @@ export default function ChatPage() {
     setActiveHistoryId(null);
     setStage("idle");
     pendingDescriptionRef.current = "";
-    pendingSkillRef.current = "";
     currentJobRef.current = null;
     transcriptQueueRef.current = [];
     forgetActiveJob();
@@ -767,8 +760,7 @@ export default function ChatPage() {
       setActiveHistoryId(null);
       setStage("idle");
       pendingDescriptionRef.current = "";
-      pendingSkillRef.current = "";
-    }
+      }
   };
 
   const handleDeleteHistory = async (id: string) => {

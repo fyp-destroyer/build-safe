@@ -11,7 +11,23 @@ Writes:
 FEATURES ARE DELIBERATELY RESTRICTED to what the backend actually knows
 when a user submits a job (architecture.md 4, srs.md 8):
 
-    task_text, category, user_skill
+    task_text, category
+
+NOT user_skill, dropped 2026-08-02 along with the field itself. It was a
+feature until the confound behind it was measured: the seed data chose
+`user_skill` to fit each example's narrative, which put 91% of `Experienced`
+rows on level 4 and left levels 1-3 with no `Experienced` example at all. The
+model learned that faithfully and returned level 4 for an experienced user
+changing a light bulb while returning level 1 for a beginner rewiring a
+consumer unit - a near-constant function of a dropdown. `ml/analyze_skill_
+bias.py` has the measurement; `ml/rebalance_skill.py` fixed the data
+(normalised mutual information 0.657 -> 0.000), after which skill was the
+weakest coefficient block in the model and the prediction was identical
+across all three values. Having stopped earning its place as a feature, and
+being unverifiable self-report either way (srs.md 3), it was removed from the
+product entirely. Skill-based escalation is not lost by this - it was always
+the rule engine's job, and `fixed_wiring_work` now carries floor 3 for
+everyone.
 
 NOT tools_available. The dataset records it, but the backend has no such
 field - `Job` stores description/category/skill_level/urgency and nothing
@@ -76,9 +92,9 @@ def to_frame(rows: list[dict]):
     return pd.DataFrame({
         "task_text": [r["task_text"] for r in rows],
         "category": [r["category"] for r in rows],
-        "user_skill": [r["user_skill"] for r in rows],
         # NOTE: tools_available is deliberately NOT a feature - the backend
         # cannot supply it at inference time. See the module docstring.
+        # NOTE: user_skill was dropped on 2026-08-02 - see the docstring.
     })
 
 
@@ -91,7 +107,7 @@ def build_pipeline(C: float, ngram: tuple[int, int]) -> Pipeline:
             # shared morphology ("wiring"/"rewire") that word n-grams miss.
             ("char", TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 5),
                                      sublinear_tf=True, min_df=2), "task_text"),
-            ("cat", OneHotEncoder(handle_unknown="ignore"), ["category", "user_skill"]),
+            ("cat", OneHotEncoder(handle_unknown="ignore"), ["category"]),
         ])),
         ("clf", LogisticRegression(
             max_iter=4000, C=C,
@@ -154,7 +170,7 @@ def main() -> int:
     final = build_pipeline(best_C, best_ng).fit(
         pd.concat([Xtr, Xva], ignore_index=True), np.concatenate([ytr, yva]))
     joblib.dump({"model": final, "C": best_C, "ngram": best_ng,
-                 "features": ["task_text", "category", "user_skill"],
+                 "features": ["task_text", "category"],
                  "risk_levels": [1, 2, 3, 4, 5]},
                 EVAL / "baseline_model.joblib")
 

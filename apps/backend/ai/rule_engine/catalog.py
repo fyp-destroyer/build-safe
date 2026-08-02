@@ -201,15 +201,34 @@ _RULES: tuple[Rule, ...] = (
     # categorised as tiling (chasing a wall), hvac (thermostats) and general;
     # gating this on category would silently drop the power-isolation
     # question for exactly those cases.
+    # Floor raised 2 -> 3 on 2026-08-02, when `user_skill` was removed from
+    # the product and `electrical_work_by_beginner` (floor 3, the only rule
+    # that used `requires_skill`) was deleted with it.
+    #
+    # This is not a like-for-like swap and the difference is worth stating.
+    # Before: fixed wiring scored 2 for everyone, topped up to 3 only if the
+    # user had selected "Beginner" from a dropdown. After: it scores 3 for
+    # everyone. Beginners land exactly where they did; an experienced user
+    # doing fixed wiring moves 2 -> 3.
+    #
+    # 3 is the more honest number under the competence ladder in
+    # ml/data/README.md — level 3 means "needs some relevant experience",
+    # which is true of fixed wiring irrespective of who is asking, and it no
+    # longer depends on an unverifiable self-report (srs.md §3 already
+    # concedes the system cannot check that claim). srs.md §9's intent
+    # ("electrical wiring task + beginner user -> at least Professional
+    # Recommended") is preserved; only its skill condition is gone.
     _r(
         id="fixed_wiring_work",
         hazard="electrical_shock",
-        floor=2,
+        floor=3,
         summary="Work on fixed wiring or accessories",
         explanation=(
             "Working on fixed wiring means working on circuits that "
             "may be live. The supply must be isolated and proven dead "
-            "before anything is disturbed."
+            "before anything is disturbed, and faults are often "
+            "invisible until they matter — have the work checked by a "
+            "qualified electrician."
         ),
         keywords=(
             "wiring",
@@ -226,33 +245,6 @@ _RULES: tuple[Rule, ...] = (
             "dimmer",
             "chase a channel",
         ),
-    ),
-    _r(
-        id="electrical_work_by_beginner",
-        hazard="electrical_shock",
-        floor=3,
-        summary="Fixed-wiring work attempted by a beginner",
-        explanation=(
-            "Working on fixed wiring without experience risks shock "
-            "and fire, and faults are often invisible until they "
-            "matter. Have the work checked by a qualified electrician."
-        ),
-        keywords=(
-            "wiring",
-            "rewire",
-            "rewiring",
-            "circuit",
-            "socket",
-            "outlet",
-            "light fitting",
-            "light fixture",
-            "junction box",
-            "thermostat",
-            "light switch",
-            "dimmer",
-            "chase a channel",
-        ),
-        requires_skill=("beginner",),
     ),
     # ---- structural ------------------------------------------------------
     _r(
@@ -952,7 +944,6 @@ FOLLOWUPS: tuple[Followup, ...] = (
         floor_when_denied=3,
         applies_when_rule=(
             "fixed_wiring_work",
-            "electrical_work_by_beginner",
             "supply_side_electrical",
             "circuit_extension",
         ),

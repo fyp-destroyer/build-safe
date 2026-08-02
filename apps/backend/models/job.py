@@ -33,7 +33,12 @@ class Job(Base):
     )
     description: Mapped[str] = mapped_column(Text, nullable=False)
     category: Mapped[str] = mapped_column(String(50), nullable=False)
-    skill_level: Mapped[str] = mapped_column(String(50), nullable=False)
+    # Nullable since 2026-08-02: the chat flow no longer asks for it and
+    # nothing reads it. Same retirement `urgency` got below, and for the same
+    # reason — it stopped being a classifier feature once the seed data was
+    # rebalanced, and the one rule that used it is gone. Column kept rather
+    # than dropped so existing rows survive and the change is reversible.
+    skill_level: Mapped[str | None] = mapped_column(String(50), nullable=True)
     # Nullable since 2026-07-31: the chat flow no longer asks for it and
     # nothing reads it. Column kept rather than dropped so existing rows
     # survive and the change is reversible.

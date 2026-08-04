@@ -1,9 +1,18 @@
 /**
  * The hardcoded safety rule catalog.
  *
- * ⚠️  GENERATED FILE — DO NOT EDIT BY HAND.
- *     Source:    apps/backend/ai/rule_engine/catalog.py
- *     Generator: tools/generate_catalog_ts.py
+ * PROVENANCE: this file was originally generated from
+ * `apps/backend/ai/rule_engine/catalog.py` by `tools/generate_catalog_ts.py`,
+ * to guarantee the port carried every keyword and floor across unchanged. That
+ * Python source no longer exists, so **this file is now the source of truth and
+ * is edited by hand.** The generator is kept only as a record of how the data
+ * originally got here; re-running it would fail.
+ *
+ * Because a mistake here is silent — a dropped keyword or a floor typed as 3
+ * instead of 4 compiles, runs, and looks fine on review, while under-escalating
+ * one hazard family forever — changes are guarded by the property tests in
+ * `ruleEngine.test.ts`, including a test that every follow-up's
+ * `floorWhenDenied` can actually change an outcome.
  *
  * This module is DATA, not logic. It is the single source of truth for which
  * hazards exist, what each one escalates risk to, and how each is explained to
@@ -83,6 +92,28 @@ export interface Followup {
 
 export const MIN_RISK_LEVEL = 1;
 export const MAX_RISK_LEVEL = 5;
+
+/**
+ * The third answer state: "I don't know".
+ *
+ * A yes/no question forces a user who has not checked into picking one, and both
+ * choices are wrong in a way that matters. "Yes" claims a safety condition that
+ * may not hold. "No" reads as a definite unsafe state when the truth is only
+ * that nobody looked.
+ *
+ * "Unsure" scores as `floorWhenMissing` — the worst plausible case — because an
+ * unknown safety-critical fact cannot be ruled out, which is exactly how an
+ * unanswered question is treated. It is stored distinctly rather than being
+ * mapped onto "no", so the transcript records what the user actually said and
+ * `explain()` can tell them the honest reason their task was escalated.
+ *
+ * CLAUDE.md: "Missing safety-critical follow-up answers escalate risk (treat as
+ * worst plausible case), never assume safety."
+ */
+export const UNSURE_ANSWER = "unsure" as const;
+
+/** What a user may answer to a safety-critical follow-up. */
+export type FollowupAnswer = boolean | typeof UNSURE_ANSWER;
 
 
 const RULE_LIST: readonly Rule[] = [
@@ -496,27 +527,51 @@ const RULE_LIST: readonly Rule[] = [
   },
 ];
 
+// QUESTIONS ASK ABOUT THE WORLD, NOT ABOUT THE USER'S DILIGENCE.
+//
+// These were originally phrased "Have you confirmed X?". That framing makes the
+// most safety-relevant answer meaningless: "no" collapses two completely
+// different situations — "I checked, and X is false" and "I never checked" —
+// into one value, and the engine cannot tell a known hazard from an unknown one.
+//
+// Asking about the condition itself ("Is X true?") splits them cleanly: "no"
+// now means X is genuinely false, and a user who has not checked has the honest
+// third option of "not sure" (UNSURE_ANSWER).
+//
+// POLARITY IS INVARIANT: `true` must always mean SAFE, for every follow-up,
+// because `floorWhenDenied` is applied to `false`. A question whose "yes" is the
+// dangerous answer would silently invert its own escalation.
 export const FOLLOWUPS: readonly Followup[] = [
   {
     field: "power_isolated",
-    question: "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
+    question: "Is the power to this circuit switched off and isolated at the breaker?",
     floorWhenMissing: 5,
-    floorWhenDenied: 3,
+    // Was 3, which was DEAD. This follow-up only applies when one of the rules
+    // below has already fired, and the lowest floor among them is 3
+    // (fixed_wiring_work) — so max(3, 3) meant answering "no" to "is the power
+    // isolated?" scored exactly the same as answering "yes". A user telling us
+    // the circuit is still live changed nothing. 4 makes the answer count.
+    floorWhenDenied: 4,
     appliesWhenRule: ["fixed_wiring_work", "supply_side_electrical", "circuit_extension"],
     appliesToCategories: [],
   },
   {
     field: "load_bearing_confirmed",
-    question: "Have you confirmed the wall or structure involved is NOT load-bearing?",
+    question: "Is the wall or structure you will be working on non-load-bearing?",
     floorWhenMissing: 5,
-    floorWhenDenied: 4,
+    // Was 4, dead for the same reason: both triggering rules carry floor 4, so
+    // "this wall IS load-bearing" scored identically to "it is not". 5 is the
+    // honest level for deliberately cutting into a structural element.
+    floorWhenDenied: 5,
     appliesWhenRule: ["structural_alteration", "masonry_wall_instability"],
     appliesToCategories: [],
   },
   {
     field: "gas_line_present",
-    question: "Have you confirmed there is no gas line present near this work area?",
+    // "Yes" = clear of gas lines = safe, preserving the polarity rule above.
+    question: "Is the work area clear of gas lines?",
     floorWhenMissing: 5,
+    // Genuinely live: buried_services carries floor 3, so 4 still escalates.
     floorWhenDenied: 4,
     appliesWhenRule: ["buried_services"],
     appliesToCategories: [],

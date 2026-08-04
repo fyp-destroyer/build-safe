@@ -49,15 +49,38 @@ import {
   MAX_RISK_LEVEL,
   MIN_RISK_LEVEL,
   RULES,
+  UNSURE_ANSWER,
   VALID_RULE_IDS,
+  type FollowupAnswer,
   type Rule,
 } from "./catalog";
 
-export { MIN_RISK_LEVEL, MAX_RISK_LEVEL };
+export { MIN_RISK_LEVEL, MAX_RISK_LEVEL, UNSURE_ANSWER };
+export type { FollowupAnswer };
 
-/** Answers to safety-critical follow-ups. A field being ABSENT and a field
- *  being `false` are different states — see `nextFollowup` and `evaluate`. */
-export type FollowupAnswers = Record<string, boolean | undefined>;
+/** Answers to safety-critical follow-ups. ABSENT, `false` and `"unsure"` are
+ *  three different states — see `answerState`, `nextFollowup` and `evaluate`. */
+export type FollowupAnswers = Record<string, FollowupAnswer | undefined>;
+
+/** The four states an answer can be in, in escalation terms. */
+export type AnswerState = "confirmed" | "denied" | "unsure" | "absent";
+
+/**
+ * Classify one answer.
+ *
+ * Everything that is not recognisably `true`, `false` or `"unsure"` is treated
+ * as **absent** — the worst plausible case — rather than being coerced. A
+ * corrupted value, a stale client sending a string, a field renamed in a future
+ * migration: none of those should quietly become "safe". The one direction this
+ * must never fail in is toward under-escalation, so the default is the option
+ * that escalates hardest.
+ */
+export function answerState(value: unknown): AnswerState {
+  if (value === true) return "confirmed";
+  if (value === false) return "denied";
+  if (value === UNSURE_ANSWER) return "unsure";
+  return "absent";
+}
 
 /**
  * Every applicability condition on `rule` EXCEPT its keywords.
@@ -195,9 +218,13 @@ export function requiredFollowups(input: RuleEngineInput): string[] {
 /**
  * The next unanswered safety-critical field, or null if all are answered.
  *
- * Presence, not truthiness: an explicit `false` is an ANSWER (the user said
- * "no"), and must not be re-asked forever. Conflating the two once made the
- * entire dangerous-task path unreachable — see memory.md, 2026-07-19.
+ * Presence, not truthiness: `false` and `"unsure"` are both ANSWERS (the user
+ * said "no", or said they don't know), and must not be re-asked forever.
+ * Conflating that with "unanswered" once made the entire dangerous-task path
+ * unreachable — see memory.md, 2026-07-19.
+ *
+ * "Unsure" still escalates as hard as no answer at all in `evaluate`; what it
+ * does not do is trap the user in a loop being asked the same thing.
  */
 export function nextFollowup(input: RuleEngineInput): string | null {
   const answers = input.followupAnswers ?? {};
@@ -229,17 +256,39 @@ export function evaluate(input: RuleEngineInput): RuleEngineResult {
     risk = Math.max(risk, RULES[ruleId].floor);
   }
 
-  // Safety-critical follow-ups. Missing and denied are DIFFERENT states and
-  // escalate differently; see catalog.FOLLOWUPS for why missing scores higher
-  // than an explicit "no".
+  // Safety-critical follow-ups. The four answer states escalate differently;
+  // see catalog.FOLLOWUPS and `answerState` for why.
   for (const field of requiredFollowups(input)) {
     const spec = FOLLOWUPS_BY_FIELD[field];
-    if (!(field in answers)) {
-      triggered.push(`missing_followup:${field}`);
-      risk = Math.max(risk, spec.floorWhenMissing);
-    } else if (answers[field] === false) {
-      triggered.push(`unsafe_followup:${field}`);
-      risk = Math.max(risk, spec.floorWhenDenied);
+
+    switch (answerState(answers[field])) {
+      case "absent":
+        triggered.push(`missing_followup:${field}`);
+        risk = Math.max(risk, spec.floorWhenMissing);
+        break;
+
+      case "unsure":
+        // Scores exactly like absent — an unknown safety fact cannot be ruled
+        // out — but keeps its own marker so the explanation can say "you told us
+        // you weren't sure" rather than "you didn't answer", which would be
+        // false and would read as the system's mistake rather than an honest
+        // gap.
+        triggered.push(`unsure_followup:${field}`);
+        risk = Math.max(risk, spec.floorWhenMissing);
+        break;
+
+      case "denied":
+        triggered.push(`unsafe_followup:${field}`);
+        risk = Math.max(risk, spec.floorWhenDenied);
+        break;
+
+      case "confirmed":
+        // Recorded, never scored. `risk` is untouched here — a marker that
+        // changed the number would be de-escalation, which rules.md §4.2
+        // forbids outright. It exists so the risk card can tell the user which
+        // precautions they confirmed, instead of listing only what went wrong.
+        triggered.push(`safe_followup:${field}`);
+        break;
     }
   }
 
@@ -267,6 +316,16 @@ export function explain(triggered: readonly string[]): string[] {
             `plausible case.`,
         );
       }
+    } else if (name.startsWith("unsure_followup:")) {
+      const field = name.slice("unsure_followup:".length);
+      const spec = FOLLOWUPS_BY_FIELD[field];
+      if (spec) {
+        out.push(
+          `You weren't sure about a safety-critical condition ("${spec.question}"). ` +
+            `Until that is established, this task is treated as the worst ` +
+            `plausible case — check it before going further.`,
+        );
+      }
     } else if (name.startsWith("unsafe_followup:")) {
       const field = name.slice("unsafe_followup:".length);
       const spec = FOLLOWUPS_BY_FIELD[field];
@@ -275,6 +334,14 @@ export function explain(triggered: readonly string[]): string[] {
           `You indicated a safety-critical condition is not met ("${spec.question}" ` +
             `— answered no), which raises the risk of this task.`,
         );
+      }
+    } else if (name.startsWith("safe_followup:")) {
+      const field = name.slice("safe_followup:".length);
+      const spec = FOLLOWUPS_BY_FIELD[field];
+      if (spec) {
+        // Purely informational. Phrased so it can never read as clearance to
+        // proceed: it confirms one precaution, not the task.
+        out.push(`You confirmed: ${spec.question} — yes.`);
       }
     } else if (name in RULES) {
       out.push(RULES[name].explanation);

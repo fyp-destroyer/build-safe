@@ -26,6 +26,9 @@ export const taskCategory = v.union(
   v.literal("general"),
 );
 
+/** What a user may answer to a safety-critical follow-up. See jobs.followupAnswers. */
+export const followupAnswer = v.union(v.boolean(), v.literal("unsure"));
+
 export const jobStatus = v.union(
   v.literal("pending_followup"),
   v.literal("ready_to_assess"),
@@ -51,8 +54,18 @@ export default defineSchema({
     userId: v.id("users"),
     description: v.string(),
     category: taskCategory,
-    /** Free-form answers keyed by field name (was Job.followup_answers JSON). */
-    followupAnswers: v.record(v.string(), v.boolean()),
+    /**
+     * Answers keyed by follow-up field name.
+     *
+     * THREE values, not two: `true` (safe condition holds), `false` (it does
+     * not), and `"unsure"` (the user does not know). A yes/no question forces
+     * someone who has not checked to claim something either way, and both
+     * claims are wrong in ways that matter — so "unsure" is stored as itself
+     * rather than folded into "no". It escalates as hard as no answer at all.
+     *
+     * A field being ABSENT remains distinct from all three.
+     */
+    followupAnswers: v.record(v.string(), followupAnswer),
     /**
      * Hazard ids tagged by the LLM once at creation.
      *

@@ -32,6 +32,15 @@ export interface TokenResponse {
 
 // ---- job.py ----
 
+/**
+ * What a user may answer to a safety-critical follow-up.
+ *
+ * `"unsure"` is a first-class answer, not a missing one: it escalates as
+ * hard as no answer at all, but it is recorded as what the user actually
+ * said so the explanation can be honest about why the task was escalated.
+ */
+export type FollowupAnswer = boolean | "unsure";
+
 export type JobStatus = "pending_followup" | "ready_to_assess" | "assessed" | "failed";
 
 export interface FollowupPrompt {
@@ -47,7 +56,7 @@ export interface JobOut {
   skill_level: string;
   /** Legacy: no longer collected by the chat flow (srs.md FR-02). */
   urgency: string | null;
-  followup_answers: Record<string, boolean>;
+  followup_answers: Record<string, FollowupAnswer>;
   status: JobStatus;
   created_at: string;
   next_followup: FollowupPrompt | null;

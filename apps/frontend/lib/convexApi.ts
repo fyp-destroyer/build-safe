@@ -25,6 +25,7 @@ import type { ConvexReactClient } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import type {
+  FollowupAnswer,
   ChatMessagesOut,
   JobOut,
   RecommendationsOut,
@@ -40,7 +41,7 @@ interface JobDoc {
   userId: Id<"users">;
   description: string;
   category: string;
-  followupAnswers: Record<string, boolean>;
+  followupAnswers: Record<string, FollowupAnswer>;
   llmHazardIds?: string[] | null;
   llmFollowupFields?: string[] | null;
   nextFollowup?: { field: string; question: string } | null;
@@ -91,7 +92,7 @@ export async function createJob(convex: Convex, description: string): Promise<Jo
 export async function submitFollowup(
   convex: Convex,
   jobId: string,
-  answers: Record<string, boolean>,
+  answers: Record<string, FollowupAnswer>,
 ): Promise<JobOut> {
   await convex.action(api.jobs.submitFollowup, {
     jobId: jobId as Id<"jobs">,

@@ -9,7 +9,7 @@
  * and this codebase has already been bitten by it once.
  */
 
-import { requiredFollowups, type FollowupAnswers } from "./ruleEngine/rules";
+import { answerState, requiredFollowups, type FollowupAnswers } from "./ruleEngine/rules";
 
 /** The subset of a job document this module needs. */
 export interface JobLike {
@@ -70,6 +70,11 @@ export function askedFields(job: JobLike): string[] {
  * could never be assessed once a safety-critical answer was honestly "no",
  * permanently blocking instead of ever producing the Dangerous / Do-Not-Attempt
  * result the rule engine is designed to compute for exactly that case.
+ *
+ * The same applies to `"unsure"`: it is an answer, so it unblocks assessment,
+ * and `evaluate` escalates it as hard as no answer at all. Treating it as
+ * missing here would trap the user in a loop being re-asked something they have
+ * already told us they do not know.
  */
 export function missingRequiredFollowups(job: JobLike): string[] {
   const required = requiredFollowups({
@@ -79,7 +84,10 @@ export function missingRequiredFollowups(job: JobLike): string[] {
     followupAnswers: job.followupAnswers,
     llmAskedFields: askedFields(job),
   });
-  return required.filter((field) => !(field in job.followupAnswers));
+  // `answerState` rather than a bare `in` check, so a corrupted or unrecognised
+  // stored value counts as unresolved and gets asked again rather than silently
+  // passing the gate.
+  return required.filter((field) => answerState(job.followupAnswers[field]) === "absent");
 }
 
 /**

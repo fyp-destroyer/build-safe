@@ -216,7 +216,11 @@ export const assess = action({
         riskLevel: finalRisk,
         confidence,
         explanation: buildExplanation(mlRisk, ruleRisk, finalRisk, triggeredRules, useMl),
-        hazardTags: [...triggeredRules],
+        // Hazards only. A `safe_followup:` marker records a precaution the user
+        // CONFIRMED, so listing it among hazard tags would present the user's
+        // own safety measure back to them as a danger. It stays in
+        // `triggeredRules`, which is the full audit trail.
+        hazardTags: triggeredRules.filter((r) => !r.startsWith("safe_followup:")),
         triggeredRules,
         status: "completed",
         modelInput,

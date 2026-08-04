@@ -16,6 +16,7 @@
 import { describe, expect, it } from "vitest";
 import {
   FOLLOWUPS,
+  UNSURE_ANSWER,
   FOLLOWUPS_BY_FIELD,
   HARD_GATE_RULE_IDS,
   LLM_SELECTABLE_FOLLOWUP_FIELDS,
@@ -24,8 +25,15 @@ import {
   RULES,
   VALID_RULE_IDS,
 } from "./catalog";
-import { evaluate, explain, matchedRuleIds, nextFollowup, requiredFollowups } from "./rules";
-import { evidenceSupports } from "./llmAssist";
+import {
+  answerState,
+  evaluate,
+  explain,
+  matchedRuleIds,
+  nextFollowup,
+  requiredFollowups,
+} from "./rules";
+import { ASKS_WHETHER_USER_CHECKED, evidenceSupports } from "./llmAssist";
 
 /** A task with no hazard keywords in any rule, used as the benign control. */
 const BENIGN = { description: "hang a small picture frame on a stud wall", category: "carpentry" };
@@ -110,6 +118,53 @@ describe("catalog integrity", () => {
     expect([...LLM_SELECTABLE_FOLLOWUP_FIELDS].sort()).toEqual(
       FOLLOWUPS.map((f) => f.field).sort(),
     );
+  });
+
+  it("gives every follow-up a floorWhenDenied that can actually change the outcome", () => {
+    // THE DEAD-PARAMETER GUARD.
+    //
+    // A follow-up only applies once one of its triggering rules has fired, so
+    // the score is already at least the lowest floor among those rules. If
+    // floorWhenDenied is at or below that, answering "no" scores exactly the
+    // same as answering "yes" — the question is asked, the user tells us the
+    // circuit is still live, and nothing happens. Two follow-ups shipped in that
+    // state (power_isolated at 3, load_bearing_confirmed at 4).
+    //
+    // Nothing about that fails loudly, which is why it needs a test.
+    for (const f of FOLLOWUPS) {
+      if (f.appliesWhenRule.length === 0) continue;
+
+      const floors = f.appliesWhenRule.map((id) => RULES[id].floor);
+      const lowestTriggeringFloor = Math.min(...floors);
+
+      // A gated follow-up is exempt: its "yes" stops the rule firing entirely,
+      // so the answer changes the outcome via the gate rather than via this
+      // floor (height_access works exactly this way).
+      const isGate = Object.values(RULES).some(
+        (r) => r.gatedBy.includes(f.field) && f.appliesWhenRule.includes(r.id),
+      );
+      if (isGate) continue;
+
+      expect(
+        f.floorWhenDenied,
+        `${f.field}: floorWhenDenied ${f.floorWhenDenied} is <= the lowest floor ` +
+          `(${lowestTriggeringFloor}) of the rules that trigger it, so answering ` +
+          `"no" cannot change the result — the question is dead weight`,
+      ).toBeGreaterThan(lowestTriggeringFloor);
+    }
+  });
+
+  it("asks about the world, not about whether the user checked", () => {
+    // "Have you confirmed X?" makes "no" ambiguous between "I checked and X is
+    // false" and "I never checked" — two different risks. Condition framing
+    // ("Is X true?") keeps them separable, with "not sure" covering the second.
+    for (const f of FOLLOWUPS) {
+      expect(
+        ASKS_WHETHER_USER_CHECKED.test(f.question),
+        `${f.field} asks whether the user verified something: "${f.question}"`,
+      ).toBe(false);
+      expect(f.question, `${f.field} is not phrased as a question`).toContain("?");
+    }
   });
 });
 
@@ -211,6 +266,130 @@ describe("missing information escalates, never assumes safety", () => {
       category: "tiling",
     });
     expect(required).toContain("power_isolated");
+  });
+});
+
+describe("three-valued answers: yes / no / not sure", () => {
+  const ELECTRICAL = {
+    description: "replace the fixed wiring for the kitchen sockets",
+    category: "electrical",
+  };
+
+  it("classifies every answer, defaulting anything unrecognised to absent", () => {
+    expect(answerState(true)).toBe("confirmed");
+    expect(answerState(false)).toBe("denied");
+    expect(answerState(UNSURE_ANSWER)).toBe("unsure");
+    expect(answerState(undefined)).toBe("absent");
+
+    // The safety-critical part. A corrupted value, a stale client sending a
+    // string, a renamed field — none may be read as "safe". Every unrecognised
+    // value falls to `absent`, which escalates hardest.
+    for (const junk of [null, "", "yes", "true", 1, 0, {}, [], NaN, "UNSURE"]) {
+      expect(answerState(junk), `${JSON.stringify(junk)} must not be trusted`).toBe("absent");
+    }
+  });
+
+  it("scores 'not sure' as hard as no answer at all", () => {
+    const unanswered = evaluate({ ...ELECTRICAL, followupAnswers: {} });
+    const unsure = evaluate({ ...ELECTRICAL, followupAnswers: { power_isolated: UNSURE_ANSWER } });
+
+    expect(unsure.risk).toBe(unanswered.risk);
+    expect(unsure.risk).toBe(FOLLOWUPS_BY_FIELD.power_isolated.floorWhenMissing);
+  });
+
+  it("distinguishes 'not sure' from 'no' in the markers, and scores it higher", () => {
+    const unsure = evaluate({ ...ELECTRICAL, followupAnswers: { power_isolated: UNSURE_ANSWER } });
+    const denied = evaluate({ ...ELECTRICAL, followupAnswers: { power_isolated: false } });
+
+    expect(unsure.triggered).toContain("unsure_followup:power_isolated");
+    expect(denied.triggered).toContain("unsafe_followup:power_isolated");
+    // An unknown fact cannot be ruled out; a known-bad one can at least be
+    // advised about. So "not sure" must never score BELOW "no".
+    expect(unsure.risk).toBeGreaterThanOrEqual(denied.risk);
+  });
+
+  it("treats 'not sure' as answered, so the user is not asked in a loop", () => {
+    const next = nextFollowup({
+      ...ELECTRICAL,
+      followupAnswers: { power_isolated: UNSURE_ANSWER },
+    });
+    expect(next).not.toBe("power_isolated");
+  });
+
+  it("records a confirmed answer without touching the risk level", () => {
+    // The marker is presentation only. If it moved the number it would be
+    // de-escalation, which rules.md §4.2 forbids outright.
+    const confirmed = evaluate({ ...ELECTRICAL, followupAnswers: { power_isolated: true } });
+    expect(confirmed.triggered).toContain("safe_followup:power_isolated");
+
+    const rulesOnly = evaluate({
+      description: ELECTRICAL.description,
+      category: ELECTRICAL.category,
+      // Same job, but with the follow-up satisfied a different way: the score
+      // must come from the fired rules alone.
+      followupAnswers: { power_isolated: true },
+    });
+    expect(confirmed.risk).toBe(rulesOnly.risk);
+    expect(confirmed.risk).toBe(RULES.fixed_wiring_work.floor);
+  });
+
+  it("explains all three answers differently, and never implies clearance", () => {
+    const [missing] = explain(["missing_followup:power_isolated"]);
+    const [unsure] = explain(["unsure_followup:power_isolated"]);
+    const [denied] = explain(["unsafe_followup:power_isolated"]);
+    const [safe] = explain(["safe_followup:power_isolated"]);
+
+    for (const text of [missing, unsure, denied, safe]) {
+      expect(text).toBeTruthy();
+    }
+    expect(new Set([missing, unsure, denied, safe]).size).toBe(4);
+
+    // "Not sure" must not be reported back as "you didn't answer" — that would
+    // be false, and would read as the system's failure rather than an honest gap.
+    expect(unsure).toContain("weren't sure");
+  });
+
+  it("answering 'no' now changes the outcome for the previously-dead follow-ups", () => {
+    // Regression test for the dead-parameter bug: these two scored identically
+    // whether the user said yes or no.
+    const wiringYes = evaluate({ ...ELECTRICAL, followupAnswers: { power_isolated: true } });
+    const wiringNo = evaluate({ ...ELECTRICAL, followupAnswers: { power_isolated: false } });
+    expect(wiringNo.risk).toBeGreaterThan(wiringYes.risk);
+
+    const WALL = { description: "knock through a structural wall", category: "masonry" };
+    const wallYes = evaluate({ ...WALL, followupAnswers: { load_bearing_confirmed: true } });
+    const wallNo = evaluate({ ...WALL, followupAnswers: { load_bearing_confirmed: false } });
+    expect(wallNo.risk).toBeGreaterThan(wallYes.risk);
+  });
+});
+
+describe("the LLM cannot reintroduce ambiguous question framing", () => {
+  it("flags verification framing in its many forms", () => {
+    for (const bad of [
+      "Have you confirmed the power is off?",
+      "Have you checked whether the wall is load-bearing?",
+      "Did you verify the circuit is dead?",
+      "Has your electrician confirmed the isolation?",
+      "Do you ensure the area is clear of gas lines?",
+      "Have you made sure the breaker is off?",
+      "Did you test the wire before starting?",
+    ]) {
+      expect(ASKS_WHETHER_USER_CHECKED.test(bad), `should reject: ${bad}`).toBe(true);
+    }
+  });
+
+  it("leaves condition-framed questions alone", () => {
+    for (const good of [
+      "Is the power to this circuit switched off and isolated at the breaker?",
+      "Is the wall or structure you will be working on non-load-bearing?",
+      "Is the work area clear of gas lines?",
+      "Can you reach this comfortably from floor level or a step ladder?",
+      // Mentions checking, but asks about the world rather than the user's
+      // diligence — the boundary the regex has to respect.
+      "Is the checked circuit still live?",
+    ]) {
+      expect(ASKS_WHETHER_USER_CHECKED.test(good), `should accept: ${good}`).toBe(false);
+    }
   });
 });
 

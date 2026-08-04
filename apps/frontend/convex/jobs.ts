@@ -24,7 +24,7 @@ import { action, internalMutation, internalQuery, mutation, query } from "./_gen
 import { internal } from "./_generated/api";
 import type { Doc, Id } from "./_generated/dataModel";
 import type { ActionCtx, MutationCtx, QueryCtx } from "./_generated/server";
-import { taskCategory } from "./schema";
+import { taskCategory, followupAnswer } from "./schema";
 import { requireUser, getUserForRead, deleteJobChildren } from "./users";
 import { statusFor, nextMissingField, type JobLike } from "./ai/jobLogic";
 import {
@@ -130,7 +130,7 @@ export const insert = internalMutation({
 export const patch = internalMutation({
   args: {
     jobId: v.id("jobs"),
-    followupAnswers: v.optional(v.record(v.string(), v.boolean())),
+    followupAnswers: v.optional(v.record(v.string(), followupAnswer)),
     llmHazardIds: v.optional(v.union(v.null(), v.array(v.string()))),
     llmFollowupFields: v.optional(v.union(v.null(), v.array(v.string()))),
     nextFollowup: v.optional(
@@ -205,7 +205,7 @@ export const create = action({
 export const submitFollowup = action({
   args: {
     jobId: v.id("jobs"),
-    answers: v.record(v.string(), v.boolean()),
+    answers: v.record(v.string(), followupAnswer),
   },
   handler: async (ctx, args): Promise<void> => {
     // Retry tagging first if creation-time tagging failed, so a hazard we only

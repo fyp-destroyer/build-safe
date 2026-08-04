@@ -72,19 +72,27 @@ export type TaskCategory = (typeof TASK_CATEGORIES)[number];
 const FALLBACK_CATEGORY: TaskCategory = "general";
 
 /**
- * Hardcoded default phrasings, keyed by the same field names hardcoded in
- * catalog.ts. Used whenever the LLM is unavailable or returns an empty answer —
- * the flow must never block just because the LLM is down.
+ * Rejects LLM phrasings that ask whether the USER CHECKED, rather than what is
+ * TRUE.
+ *
+ * The catalog's questions were deliberately reworded from "Have you confirmed
+ * the power is isolated?" to "Is the power isolated?", because the first makes
+ * "no" ambiguous — it could mean "I checked and it is live" or "I never
+ * checked", which are different risks. The LLM only supplies WORDING, and it
+ * kept helpfully reintroducing the framing the catalog had just removed,
+ * undoing the fix one generated question at a time.
+ *
+ * Prose in the prompt is not enough to stop that (the same lesson as hazard
+ * tagging: an instruction not to infer did not stop inference; requiring
+ * verbatim evidence did). So a phrasing that matches this is discarded
+ * mechanically and the catalog's own wording is used instead.
+ *
+ * Matches `your` as well as `you` — "Has your electrician confirmed the
+ * isolation?" is the same ambiguity wearing a different subject, and slipped
+ * through the first version of this pattern.
  */
-const DEFAULT_FOLLOWUP_QUESTIONS: Record<string, string> = {
-  power_isolated:
-    "Have you confirmed the power to this circuit is fully isolated at the breaker before starting?",
-  load_bearing_confirmed:
-    "Have you confirmed the wall or structure involved is NOT load-bearing?",
-  gas_line_present: "Have you confirmed there is no gas line present near this work area?",
-  height_access:
-    "Can you reach this comfortably from floor level or a step ladder, without needing roof or upper-storey access?",
-};
+export const ASKS_WHETHER_USER_CHECKED =
+  /\b(have|has|did|do|does)\s+(you|your)\b[^?]*\b(confirm(ed|s)?|check(ed|s)?|verif(y|ied|ies)|ensure[ds]?|made sure|test(ed|s)?)\b/i;
 
 const CategoryTag = z.object({ category: z.string() });
 const PhrasedQuestion = z.object({ question: z.string() });
@@ -162,26 +170,63 @@ export async function tagCategory(description: string): Promise<TaskCategory> {
  * default phrasing if the LLM is unavailable or returns an empty question.
  */
 export async function phraseFollowupQuestion(field: string, category: string): Promise<string> {
-  const fallback =
-    DEFAULT_FOLLOWUP_QUESTIONS[field] ?? `Please confirm: ${field.replace(/_/g, " ")}?`;
+  // Read the fallback from the catalog rather than keeping a second copy here.
+  // There used to be a local dict duplicating these strings, and it drifted:
+  // when the catalog's questions were reworded, the duplicates were not, so
+  // whichever path ran decided which wording the user saw. One source of truth.
+  const spec = FOLLOWUPS_BY_FIELD[field];
+  const fallback = spec?.question ?? `Is this true: ${field.replace(/_/g, " ")}?`;
 
   const prompt =
-    "Phrase a single, natural, user-facing yes/no-style safety question for a " +
-    `home DIY/construction app. The task category is ${JSON.stringify(category)} ` +
-    `and the underlying safety field being confirmed is ${JSON.stringify(field)}. ` +
-    "Keep it short, plain-language, and specific to that field. Do not state any " +
-    "safety fact yourself — only ask the question.";
+    "Rephrase a safety question for a home DIY/construction app, keeping its " +
+    "meaning EXACTLY.\n\n" +
+    `Task category: ${category}\n` +
+    `Question to rephrase: ${spec?.question ?? field}\n\n` +
+    "RULES:\n" +
+    "1. Ask about the CONDITION ITSELF — what is true of the world. Never ask " +
+    "whether the user has checked, confirmed, verified or made sure of " +
+    "something. \"Is the power off?\" is correct; \"Have you confirmed the power " +
+    "is off?\" is not, because answering no to it is ambiguous.\n" +
+    "2. Keep the same yes/no polarity: answering YES must still mean the SAFE " +
+    "situation.\n" +
+    "3. Short, plain language. Do not state any safety fact yourself, do not add " +
+    "advice, and do not explain — only ask the question.\n" +
+    "4. Return a question ending in a question mark.";
 
   const result = await generateStructured(prompt, PhrasedQuestion, "PhrasedQuestion");
   if (result === null || !result.question.trim()) {
     console.warn(
       `LLM follow-up phrasing unavailable for field=${JSON.stringify(field)}; ` +
-        `using hardcoded default.`,
+        `using the catalog's wording.`,
     );
     return fallback;
   }
 
-  return result.question.trim();
+  const question = result.question.trim();
+
+  // Guard 1: the model reintroduced "have you confirmed…" framing, which is the
+  // exact ambiguity the catalog wording was rewritten to remove.
+  if (ASKS_WHETHER_USER_CHECKED.test(question)) {
+    console.warn(
+      `LLM phrasing for ${JSON.stringify(field)} asked whether the user had ` +
+        `checked rather than what is true (${JSON.stringify(question)}); using ` +
+        `the catalog's wording.`,
+    );
+    return fallback;
+  }
+
+  // Guard 2: a statement, not a question. The UI renders this next to Yes / No /
+  // Not sure chips, and a declarative sentence there reads as the app asserting
+  // a safety fact — which is precisely what the LLM is never allowed to do.
+  if (!question.includes("?")) {
+    console.warn(
+      `LLM phrasing for ${JSON.stringify(field)} was not a question ` +
+        `(${JSON.stringify(question)}); using the catalog's wording.`,
+    );
+    return fallback;
+  }
+
+  return question;
 }
 
 /** Lowercase and collapse whitespace, for substring evidence checking. */

@@ -37,12 +37,18 @@ import {
   submitFollowup as submitFollowupApi,
 } from "@/lib/convexApi";
 import type {
+  FollowupAnswer,
   ChatMessagesOut,
   JobOut,
   RecommendationsOut,
   RiskAssessmentOut,
 } from "@/lib/types";
 import type { RiskLevel } from "@/lib/riskLevels";
+
+// The three answers a safety follow-up accepts. "Not sure" exists because a
+// yes/no question forces someone who has not checked to claim something either
+// way, and both claims are wrong in ways that matter for a safety decision.
+const FOLLOWUP_OPTIONS = ["Yes", "No", "Not sure"];
 
 // A few example task descriptions to seed the empty-state suggestion chips
 // (the old SCENARIOS demo is gone — these just call handleSend with real
@@ -466,7 +472,7 @@ export default function ChatPage() {
     currentJobRef.current = job;
     if (job.next_followup) {
       setStage("followup");
-      await showBotMessage(job.next_followup.question, ["Yes", "No"]);
+      await showBotMessage(job.next_followup.question, FOLLOWUP_OPTIONS);
     } else if (job.status === "assessed" || job.status === "failed") {
       // Re-entering an already-finished job (e.g. via the resume prompt) —
       // nothing left to drive here.
@@ -505,7 +511,7 @@ export default function ChatPage() {
     }
   };
 
-  const submitFollowupAndProceed = async (answer: boolean) => {
+  const submitFollowupAndProceed = async (answer: FollowupAnswer) => {
     const job = currentJobRef.current;
     const field = job?.next_followup?.field;
     if (!job || !field) return;
@@ -516,14 +522,13 @@ export default function ChatPage() {
       setIsTyping(false);
       setJobsById((prev) => ({ ...prev, [updated.id]: updated }));
 
-      // Any answer — including "No" (the user honestly confirming the
-      // unsafe condition) — resolves this field: job_service.py only
-      // blocks assessment for a field that's still *unanswered*, not one
-      // whose answer happens to be unsafe. A "No" here proceeds straight to
-      // assessment, where ai/rule_engine/rules.py's own falsy-answer check
-      // escalates final_risk accordingly (verified end-to-end: an honestly
-      // "No" gas-line answer produces a real Dangerous/level-5 result, not
-      // a permanent block).
+      // Any answer — "No" (the user honestly confirming the unsafe
+      // condition) and "Not sure" alike — RESOLVES this field. The gate only
+      // blocks assessment for a field that is still *unanswered*, never one
+      // whose answer happens to be unsafe or unknown. So both proceed straight
+      // to assessment, where the rule engine escalates them: "No" to the
+      // follow-up's floorWhenDenied, "Not sure" to floorWhenMissing (the worst
+      // plausible case, since an unknown fact cannot be ruled out).
       await processJobFollowup(updated);
     } catch (err) {
       setIsTyping(false);
@@ -634,7 +639,14 @@ export default function ChatPage() {
     pushUserMessage(option, { persist: stage !== "resume_prompt" });
 
     if (stage === "followup") {
-      void submitFollowupAndProceed(option === "Yes");
+      // Anything that is not an explicit Yes or No is treated as "not sure",
+      // NOT as false. Mapping an unrecognised chip to `false` would put words in
+      // the user's mouth — asserting a definite unsafe condition they never
+      // claimed — and "unsure" escalates at least as hard anyway, so the
+      // conservative default is also the honest one.
+      void submitFollowupAndProceed(
+        option === "Yes" ? true : option === "No" ? false : "unsure",
+      );
     } else if (stage === "resume_prompt") {
       const job = currentJobRef.current;
       if (job) void processJobFollowup(job);

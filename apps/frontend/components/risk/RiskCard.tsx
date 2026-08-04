@@ -24,7 +24,7 @@ export function RiskCard({ data }: { data: RiskCardData }) {
       initial={{ opacity: 0, y: 12, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="relative mt-2 w-full max-w-[560px] overflow-hidden rounded-xl border border-[var(--color-accent)]/25 bg-[var(--color-surface)] p-6"
+      className="relative mt-2 w-full max-w-[560px] overflow-hidden rounded-xl border border-[var(--color-accent)]/25 bg-[var(--color-surface)] p-4 sm:p-6"
     >
       {!reduceMotion && (
         <motion.div

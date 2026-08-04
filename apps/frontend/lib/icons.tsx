@@ -264,3 +264,12 @@ export const IconStar = (p: SVGProps<SVGSVGElement>) => (
     <path d="M11.53 2.53a.5.5 0 0 1 .94 0l2.4 6.1a.5.5 0 0 0 .44.32l6.55.35a.5.5 0 0 1 .29.89l-5.11 4.14a.5.5 0 0 0-.17.53l1.72 6.33a.5.5 0 0 1-.75.55l-5.55-3.57a.5.5 0 0 0-.54 0l-5.55 3.57a.5.5 0 0 1-.75-.55l1.72-6.33a.5.5 0 0 0-.17-.53L1.85 10.2a.5.5 0 0 1 .3-.9l6.54-.34a.5.5 0 0 0 .44-.32Z" />
   </Icon>
 );
+
+// Mobile sidebar toggle — the app has no icon for this because the sidebar
+// was always visible until the responsive pass added a collapsible drawer
+// below the `lg` breakpoint.
+export const IconMenu = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M4 6h16M4 12h16M4 18h16" />
+  </Icon>
+);

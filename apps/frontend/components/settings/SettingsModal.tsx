@@ -82,15 +82,23 @@ export function SettingsModal({
             role="dialog"
             aria-modal="true"
             aria-label="Settings"
-            className="flex h-[540px] w-full max-w-[720px] overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xl"
+            // A fixed 540px height overflowed short viewports (a phone in
+            // landscape is often under 400px tall) and a fixed 190px tab rail
+            // left barely any room for content on a narrow one — both were
+            // fine at the desktop widths design.md was written for, neither
+            // survives a phone. `max-h-[90vh]` bounds it to the viewport
+            // instead of a constant; the tab rail collapses into a horizontal,
+            // scrollable strip above the content below `sm`, and back into the
+            // original fixed-width side column at `sm` and up.
+            className="flex max-h-[90vh] w-full max-w-[720px] flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xl sm:h-[540px] sm:flex-row"
           >
-            <div className="flex w-[190px] shrink-0 flex-col gap-1 border-r border-[var(--color-border)] bg-[var(--color-bg-inset)] p-3">
-              <h2 className="px-2 pb-2 pt-1 text-sm font-semibold">Settings</h2>
+            <div className="flex shrink-0 gap-1 overflow-x-auto border-b border-[var(--color-border)] bg-[var(--color-bg-inset)] p-3 sm:w-[190px] sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r">
+              <h2 className="hidden px-2 pb-2 pt-1 text-sm font-semibold sm:block">Settings</h2>
               {TABS.map((t) => (
                 <button
                   key={t.id}
                   onClick={() => setTab(t.id)}
-                  className={`cursor-pointer rounded-lg px-2.5 py-2 text-left text-sm font-medium transition-colors ${
+                  className={`shrink-0 cursor-pointer rounded-lg px-2.5 py-2 text-left text-sm font-medium transition-colors ${
                     tab === t.id
                       ? "bg-[var(--color-accent)] text-white"
                       : "text-[var(--color-text-secondary)] hover:bg-[var(--color-border)]/40 hover:text-[var(--color-text-primary)]"
@@ -101,7 +109,7 @@ export function SettingsModal({
               ))}
             </div>
 
-            <div className="relative flex-1 overflow-y-auto p-6">
+            <div className="relative flex-1 overflow-y-auto p-4 sm:p-6">
               <button
                 onClick={onClose}
                 aria-label="Close settings"

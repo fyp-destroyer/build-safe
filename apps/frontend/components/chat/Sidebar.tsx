@@ -35,10 +35,19 @@ const CATEGORY_ICON: Record<TaskCategory, typeof IconBolt> = {
   General: IconWrench,
 };
 
-// Fixed 260px width, recency-ordered history split into two sections —
-// Favourites (starred items, top) and Chats (everything else, bottom) —
-// solid-orange "New chat" CTA, active item marked with both a background
-// wash and a left accent bar so it's unmistakable — see design.md §10.1.
+// Recency-ordered history split into two sections — Favourites (starred
+// items, top) and Chats (everything else, bottom) — solid-orange "New chat"
+// CTA, active item marked with both a background wash and a left accent bar
+// so it's unmistakable — see design.md §10.1.
+//
+// RESPONSIVE: design.md specifies this as a permanently-visible 260px rail and
+// says nothing about narrower viewports (it predates any mobile pass). Below
+// the `lg` breakpoint it becomes an off-canvas drawer instead of statically
+// reserving 260px from a phone-width screen: fixed-position, translated
+// off-screen when `open` is false, sliding in over a backdrop when true. At
+// `lg` and up it reverts to exactly the original always-visible rail —
+// `lg:translate-x-0 lg:static` overrides the mobile transform and positioning
+// unconditionally, so desktop behaviour is provably unchanged.
 export function Sidebar({
   activeId,
   onNewChat,
@@ -51,6 +60,8 @@ export function Sidebar({
   onClearHistory,
   onExportHistory,
   onDeleteAccount,
+  open,
+  onClose,
 }: {
   activeId: string | null;
   onNewChat: () => void;
@@ -63,6 +74,10 @@ export function Sidebar({
   onClearHistory: () => void;
   onExportHistory: () => void;
   onDeleteAccount: () => void;
+  /** Drawer state below `lg`. Ignored at `lg` and up, where the rail is
+   *  always visible regardless of this value. */
+  open: boolean;
+  onClose: () => void;
 }) {
   const router = useRouter();
   const { signOut } = useClerk();
@@ -81,21 +96,48 @@ export function Sidebar({
   const chats = history.filter((h) => !h.favourite).sort(byRecency);
 
   return (
-    <aside className="flex h-full w-[260px] shrink-0 flex-col gap-4 border-r border-[var(--color-border)] bg-[var(--color-bg-inset)] p-3">
-      <div className="flex items-center gap-2 px-2 pt-1">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--color-accent)] text-sm font-bold text-white">
-          B
-        </div>
-        <span className="text-sm font-semibold">BuildSafe AI</span>
-      </div>
+    <>
+      {/* Backdrop: mobile/tablet only, and only while the drawer is open.
+          Clicking it closes the drawer — the same affordance as clicking
+          outside any other overlay in this app (see SettingsModal). */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={onClose}
+          aria-hidden
+        />
+      )}
 
-      <button
-        onClick={onNewChat}
-        className="flex cursor-pointer items-center gap-2 rounded-lg bg-[var(--color-accent)] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] max-w-[85vw] shrink-0 flex-col gap-4 border-r border-[var(--color-border)] bg-[var(--color-bg-inset)] p-3 transition-transform duration-200 ease-out lg:static lg:z-auto lg:h-full lg:max-w-none lg:translate-x-0 ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
-        <IconPlus width={16} height={16} />
-        New chat
-      </button>
+        <div className="flex items-center justify-between px-2 pt-1">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--color-accent)] text-sm font-bold text-white">
+              B
+            </div>
+            <span className="text-sm font-semibold">BuildSafe AI</span>
+          </div>
+          {/* Closes the drawer; has no equivalent at `lg`+ since the rail
+              cannot be closed there, so the button itself is hidden there. */}
+          <button
+            onClick={onClose}
+            aria-label="Close menu"
+            className="cursor-pointer rounded-lg p-1.5 text-[var(--color-text-secondary)] hover:bg-[var(--color-border)]/40 lg:hidden"
+          >
+            <IconX width={16} height={16} />
+          </button>
+        </div>
+
+        <button
+          onClick={onNewChat}
+          className="flex cursor-pointer items-center gap-2 rounded-lg bg-[var(--color-accent)] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+        >
+          <IconPlus width={16} height={16} />
+          New chat
+        </button>
 
       <nav className="flex-1 overflow-y-auto">
         {favourites.length > 0 && (
@@ -137,6 +179,8 @@ export function Sidebar({
         </div>
       </div>
 
+      </aside>
+
       <SettingsModal
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
@@ -148,7 +192,7 @@ export function Sidebar({
         onLogOut={handleLogOut}
         onDeleteAccount={onDeleteAccount}
       />
-    </aside>
+    </>
   );
 }
 

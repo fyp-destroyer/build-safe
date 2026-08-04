@@ -15,6 +15,7 @@ import { MessageBubble } from "@/components/chat/MessageBubble";
 import { QuickReplyChips } from "@/components/chat/QuickReplyChips";
 import { RiskCard } from "@/components/risk/RiskCard";
 import { TypingIndicator } from "@/components/chat/TypingIndicator";
+import { IconMenu } from "@/lib/icons";
 import {
   CATEGORY_ORDER,
   type ChatMessage,
@@ -255,6 +256,9 @@ export default function ChatPage() {
   const [awaitingReplyOptions, setAwaitingReplyOptions] = useState<string[] | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
+  // Sidebar drawer state below the `lg` breakpoint — see Sidebar.tsx. Ignored
+  // by the component itself at `lg`+, where the rail is always visible.
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [jobsById, setJobsById] = useState<Record<string, JobOut>>({});
   // Derived from Clerk's session rather than held in state: the user's name and
@@ -658,6 +662,10 @@ export default function ChatPage() {
   };
 
   const handleNewChat = () => {
+    // On a phone/tablet the sidebar is a drawer overlaying the chat; picking
+    // an action from it should return focus to the conversation rather than
+    // leave the drawer covering the screen.
+    setMobileNavOpen(false);
     // Flush anything still queued for the chat being left, before its job
     // reference is cleared and the queue would have nowhere to go.
     void flushTranscript();
@@ -707,6 +715,7 @@ export default function ChatPage() {
   };
 
   const handleSelectHistory = (id: string) => {
+    setMobileNavOpen(false);
     const job = jobsById[id];
     if (!job) return;
     void openJob(job);
@@ -872,9 +881,33 @@ export default function ChatPage() {
         onClearHistory={handleClearHistory}
         onExportHistory={handleExportHistory}
         onDeleteAccount={handleDeleteAccount}
+        open={mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
       />
 
       <div className="flex min-w-0 flex-1 flex-col">
+        {/* Mobile/tablet only: below `lg` the sidebar is an off-canvas drawer
+            (see Sidebar.tsx), so this is the only way back to it once closed —
+            without it, closing the drawer on a phone would strand the user
+            with no way to see history or start a new chat from here. Hidden at
+            `lg`+, where the rail is always visible and this bar would be
+            redundant with the logo already in it. */}
+        <div className="flex items-center gap-3 border-b border-[var(--color-border)] px-3 py-2.5 lg:hidden">
+          <button
+            onClick={() => setMobileNavOpen(true)}
+            aria-label="Open menu"
+            className="cursor-pointer rounded-lg p-1.5 text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-inset)]"
+          >
+            <IconMenu width={20} height={20} />
+          </button>
+          <div className="flex items-center gap-2">
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--color-accent)] text-xs font-bold text-white">
+              B
+            </div>
+            <span className="text-sm font-semibold">BuildSafe AI</span>
+          </div>
+        </div>
+
         {isEmpty ? (
           <div className="flex flex-1 flex-col items-center justify-center px-4">
             <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="mb-6 flex items-center gap-3">

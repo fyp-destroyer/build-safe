@@ -1,4 +1,4 @@
-# Rules — BuildSafe AI
+# Rules — CanIDIY
 
 Conventions and hard boundaries for anyone (human or AI agent) writing code in this repo.
 

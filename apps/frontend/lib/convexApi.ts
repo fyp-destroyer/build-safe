@@ -26,6 +26,7 @@ import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import type {
   FollowupAnswer,
+  FollowupPrompt,
   ChatMessagesOut,
   JobOut,
   RecommendationsOut,
@@ -44,7 +45,7 @@ interface JobDoc {
   followupAnswers: Record<string, FollowupAnswer>;
   llmHazardIds?: string[] | null;
   llmFollowupFields?: string[] | null;
-  nextFollowup?: { field: string; question: string } | null;
+  nextFollowup?: FollowupPrompt | null;
   status: string;
 }
 

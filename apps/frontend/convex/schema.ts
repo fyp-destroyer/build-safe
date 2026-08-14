@@ -29,6 +29,35 @@ export const taskCategory = v.union(
 /** What a user may answer to a safety-critical follow-up. See jobs.followupAnswers. */
 export const followupAnswer = v.union(v.boolean(), v.literal("unsure"));
 
+/**
+ * A pending follow-up: which field, how it is worded, and — optionally — the
+ * answer the user's own description already appears to give.
+ *
+ * `suggested` is a SUGGESTION, never an answer. It lives here, beside the
+ * question, and deliberately NOT in `followupAnswers`, because the rule engine
+ * reads that record and an LLM-written `true` there would gate a hazard away
+ * without the user ever saying so. Nothing reads this except the UI, which uses
+ * it to pre-select a chip the user still has to tap.
+ *
+ * Exported so `jobs.patch` validates against this exact shape rather than its
+ * own copy. The two were separate literals and adding a field to one silently
+ * left the other rejecting it.
+ */
+export const followupPrompt = v.object({
+  field: v.string(),
+  question: v.string(),
+  suggested: v.optional(
+    v.union(
+      v.null(),
+      v.object({
+        answer: followupAnswer,
+        /** Verbatim span of the description that justifies it, shown to the user. */
+        evidence: v.string(),
+      }),
+    ),
+  ),
+});
+
 export const jobStatus = v.union(
   v.literal("pending_followup"),
   v.literal("ready_to_assess"),
@@ -91,12 +120,10 @@ export default defineSchema({
      * so it cannot go stale.
      *
      * WHICH field is required is still decided entirely by the hardcoded
-     * catalog; only the WORDING comes from the LLM, and that has a hardcoded
-     * fallback (rules.md §4).
+     * catalog; only the WORDING, and a suggested answer the user must confirm,
+     * come from the LLM — both with hardcoded fallbacks (rules.md §4).
      */
-    nextFollowup: v.optional(
-      v.union(v.null(), v.object({ field: v.string(), question: v.string() })),
-    ),
+    nextFollowup: v.optional(v.union(v.null(), followupPrompt)),
     status: jobStatus,
   }).index("by_user", ["userId"]),
 

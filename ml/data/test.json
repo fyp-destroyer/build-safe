@@ -24,6 +24,24 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "hsg47"
+        ],
+        "rationale": "HSG47 requires cable-locating equipment; a service is located only once safely exposed"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "generated",
     "group_id": "gen-0031"
   },
@@ -53,6 +71,24 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "electric shock on an unverified circuit; DIY-specific severity evidence"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "generated",
     "group_id": "gen-0047"
   },
@@ -80,6 +116,27 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "electric shock on an unverified circuit; DIY-specific severity evidence"
+      },
+      "restriction": {
+        "class": "Rw",
+        "implies": 3,
+        "sources": [
+          "approved-document-p",
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "fixed-wiring work on an existing circuit; not notifiable, but conductors may be live"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "generated",
     "group_id": "gen-0082"
   },
@@ -109,6 +166,26 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "electric shock on an unverified circuit; DIY-specific severity evidence"
+      },
+      "restriction": {
+        "class": "R1",
+        "implies": 4,
+        "sources": [
+          "approved-document-p"
+        ],
+        "rationale": "notifiable by location: new electrical work in a kitchen, bathroom or outdoors"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "generated",
     "group_id": "gen-0083"
   },
@@ -138,6 +215,26 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "car-2012"
+        ],
+        "rationale": "CAR 2012 requires controlled conditions; many categories require a licensed contractor"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "car-2012"
+        ],
+        "rationale": "asbestos: removal, repair or disturbance is regulated; many categories need a licensed contractor"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "generated",
     "group_id": "gen-0135"
   },
@@ -163,6 +260,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "generated",
     "group_id": "gen-0138"
   },
@@ -187,6 +302,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "generated",
     "group_id": "gen-0141"
   },
@@ -206,6 +339,26 @@
     "professional_category": "structural_engineer",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "structural failure; crush injury credible"
+      },
+      "restriction": {
+        "class": "R3",
+        "implies": 5,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "active fault already occurring alongside a serious hazard - stop, leave, get help"
+      },
+      "override": null,
+      "rubric_level": 5
+    },
     "source": "generated",
     "group_id": "gen-0155"
   },
@@ -230,6 +383,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "generated",
     "group_id": "gen-0160"
   },
@@ -257,6 +428,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "hsg33"
+        ],
+        "rationale": "roof work: HSG33 specifies edge protection, staging or harness as the control"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "generated",
     "group_id": "gen-0170"
   },
@@ -283,6 +472,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "hsg33"
+        ],
+        "rationale": "roof work: HSG33 specifies edge protection, staging or harness as the control"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "generated",
     "group_id": "gen-0173"
   },
@@ -304,6 +511,26 @@
     "professional_category": "roofer",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "hsg33"
+        ],
+        "rationale": "roof work: HSG33 specifies edge protection, staging or harness as the control"
+      },
+      "restriction": {
+        "class": "R3",
+        "implies": 5,
+        "sources": [
+          "hsg33"
+        ],
+        "rationale": "working at height in adverse conditions - defer until the surface is safe"
+      },
+      "override": null,
+      "rubric_level": 5
+    },
     "source": "generated",
     "group_id": "gen-0175"
   },
@@ -324,6 +551,26 @@
     "professional_category": "roofer",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "hsg33"
+        ],
+        "rationale": "roof work: HSG33 specifies edge protection, staging or harness as the control"
+      },
+      "restriction": {
+        "class": "R3",
+        "implies": 5,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "active fault already occurring alongside a serious hazard - stop, leave, get help"
+      },
+      "override": null,
+      "rubric_level": 5
+    },
     "source": "generated",
     "group_id": "gen-0178"
   },
@@ -347,6 +594,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "chemical splash or fume; medical attention, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "generated",
     "group_id": "gen-0183"
   },
@@ -371,6 +636,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "fall from height; 31 of 126 GB worker deaths 2025/26, the most common cause"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 3
+    },
     "source": "generated",
     "group_id": "gen-0187"
   },
@@ -395,6 +678,24 @@
       "respirator_mask"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "nuisance dust or fume; irritation, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "generated",
     "group_id": "gen-0190"
   },
@@ -420,6 +721,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "fall from height; 31 of 126 GB worker deaths 2025/26, the most common cause"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 3
+    },
     "source": "generated",
     "group_id": "gen-0193"
   },
@@ -445,6 +764,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "fall from height; 31 of 126 GB worker deaths 2025/26, the most common cause"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 3
+    },
     "source": "generated",
     "group_id": "gen-0196"
   },
@@ -469,6 +806,26 @@
     "professional_category": "general_contractor",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "confined-spaces-regs-1997"
+        ],
+        "rationale": "atmosphere testing and rescue arrangements required BEFORE entry"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "gas-safety-regs-1998"
+        ],
+        "rationale": "work on gas fittings/appliances is restricted to registered engineers"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "generated",
     "group_id": "gen-0201"
   },
@@ -493,6 +850,24 @@
       "rubber_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "generated",
     "group_id": "gen-0202"
   },
@@ -517,6 +892,24 @@
       "rubber_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "generated",
     "group_id": "gen-0206"
   },
@@ -543,6 +936,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "hand-tool laceration; medical attention, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "generated",
     "group_id": "gen-0209"
   },
@@ -568,6 +979,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "hand-tool laceration; medical attention, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "generated",
     "group_id": "gen-0213"
   },
@@ -596,6 +1025,24 @@
       "steel_toe_boots"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "hand-tool laceration; medical attention, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "generated",
     "group_id": "gen-0215"
   },
@@ -621,6 +1068,26 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "car-2012"
+        ],
+        "rationale": "CAR 2012 requires controlled conditions; many categories require a licensed contractor"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "car-2012"
+        ],
+        "rationale": "asbestos: removal, repair or disturbance is regulated; many categories need a licensed contractor"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "generated",
     "group_id": "gen-0219"
   },
@@ -640,6 +1107,24 @@
     "professional_category": null,
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "generated",
     "group_id": "gen-0226"
   },
@@ -663,6 +1148,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "generated",
     "group_id": "gen-0231"
   },
@@ -689,6 +1192,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "manual-handling-regs-1992"
+        ],
+        "rationale": "load above the L23 guideline filter figures; musculoskeletal injury"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "generated",
     "group_id": "gen-0234"
   },
@@ -716,6 +1237,26 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "electric shock on an unverified circuit; DIY-specific severity evidence"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "fgas-qualifications"
+        ],
+        "rationale": "F gas: it is against the law to work on equipment containing fluorinated gases unqualified"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "generated",
     "group_id": "gen-0239"
   },
@@ -741,6 +1282,26 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "gas-safety-regs-1998"
+        ],
+        "rationale": "gas fittings require registered-engineer competence and test equipment"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "gas-safety-regs-1998"
+        ],
+        "rationale": "work on gas fittings/appliances is restricted to registered engineers"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "generated",
     "group_id": "gen-0242"
   },
@@ -764,6 +1325,26 @@
     "professional_category": "hvac_technician",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "gas-safety-regs-1998"
+        ],
+        "rationale": "gas fittings require registered-engineer competence and test equipment"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "gas-safety-regs-1998"
+        ],
+        "rationale": "work on gas fittings/appliances is restricted to registered engineers"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "generated",
     "group_id": "gen-0244"
   },
@@ -786,6 +1367,24 @@
     "professional_category": null,
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "generated",
     "group_id": "gen-0248"
   },
@@ -807,6 +1406,24 @@
     "professional_category": null,
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "generated",
     "group_id": "gen-0252"
   },
@@ -829,6 +1446,24 @@
     "professional_category": null,
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "generated",
     "group_id": "gen-0255"
   },
@@ -853,6 +1488,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "manual-handling-regs-1992"
+        ],
+        "rationale": "trivial to perform, but a fixing failure drops a load onto whoever is below afterwards - consequence falls on a third party, not the doer"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "generated",
     "group_id": "gen-0256"
   },
@@ -879,6 +1532,24 @@
       "knee_pads"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "hand-tool laceration; medical attention, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "generated",
     "group_id": "gen-0259"
   },
@@ -907,6 +1578,24 @@
       "steel_toe_boots"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "fall from height; 31 of 126 GB worker deaths 2025/26, the most common cause"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 3
+    },
     "source": "generated",
     "group_id": "gen-0262"
   },
@@ -932,6 +1621,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "ignition; burn injury and property fire credible"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 3
+    },
     "source": "generated",
     "group_id": "gen-0266"
   },
@@ -958,6 +1665,26 @@
       "steel_toe_boots"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "confined-spaces-regs-1997"
+        ],
+        "rationale": "atmosphere testing and rescue arrangements required BEFORE entry"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "confined-spaces-regs-1997"
+        ],
+        "rationale": "confined space: entry requires a safe system of work and emergency arrangements in place first"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "generated",
     "group_id": "gen-0269"
   },
@@ -979,6 +1706,25 @@
     "professional_category": "general_contractor",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "coshh-2002",
+          "lead-at-work-regs-2002"
+        ],
+        "rationale": "burning treated or painted timber releases arsenic, copper and lead fume"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "generated",
     "group_id": "gen-0273"
   },
@@ -1006,6 +1752,27 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "electric shock on an unverified circuit; DIY-specific severity evidence"
+      },
+      "restriction": {
+        "class": "Rw",
+        "implies": 3,
+        "sources": [
+          "approved-document-p",
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "fixed-wiring work on an existing circuit; not notifiable, but conductors may be live"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "generated",
     "group_id": "gen-0082"
   },
@@ -1032,6 +1799,24 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "hsg47"
+        ],
+        "rationale": "HSG47 requires cable-locating equipment; a service is located only once safely exposed"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "seed",
     "group_id": "gen-0031"
   },
@@ -1059,6 +1844,24 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "electric shock on an unverified circuit; DIY-specific severity evidence"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "seed",
     "group_id": "gen-0047"
   },
@@ -1084,6 +1887,27 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "electric shock on an unverified circuit; DIY-specific severity evidence"
+      },
+      "restriction": {
+        "class": "Rw",
+        "implies": 3,
+        "sources": [
+          "approved-document-p",
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "fixed-wiring work on an existing circuit; not notifiable, but conductors may be live"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "seed",
     "group_id": "gen-0082"
   },
@@ -1111,6 +1935,26 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "electric shock on an unverified circuit; DIY-specific severity evidence"
+      },
+      "restriction": {
+        "class": "R1",
+        "implies": 4,
+        "sources": [
+          "approved-document-p"
+        ],
+        "rationale": "notifiable by location: new electrical work in a kitchen, bathroom or outdoors"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "seed",
     "group_id": "gen-0083"
   },
@@ -1138,6 +1982,26 @@
         "answer": null
       }
     ],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "car-2012"
+        ],
+        "rationale": "CAR 2012 requires controlled conditions; many categories require a licensed contractor"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "car-2012"
+        ],
+        "rationale": "asbestos: removal, repair or disturbance is regulated; many categories need a licensed contractor"
+      },
+      "override": "unanswered-safety-critical-followup",
+      "rubric_level": 5
+    },
     "source": "seed",
     "group_id": "gen-0135"
   },
@@ -1161,6 +2025,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "seed",
     "group_id": "gen-0138"
   },
@@ -1183,6 +2065,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "seed",
     "group_id": "gen-0141"
   },
@@ -1200,6 +2100,26 @@
     "professional_category": "structural_engineer",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "structural failure; crush injury credible"
+      },
+      "restriction": {
+        "class": "R3",
+        "implies": 5,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "active fault already occurring alongside a serious hazard - stop, leave, get help"
+      },
+      "override": null,
+      "rubric_level": 5
+    },
     "source": "seed",
     "group_id": "gen-0155"
   },
@@ -1222,6 +2142,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "seed",
     "group_id": "gen-0160"
   },
@@ -1247,6 +2185,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "hsg33"
+        ],
+        "rationale": "roof work: HSG33 specifies edge protection, staging or harness as the control"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "seed",
     "group_id": "gen-0170"
   },
@@ -1271,6 +2227,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "hsg33"
+        ],
+        "rationale": "roof work: HSG33 specifies edge protection, staging or harness as the control"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "seed",
     "group_id": "gen-0173"
   },
@@ -1290,6 +2264,26 @@
     "professional_category": "roofer",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "hsg33"
+        ],
+        "rationale": "roof work: HSG33 specifies edge protection, staging or harness as the control"
+      },
+      "restriction": {
+        "class": "R3",
+        "implies": 5,
+        "sources": [
+          "hsg33"
+        ],
+        "rationale": "working at height in adverse conditions - defer until the surface is safe"
+      },
+      "override": null,
+      "rubric_level": 5
+    },
     "source": "seed",
     "group_id": "gen-0175"
   },
@@ -1308,6 +2302,26 @@
     "professional_category": "roofer",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "hsg33"
+        ],
+        "rationale": "roof work: HSG33 specifies edge protection, staging or harness as the control"
+      },
+      "restriction": {
+        "class": "R3",
+        "implies": 5,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "active fault already occurring alongside a serious hazard - stop, leave, get help"
+      },
+      "override": null,
+      "rubric_level": 5
+    },
     "source": "seed",
     "group_id": "gen-0178"
   },
@@ -1329,6 +2343,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "chemical splash or fume; medical attention, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "seed",
     "group_id": "gen-0183"
   },
@@ -1351,6 +2383,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "fall from height; 31 of 126 GB worker deaths 2025/26, the most common cause"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 3
+    },
     "source": "seed",
     "group_id": "gen-0187"
   },
@@ -1373,6 +2423,24 @@
       "respirator_mask"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "nuisance dust or fume; irritation, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "seed",
     "group_id": "gen-0190"
   },
@@ -1396,6 +2464,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "fall from height; 31 of 126 GB worker deaths 2025/26, the most common cause"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 3
+    },
     "source": "seed",
     "group_id": "gen-0193"
   },
@@ -1419,6 +2505,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "fall from height; 31 of 126 GB worker deaths 2025/26, the most common cause"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 3
+    },
     "source": "seed",
     "group_id": "gen-0196"
   },
@@ -1441,6 +2545,26 @@
     "professional_category": "general_contractor",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "confined-spaces-regs-1997"
+        ],
+        "rationale": "atmosphere testing and rescue arrangements required BEFORE entry"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "gas-safety-regs-1998"
+        ],
+        "rationale": "work on gas fittings/appliances is restricted to registered engineers"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "seed",
     "group_id": "gen-0201"
   },
@@ -1463,6 +2587,24 @@
       "rubber_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "seed",
     "group_id": "gen-0202"
   },
@@ -1485,6 +2627,24 @@
       "rubber_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "seed",
     "group_id": "gen-0206"
   },
@@ -1509,6 +2669,24 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "hand-tool laceration; medical attention, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "seed",
     "group_id": "gen-0209"
   },
@@ -1532,6 +2710,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "hand-tool laceration; medical attention, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "seed",
     "group_id": "gen-0213"
   },
@@ -1558,6 +2754,24 @@
       "steel_toe_boots"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "hand-tool laceration; medical attention, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "seed",
     "group_id": "gen-0215"
   },
@@ -1581,6 +2795,26 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "car-2012"
+        ],
+        "rationale": "CAR 2012 requires controlled conditions; many categories require a licensed contractor"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "car-2012"
+        ],
+        "rationale": "asbestos: removal, repair or disturbance is regulated; many categories need a licensed contractor"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "seed",
     "group_id": "gen-0219"
   },
@@ -1598,6 +2832,24 @@
     "professional_category": null,
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "seed",
     "group_id": "gen-0226"
   },
@@ -1619,6 +2871,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "seed",
     "group_id": "gen-0231"
   },
@@ -1643,6 +2913,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "manual-handling-regs-1992"
+        ],
+        "rationale": "load above the L23 guideline filter figures; musculoskeletal injury"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "seed",
     "group_id": "gen-0234"
   },
@@ -1668,6 +2956,26 @@
       "work_gloves"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "cpsc-neiss-electrical"
+        ],
+        "rationale": "electric shock on an unverified circuit; DIY-specific severity evidence"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "fgas-qualifications"
+        ],
+        "rationale": "F gas: it is against the law to work on equipment containing fluorinated gases unqualified"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "seed",
     "group_id": "gen-0239"
   },
@@ -1691,6 +2999,26 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "gas-safety-regs-1998"
+        ],
+        "rationale": "gas fittings require registered-engineer competence and test equipment"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "gas-safety-regs-1998"
+        ],
+        "rationale": "work on gas fittings/appliances is restricted to registered engineers"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "seed",
     "group_id": "gen-0242"
   },
@@ -1712,6 +3040,26 @@
     "professional_category": "hvac_technician",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "gas-safety-regs-1998"
+        ],
+        "rationale": "gas fittings require registered-engineer competence and test equipment"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "gas-safety-regs-1998"
+        ],
+        "rationale": "work on gas fittings/appliances is restricted to registered engineers"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "seed",
     "group_id": "gen-0244"
   },
@@ -1732,6 +3080,24 @@
     "professional_category": null,
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "seed",
     "group_id": "gen-0248"
   },
@@ -1751,6 +3117,24 @@
     "professional_category": null,
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "seed",
     "group_id": "gen-0252"
   },
@@ -1771,6 +3155,24 @@
     "professional_category": null,
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S1",
+        "implies": 1,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "no hazard tagged; worst credible outcome is self-treating"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 1
+    },
     "source": "seed",
     "group_id": "gen-0255"
   },
@@ -1793,6 +3195,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "manual-handling-regs-1992"
+        ],
+        "rationale": "trivial to perform, but a fixing failure drops a load onto whoever is below afterwards - consequence falls on a third party, not the doer"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "seed",
     "group_id": "gen-0256"
   },
@@ -1817,6 +3237,24 @@
       "knee_pads"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S2",
+        "implies": 2,
+        "sources": [
+          "cpsc-neiss"
+        ],
+        "rationale": "hand-tool laceration; medical attention, full recovery"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 2
+    },
     "source": "seed",
     "group_id": "gen-0259"
   },
@@ -1843,6 +3281,24 @@
       "steel_toe_boots"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "fall from height; 31 of 126 GB worker deaths 2025/26, the most common cause"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 3
+    },
     "source": "seed",
     "group_id": "gen-0262"
   },
@@ -1866,6 +3322,24 @@
       "safety_glasses"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S3",
+        "implies": 3,
+        "sources": [
+          "hse-fatal-injuries"
+        ],
+        "rationale": "ignition; burn injury and property fire credible"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 3
+    },
     "source": "seed",
     "group_id": "gen-0266"
   },
@@ -1890,6 +3364,26 @@
       "steel_toe_boots"
     ],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "confined-spaces-regs-1997"
+        ],
+        "rationale": "atmosphere testing and rescue arrangements required BEFORE entry"
+      },
+      "restriction": {
+        "class": "R2",
+        "implies": 4,
+        "sources": [
+          "confined-spaces-regs-1997"
+        ],
+        "rationale": "confined space: entry requires a safe system of work and emergency arrangements in place first"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "seed",
     "group_id": "gen-0269"
   },
@@ -1909,6 +3403,25 @@
     "professional_category": "general_contractor",
     "suggested_ppe": [],
     "followup_questions": [],
+    "basis": {
+      "severity": {
+        "band": "S4",
+        "implies": 4,
+        "sources": [
+          "coshh-2002",
+          "lead-at-work-regs-2002"
+        ],
+        "rationale": "burning treated or painted timber releases arsenic, copper and lead fume"
+      },
+      "restriction": {
+        "class": "R0",
+        "implies": 0,
+        "sources": [],
+        "rationale": "no restriction identified"
+      },
+      "override": null,
+      "rubric_level": 4
+    },
     "source": "seed",
     "group_id": "gen-0273"
   }

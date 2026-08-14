@@ -31,7 +31,7 @@ npm run verify     # safety tests + both port-equivalence gates
 Read these seven files in this order before making any non-trivial change — they
 are the actual spec, not background reading:
 
-1. **`prd.md`** — what BuildSafe AI is: a platform that decides *whether* a
+1. **`prd.md`** — what CanIDIY is: a platform that decides *whether* a
    DIY/construction task is safe to attempt (not how to do it), producing one of
    5 risk levels plus tool/material/PPE recommendations. Read this for scope (§4
    lists what's explicitly out of scope) and the one key product principle (§6).

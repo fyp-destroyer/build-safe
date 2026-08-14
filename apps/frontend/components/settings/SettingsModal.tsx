@@ -217,7 +217,7 @@ function AppearanceTab() {
     <div>
       <SectionTitle>Appearance</SectionTitle>
       <p className="mb-4 text-sm text-[var(--color-text-secondary)]">
-        Choose how BuildSafe AI looks. &quot;System&quot; follows your device&apos;s setting automatically.
+        Choose how CanIDIY looks. &quot;System&quot; follows your device&apos;s setting automatically.
       </p>
       <div className="grid grid-cols-3 gap-3">
         {options.map((opt) => {
@@ -320,7 +320,7 @@ function AccountTab({ onLogOut, onDeleteAccount }: { onLogOut: () => void; onDel
       <SectionTitle>Account</SectionTitle>
 
       <div className="mb-5 flex items-center justify-between rounded-lg border border-[var(--color-border)] p-4">
-        <div className="text-sm font-medium">Log out of BuildSafe AI</div>
+        <div className="text-sm font-medium">Log out of CanIDIY</div>
         <button
           onClick={onLogOut}
           className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:border-[var(--color-accent)]"

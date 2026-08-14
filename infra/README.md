@@ -2,7 +2,7 @@
 
 There is no infrastructure to run.
 
-That is the point of this directory now. BuildSafe AI used to need a local
+That is the point of this directory now. CanIDIY used to need a local
 Postgres + pgvector container (`docker-compose.yml`), Alembic migrations, and a
 separate Python API process. All of it is gone: the backend moved to Convex,
 which is a hosted database and function runtime, and auth moved to Clerk.

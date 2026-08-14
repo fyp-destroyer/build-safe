@@ -24,11 +24,12 @@ import { action, internalMutation, internalQuery, mutation, query } from "./_gen
 import { internal } from "./_generated/api";
 import type { Doc, Id } from "./_generated/dataModel";
 import type { ActionCtx, MutationCtx, QueryCtx } from "./_generated/server";
-import { taskCategory, followupAnswer } from "./schema";
+import { taskCategory, followupAnswer, followupPrompt } from "./schema";
 import { requireUser, getUserForRead, deleteJobChildren } from "./users";
 import { statusFor, nextMissingField, type JobLike } from "./ai/jobLogic";
 import {
   phraseFollowupQuestion,
+  suggestFollowupAnswer,
   tagCategory,
   tagHazardsResult,
   TASK_CATEGORIES,
@@ -133,9 +134,9 @@ export const patch = internalMutation({
     followupAnswers: v.optional(v.record(v.string(), followupAnswer)),
     llmHazardIds: v.optional(v.union(v.null(), v.array(v.string()))),
     llmFollowupFields: v.optional(v.union(v.null(), v.array(v.string()))),
-    nextFollowup: v.optional(
-      v.union(v.null(), v.object({ field: v.string(), question: v.string() })),
-    ),
+    // Shared with the table definition rather than re-declared, so the two
+    // cannot disagree about the shape they accept.
+    nextFollowup: v.optional(v.union(v.null(), followupPrompt)),
     status: v.optional(
       v.union(
         v.literal("pending_followup"),
@@ -263,11 +264,19 @@ export async function ensureHazardIds(ctx: ActionCtx, jobId: Id<"jobs">): Promis
 }
 
 /**
- * Recompute the next unanswered follow-up and its wording.
+ * Recompute the next unanswered follow-up, its wording, and any answer the
+ * description already gives.
  *
- * The catalog decides WHICH field; the LLM only supplies wording, and
- * `phraseFollowupQuestion` falls back to a hardcoded phrasing when the LLM is
- * unavailable — the flow never blocks because a model is down.
+ * The catalog decides WHICH field; the LLM only supplies wording and a
+ * suggestion. Both have hardcoded fallbacks (`phraseFollowupQuestion` returns
+ * the catalog's own phrasing, `suggestFollowupAnswer` returns null), so the flow
+ * never blocks because a model is down — it just asks the question cold, exactly
+ * as it did before suggestions existed.
+ *
+ * The suggestion does NOT pre-answer the field. `nextMissingField` above is
+ * computed from `followupAnswers`, which a suggestion never touches, so a job
+ * with a suggested answer is still blocked from assessment until the user
+ * actually taps a chip. That is the whole safety property of this feature.
  */
 async function refreshNextFollowup(ctx: ActionCtx, jobId: Id<"jobs">): Promise<void> {
   const job = await ctx.runQuery(internal.jobs.getInternal, { jobId });
@@ -279,8 +288,15 @@ async function refreshNextFollowup(ctx: ActionCtx, jobId: Id<"jobs">): Promise<v
     return;
   }
 
-  const question = await phraseFollowupQuestion(field, job.category);
-  await ctx.runMutation(internal.jobs.patch, { jobId, nextFollowup: { field, question } });
+  const [question, suggested] = await Promise.all([
+    phraseFollowupQuestion(field, job.category),
+    suggestFollowupAnswer(job.description, field),
+  ]);
+
+  await ctx.runMutation(internal.jobs.patch, {
+    jobId,
+    nextFollowup: { field, question, suggested },
+  });
 }
 
 /** Resolve (and create if needed) the calling user, callable from an action. */

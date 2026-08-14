@@ -122,6 +122,10 @@ BASE_KEYS = {
     "professional_category",
     "suggested_ppe",
     "followup_questions",
+    # Written by ml/assign_basis.py: the severity band, restriction class and
+    # cited sources behind this label, per ml/data/rubric.md. Regenerated, never
+    # hand-edited — edit the rubric or the source registry instead.
+    "basis",
 }
 
 # Generated records additionally carry provenance, so a variant can always be

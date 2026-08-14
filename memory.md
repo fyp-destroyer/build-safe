@@ -1,4 +1,4 @@
-# Memory Log — BuildSafe AI
+# Memory Log — CanIDIY
 
 This file is a **living record** of what has actually been done, kept in sync with reality — not a plan (that's `phases.md`). Update it every time a task is completed, a decision is made, or a file is meaningfully changed. Anyone (or any AI agent) picking up the project should be able to read this file top to bottom and know exactly where things stand without re-reading the whole codebase.
 
@@ -98,7 +98,7 @@ This file is a **living record** of what has actually been done, kept in sync wi
 - **Protocol, because fitting rules to the remaining eval failures is textbook overfitting:** `ml/data/holdout_rules.json` (24 fresh tasks, none in the training data) was written and **committed before** the rules it tests, so they provably could not be fitted to it. **14 of the 24 are adversarial negatives** — "lean a ladder against the wall", "replace a rotten fence post", "swap the faceplate on an existing socket", "fill a hairline crack" — because overfitting shows up as an over-broad rule as much as a narrow one, and positives alone cannot detect that. Rules were written against the hazard *concept*, not the miss strings, and the positives deliberately use different vocabulary.
 - **Result: 24/24 held out** (10/10 positives caught, 14/14 negatives held), up from a pre-rule baseline of 0/10 and 14/14. On the main data, deployed recall **0.873 → 0.902 with over-escalation unchanged at 0.094**; genuine misses **6 → 0**; recall on tasks whose hazard is stated in the text is now **1.000**.
 - ⚠️ **How to report that 1.000 honestly:** on training data it is exactly what overfitting would look like, so it must never be quoted alone. The evidence it generalises is the held-out 24/24 on examples committed beforehand. Quote both, or quote neither. The remaining 20 missed rows are all the unanswered-follow-up definitional artefact, which production never evaluates.
-- `ml/check_holdout.py` runs the validation; keep it green when touching the catalog.
+- `npx tsx ../../tools/check_holdout.mjs` (from `apps/frontend`) runs the validation; keep it green when touching the catalog. Ported from `ml/check_holdout.py` on 2026-08-12 — see that date's entry.
 - Status: **Complete.** Note the classifier half of `max(ML, rules)` is still the keyword placeholder — the Phase 3/4 trained model is not yet wired into the backend (deliberately deferred, see Decisions Log), so the rule engine currently carries the safety guarantee on its own.
 
 ### Phase 6 — Backend APIs
@@ -185,6 +185,8 @@ _(Append one row per meaningful change — new file, major edit, deletion.)_
 | 2026-08-01 | `apps/backend/routers/jobs.py`, `services/job_service.py`, `tests/test_job_delete.py` (new), `apps/frontend/components/chat/Sidebar.tsx`, `components/chat/Composer.tsx`, `app/chat/page.tsx` | **Chat deletion + no-new-chat-after-verdict** (user request). New `DELETE /jobs/{id}` (204, ownership-scoped 404) and `job_service.delete_job`, which removes `chat_messages`, `risk_assessments` and `ai_logs` rows before the job — none of the relationships cascade and every child FK is NOT NULL, so a bare delete is a FK violation. Sidebar rows gained a trash button with a two-click inline confirm; Settings → Clear history now actually deletes server-side instead of only emptying local state. Once a chat reaches `done` the composer is removed entirely (not shown disabled) and replaced by a centred "assessment complete / New chat" notice. 4 new tests, 181 passing | Phase 7 |
 | 2026-08-02 | `apps/frontend/app/globals.css` | **Themed scrollbars.** User-reported white scrollbar track in the sidebar. Root cause was not the sidebar: the app never declared `color-scheme`, which defaults to `light`, so every native control — scrollbars in all four scroll containers, and form-control chrome — was painted light regardless of the app's own theme. Added `color-scheme: light` on `:root` / `dark` on `.dark` (the class `ThemeProvider` toggles on `<html>`), plus token-driven `scrollbar-color` / `::-webkit-scrollbar` rules for a transparent track and `--color-border` thumb. Applied globally rather than to the sidebar alone, because the message thread and composer share a `scrollbar-gutter: stable` alignment (design.md §10.4) that only holds if scrollbar width changes for both | Phase 7 |
 
+| 2026-08-11 | `apps/frontend/convex/ai/ruleEngine/llmAssist.ts`, `convex/schema.ts`, `convex/jobs.ts`, `convex/ai/ruleEngine/llmAssist.test.ts` (new), `lib/types.ts`, `lib/convexApi.ts`, `app/chat/page.tsx`, `components/chat/QuickReplyChips.tsx` | **Suggested follow-up answers.** `suggestFollowupAnswer()` reads whether the description already answers a required follow-up and, if so, stores `{answer, evidence}` on `jobs.nextFollowup.suggested`. The chat quotes the user's own words back, reorders the chips so the suggested one is first, and highlights it — **the user still taps**. 11 new tests; 56 passing. `verify:rules` unchanged at 2,895 evaluations, which is the point: no catalog, `rules.ts` or `evaluate()` change | Phase 8 |
+
 ## Decisions Log
 
 _(Append one entry per non-trivial decision — tech choices, scope cuts, rule changes.)_
@@ -262,6 +264,9 @@ _(Append one entry per non-trivial decision — tech choices, scope cuts, rule c
 | 2026-08-03 | **The LLM kept reintroducing the exact question framing the catalog had just removed, so it is now rejected mechanically** | The LLM only supplies WORDING for follow-ups, never which field is asked or what it scores. But asked to rephrase "Is the power isolated?", it helpfully produced "Have you confirmed the power is isolated?" — undoing the fix one generated question at a time, invisibly, because the wording looks perfectly reasonable in isolation. `_ASKS_WHETHER_USER_CHECKED` now discards any phrasing that asks whether the user *checked/confirmed/verified/ensured/tested* rather than what is *true*, and falls back to the catalog's own wording; a declarative (non-question) reply is rejected too, since the UI renders it beside Yes/No/Not-sure chips where a statement reads as the app asserting a safety fact. **Same lesson as evidence-grounded hazard tagging**: a prompt instruction not to do X does not stop X — a mechanical check does. The pattern matches `your` as well as `you` ("Has your electrician confirmed…?" is the same ambiguity wearing a different subject) — caught by a test, not by review. Also deleted the local `_DEFAULT_FOLLOWUP_QUESTIONS` dict, which duplicated the catalog's question text and had already drifted from it: whichever path ran decided which wording the user saw. One source of truth |
 | 2026-08-03 | **The rule-engine equivalence gate was re-pointed from "matches Python" to "matches reviewed behaviour"** | `compare_rule_engines.mjs` existed to prove the Python→TypeScript port was faithful, and it did: 2,316 evaluations identical. The changes above deliberately alter behaviour, so 949 of those evaluations now differ *by design* and matching Python is no longer the goal. Rather than delete the gate — which would remove the only mechanical protection over the catalog — it now diffs against `rule_engine_expected.json`, a committed snapshot of current reviewed behaviour, re-baselined with `--update`. `rule_engine_python_results.json` is retained as the frozen historical evidence of the port. A fifth answer state `all_unsure` was added to the replay, so the corpus is now **2,895 evaluations**. The gate no longer proves parity with a deleted implementation, but it still catches the failure that actually threatens users: a change that silently moves a risk level nobody meant to move |
 
+| 2026-08-11 | **The LLM may PROPOSE a follow-up answer, but may never write one — the user's tap is what counts** | User-reported: describing a task as "retile a wall, the wall is not load-bearing" still got asked whether the wall was load-bearing, and stating it in prose did nothing, because only a recorded chip answer reaches `followupAnswers`. The obvious fix — have the LLM populate `followupAnswers` directly — is the one that cannot be taken: a confirmed answer removes a follow-up's escalation, so an LLM writing `true` there would be **suppressing a hazard**, which `rules.md` §4 forbids outright (contributions are additive only). So the suggestion is stored on `nextFollowup.suggested`, which nothing but the UI reads: `missingRequiredFollowups` and `evaluate` both read `followupAnswers`, so a job with a suggestion is still blocked from assessment and still scores `floorWhenMissing` until the user actually answers. Asserted by tests rather than left to convention. **Grounding reuses `evidenceSupports`** — the model must quote the description verbatim or the suggestion is discarded, the same mechanical check that stopped ungrounded hazard tags, and for the same reason: a prompt instruction not to infer does not stop inference. An unrecognised `answer` string is discarded rather than coerced, so there is no path from model noise to a pre-selected "Yes". **Known limitation:** this fixes the ergonomics, not the risk number. A task held high by an ungated hazard rule (`fixed_wiring_work`, `structural_alteration` — `gatedBy: []`, so a confirmed answer cannot stop them firing) or by the ML term in `max(ML, rules)` is unaffected. Only 1 of 35 rules uses `gatedBy` at all; gating more is a separate, live decision |
+| 2026-08-11 | **Rejected (for now): giving the classifier follow-up answers as features**, per user proposal | The proposal — LLM normalises text + answers into a JSON record, classifier trains on the extra fields — is a sound architecture and correctly targets the real gap (the fact that decides risk is often absent from `task_text`). It is blocked on data, not design: **all 70 follow-up entries across the 555 rows have `answer: null`** — zero `true`, zero `false` — because `ml/data/README.md`'s authoring rule folds every known answer into `task_text` and leaves the list empty. The proposed features would be constants in training, and the only signal that does vary (present vs absent) is 59/67 at level 5, so the model would learn "a follow-up exists ⟹ 5" and be undefined on `true`. Making it work needs contrast sets — same task, differing only in field values, different labels, the `"install a ceiling fan"` quartet's shape — at roughly 150–250 new hand-written seeds. **And it would re-create the `user_skill` failure** unless each field value spans several risk levels: note the target is NOT decorrelation (unlike skill, follow-up answers *should* correlate with risk — that is real causal signal); it is that `power_isolated: true` must appear on a level-1 cover-plate swap AND a level-4 rewire, or the model keys on the flag and ignores the text. Balancing class counts alone does not achieve this — that fixes imbalance, and the skill bug was confounding |
+
 ## Bugs Found & Fixed
 
 _(Real runtime bugs caught during verification, not just typos — kept here since they're non-obvious enough to bite again if similar patterns are reused. Known pitfalls specific to the current frontend implementation are documented inline in `design.md`'s ⚠️ callouts instead of here.)_
@@ -319,3 +324,505 @@ _(Anything left dangling — a TODO, a bug, a question for the supervisor.)_
 
 - Minimum dataset size and expert-review process — **provisionally resolved 2026-07-19** (no supervisor available) at ~150–300 examples/class, standards-based review substitute — see `prd.md` §7. Confirm with supervisor when available.
 - Acceptable false-negative rate for high-risk classes — **provisionally resolved 2026-07-19** at ≥95% recall on Professional Required/Dangerous — see `prd.md` §7. Confirm with supervisor when available.
+
+---
+
+## 2026-08-12 — Renamed to CanIDIY, and a real homepage at `/`
+
+### Rename: BuildSafe AI → CanIDIY
+
+Product name changed on user instruction. "BuildSafe AI" became **CanIDIY** (not
+"CanIDIY AI" — the name already contains the question, and "CanIDIY AI" reads as a
+stutter). Applied across all UI strings, page metadata, and the spec documents
+(`prd.md`, `architecture.md`, `rules.md`, `srs.md`, `design.md`, `phases.md`,
+`CLAUDE.md`, `infra/README.md`). The brand mark letter in the sidebar, chat header and
+auth screen changed from `B` to `C`.
+
+Two places were deliberately **not** renamed:
+
+- **This file's historical entries.** Only the title changed. Every dated entry below
+  records what was true when it was written, and rewriting them would falsify the log.
+  `buildsafe-postgres`, `buildsafe-postgres-test` and `BUILDSAFE_MODEL_PATH` therefore
+  still appear throughout — those were the real identifiers at the time.
+- **`apps/frontend/.env.local`.** The `# team: sarimareeb66, project: buildsafe` comment
+  is Convex's own record of the deployment's project slug. It is not display text;
+  editing it would desync the file from the actual Convex project.
+
+Two localStorage keys were renamed with it: `buildsafe:active-job-id` →
+`canidiy:active-job-id` and `buildsafe-theme-choice` → `canidiy-theme-choice`. **Known
+consequence:** on first load after deploy, existing users lose their saved theme choice
+(falls back to "system") and anyone with an in-flight assessment loses the poll for that
+job. Judged acceptable pre-launch; if this ships to real users later, add a one-time
+read-through to the old keys instead.
+
+### Homepage at `/`
+
+`/` was an unconditional `redirect("/login")`. It now renders a real landing page.
+Nothing about route protection changed — `proxy.ts` still guards only `/chat` and
+`/dashboard`, and `/` was always public.
+
+Built through the `impeccable` skill. Structure chosen by its concept seed (surface
+scope, Persuade mode, seed `adb6da48`, assigned candidate 6 of the grounded list): **the
+page is CanIDIY's own case register** — a key of the five verdicts, three assessments
+filed in full, the standing clauses that govern them, and a scope note. Deliberately not
+a hero-plus-feature-cards page; the proof is the filed entries.
+
+Files: `app/page.tsx`, `components/landing/LandingPage.tsx`,
+`components/landing/registerData.ts`, plus a metadata/description change and the
+direction-contract comment in `app/layout.tsx`. Surface strategy is recorded in
+`.impeccable/surfaces/apps-frontend-app-page-tsx.md`; product truth in `PRODUCT.md`
+(new, written from `prd.md`/`srs.md` rather than a fresh interview).
+
+Decisions worth carrying forward:
+
+| Decision | Why |
+|---|---|
+| Every CTA points at `/chat`, for signed-in and signed-out visitors alike | `proxy.ts` already redirects signed-out visitors to `/login` with a `redirect_url`. One href needs no auth state to render, works before Clerk's script loads, and lands both cases in the right place. Only the header's secondary link varies with session state |
+| The page is always dark, via a `dark` class on its root rather than hardcoded hex | It leads directly into the always-dark auth screen (`design.md` §9); inverting the palette halfway through a sign-in journey looks broken. Scoping the class re-resolves the existing `.dark` token block for the subtree, so the page still tracks any future token change instead of drifting |
+| Rule ids, floors, follow-up wording and rule counts on the page are quoted from `convex/ai/ruleEngine/catalog.ts`; only task text and reference numbers are authored | A marketing page that misstates a floor is a safety claim that is wrong in public. The header of `registerData.ts` records which fields are which and that the counts go stale if the catalog changes |
+| No accuracy figure appears anywhere on the page | The ≥95% recall in `prd.md` §7 is a provisional target pending supervisor confirmation, not a measured result. Publishing it would turn an internal target into a public claim |
+
+**Bug found and fixed during the build:** the landing root is a flex child of the root
+layout's `flex flex-col` body, which globals.css gives `height: 100%`. Flex items default
+to `flex-shrink: 1`, so the page collapsed to its `min-h-screen` floor while its content
+overflowed — the dark ground painted for exactly one viewport and everything below it
+fell through to the light-themed body background. Fixed with `shrink-0` on the root.
+Any future full-page surface added under this layout will hit the same thing.
+
+**Environment note:** headless Chromium could not hold a connection to `next dev` on this
+machine (the document renders, but `page.goto()` never settles and the request shows
+`net::ERR_ABORTED`), while `curl` against the same server was fine. Screenshot review was
+done instead against the prerendered `/` from `next build`, served with its real CSS from
+a throwaway static server. Also: running `next build` while `next dev` is live corrupts
+`.next` badly enough that every dev route hangs — delete `.next` and restart if that
+happens.
+
+---
+
+## 2026-08-12 — `user_skill` removed from the rule-engine holdout; its runner ported to TypeScript
+
+**Files:** `ml/data/holdout_rules.json`, `tools/check_holdout.mjs` (new), `ml/check_holdout.py`
+(deleted), `memory.md`, `phases.md`.
+
+`ml/check_holdout.py` had been dead since the Convex migration — it imported
+`apps/backend/ai/rule_engine`, which no longer exists, so the held-out protocol recorded in
+the 2026-07-31 entry was not actually being enforced by anything. Ported to
+`tools/check_holdout.mjs` beside the other engine harnesses, importing
+`convex/ai/ruleEngine/rules.ts` directly the same way `compare_rule_engines.mjs` does.
+**Result unchanged: 24/24** (10/10 positives, 14/14 negatives).
+
+Run it from `apps/frontend`, where `tsx` is installed:
+
+```bash
+npx tsx ../../tools/check_holdout.mjs
+```
+
+`user_skill` was dropped from all 24 fixture rows. It could no longer change an outcome
+in two independent ways: every `requiresSkill` in `catalog.ts` is empty (the old
+`electrical_work_by_beginner` became `fixed_wiring_work`, floor 3 for everyone), and
+`skill_level` is deliberately not carried into the Convex schema at all. `rules.ts` still
+*accepts* `userSkill` on `RuleEngineInput`; that is now an unused parameter, kept so a
+future skill-gated rule needs no signature change.
+
+`tools/dump_python_rule_results.py` also reads this file, but via
+`item.get("user_skill", "")`, so it degrades safely. It is frozen history either way — it
+imports the deleted backend.
+
+**Note the field was NOT removed from the ML dataset.** `seed_examples.json`,
+`generated_examples.json` and the three splits all still carry `user_skill`, on purpose:
+`ml/rebalance_skill.py` reassigned the values to break the confound (NMI 0.657 → 0.000)
+rather than deleting the key, and `validate_dataset.py`'s skill-independence check needs
+the field present in order to test it. `holdout_rules.json` was the one file where it had
+no remaining purpose.
+
+**Also found, not yet fixed:** `python ml/review_high_risk.py` currently FAILS —
+`ml/data/REVIEW.md` reports 100% conformance, the live run gives 98.5%. One seed below its
+floor (`seed-0051`, "swap a light switch for a dimmer…", level 2) plus its generated
+variant, both flagged by the `electrical-work-by-beginner` audit rule. Introduced by
+`741fcc9`, which reassigned `user_skill` — that is the only audit rule keyed on skill, so
+the rebalance re-fired it. The rule audits a floor the shipped catalog no longer
+implements, and the dataset label does not need to encode the engine's floors anyway
+(`fixed_wiring_work` matches "light switch"/"dimmer" and lifts the task to 3 at serve time
+via `max(ML, rules)`). Resolution deferred pending the standards-coverage work below.
+
+---
+
+## 2026-08-12 — Standards-basis rubric: every label traceable to a cited source
+
+**Files:** `ml/data/sources.json` (new), `ml/data/rubric.md` (new), `ml/assign_basis.py`
+(new), `ml/validate_dataset.py`, `seed_examples.json`, `generated_examples.json`,
+`train/val/test.json`.
+
+Goal: answer "how reliable are your risk classifications?" with citations rather than
+"the author judged it." Prompted by REVIEW.md's 65-of-256 coverage.
+
+**Blocking finding: no authority publishes a DIY competence scale.** Searched for one
+specifically. Every DIY difficulty rating found is a retailer, contractor marketing, or a
+blog — uncredentialed and mutually inconsistent. Regulators answer a *different question*
+("who is legally permitted to do this work?"), which only has an answer at the top of the
+scale. So the 1–5 scale cannot be sourced and must be a published in-repo rubric.
+
+**Model (agreed with supervisor-facing stakeholder 2026-08-12):**
+`risk_level = max(severity_floor, restriction_floor)`. Severity (S1–S3) from injury
+surveillance; restriction (R0/R1/R2/R2h/R3) from named legislation, **jurisdiction-tagged**
+because a restriction is law in one country and not another. Inputs carry citations; the
+function does not and does not pretend to. Full write-up in `ml/data/rubric.md`, including
+what may and may not be claimed to stakeholders.
+
+**Two citation defects found and recorded in `sources.json` → `rejected`:**
+- `review_high_risk.py` cited **INDG284** for fragile-surface falls. HSE's own
+  fragile-surfaces page cites **HSG33** and **GEIS5** and does not reference INDG284;
+  it appears to be a withdrawn 2008 leaflet. Not yet fixed in the audit script.
+- **HASS/LASS** — the UK equivalent of NEISS and the source most "DIY injury statistics"
+  pages ultimately quote — **ceased collecting data in 2002**. Any figure from it is 24
+  years stale. Do not cite.
+
+**Measured result: the rubric reproduces 162/256 seed labels (63%).** The 94 disagreements
+are not noise — the mean delta is monotonic in the hand label:
+
+| hand level | disagree | mean delta |
+|---|---|---|
+| 1 | 10/62 | **+1.00** |
+| 2 | 14/51 | +0.29 |
+| 3 | 21/54 | −0.81 |
+| 4 | 32/45 | −1.03 |
+| 5 | 17/44 | **−1.59** |
+
+**The rubric compresses toward the middle**, and the cause is structural, not a tuning
+problem: severity caps at 3 by design, and restriction only reaches 4–5 when a *legal*
+restriction fires — which it does on ~25% of rows. Tasks that are genuinely 4–5 for
+*physical* reasons (most of them) therefore land at 3. This is the same 65-of-256 gap
+REVIEW.md found, now measured from the other direction.
+
+⚠️ **Deliberately NOT tuned further.** Adjusting the rubric until it reproduces the hand
+labels would make the "sourced" claim circular — the exact failure REVIEW.md documents
+("changing a check because it flagged something is how an audit gets quietly tuned to
+pass"). Stopped at the honest number.
+
+**Proposed fix, not yet applied:** split control-difficulty out of restriction so severity
+can reach 4–5 on physical grounds. `S4` = published guidance specifies *engineered
+controls or specialist equipment* (HSG33 staging, HSG47 CAT-and-Genny, CAR 2012
+enclosure, Confined Spaces atmosphere testing), not merely care and PPE; `S5` = active
+emergency. That is a factual question about a document, so it stays citable.
+
+**`assign_basis.py` writes `basis` only — never `risk_level`, `hazards` or `task_text`.**
+Same restraint as `rebalance_skill.py`: a script must not silently restate 256 hand-made
+safety judgements as its own. Disagreements print as a review queue.
+
+**Open:** 4 of 15 sources are `verified: null` (`hse-fatal-injuries`,
+`electrical-safety-first`, `approved-document-p`, `bs7671`) and account for ~40% of
+citations — the script flags them `[UNVERIFIED - do not ship]`. Also outstanding: the 94
+adjudications, basis for the 21 catalog rules, ceiling rules in the audit, and the
+`electrical-work-by-beginner` failure from the earlier entry.
+
+---
+
+## 2026-08-12 (later) — Control-difficulty axis applied: rubric agreement 63.3% → 71.1%
+
+**Files:** `ml/assign_basis.py`, `ml/data/rubric.md`, `ml/data/sources.json`,
+`seed_examples.json`, `generated_examples.json`, `train/val/test.json`.
+
+The compression documented in the previous entry is largely fixed. Four changes, each
+justified by a defect identifiable *without* reference to whether agreement improved:
+
+| step | agreement | defect fixed |
+|---|---|---|
+| initial | 63.3% | — |
+| + **S4** severity band | 65.2% | severity capped at S3, so anything dangerous for physical rather than legal reasons could not exceed 3 |
+| + broad **R3** | 69.1% | emergencies were detected only for gas smell and sparking wires, missing "my breaker keeps tripping", "water is dripping onto the fuse box", "sewage is backing up", "the floor feels bouncy" — all hand-labelled 5 |
+| + **G3 / F-gas / Part A** | 71.1% | plumbing and HVAC had **no restriction source in the registry at all** |
+
+Mean delta at level 5 went −1.59 → −1.10, at level 3 −0.81 → −0.23. The remaining 74
+disagreements spread evenly across all nine categories — per-row judgement difference,
+not systematic bias.
+
+**Design changes:** `R2h` retired (controllability is not law — it moved to severity as
+S4). `R1` notifiable now floors at **4**, not 3, because lawful completion needs a
+registered competent person, which is README.md's definition of level 4. New `Rw` class
+floors non-notifiable fixed wiring at 3, matching `fixed_wiring_work` in the shipped
+catalog — so dataset and engine now agree.
+
+**Three citation defects found, two fixed:**
+- `assign_basis.py` cited **Approved Document P (electrical safety) for structural work**.
+  Structural is **Part A**. Fixed.
+- **Approved Document A does not say structural alteration is notifiable** — that is the
+  Building Regulations 2010 reg. 12. Verified the AD-A scope, then *narrowed the claim* to
+  what the document actually supports and recorded the correction in `sources.json`.
+- `review_high_risk.py` still cites the withdrawn **INDG284**. NOT yet fixed.
+
+**Registry: 18 sources, 14 verified.** New and verified this session: `approved-document-g`
+(Part G3 — an unvented hot water system "may only be installed by a person competent to do
+so"), `fgas-qualifications` ("against the law to work on equipment containing F gases"
+without qualification), `approved-document-a`.
+
+⚠️ **`hse-fatal-injuries` is the largest open risk.** Its URL is an *index page* and carries
+none of the figures attributed to it; those came from secondary sources during research.
+It is the severity source for **every** `fall_from_height` and `structural_collapse` row
+(91 citations). `sources.json` carries a `blocker` field spelling out the fix: open the
+linked annual report, take figures and reporting year from it, repoint the URL.
+`electrical-safety-first` (137) and `approved-document-p` (71) are also still unverified —
+299 citations total flagged `[UNVERIFIED - do not ship]` by the script.
+
+**Still open:** the 74 adjudications; basis for the 21 catalog rules; ceiling rules in the
+audit; the INDG284 fix; and the `electrical-work-by-beginner` audit failure.
+
+---
+
+## 2026-08-13 — Sources verified (one retired), 74 disagreements adjudicated: 71.1% → 73.8%
+
+**Files:** `ml/data/sources.json`, `ml/assign_basis.py`, `seed_examples.json`,
+`generated_examples.json`, `train/val/test.json`.
+
+### Source verification: 17 of 18 verified, one retired
+
+- **`hse-fatal-injuries` fixed.** The old URL was an index page carrying none of the
+  figures attributed to it. Now points at `/statistics/fatals-overview.htm` with figures
+  taken from it directly: **126 worker fatalities 2025/26 (RIDDOR), 31 from falls from
+  height (~24.6%, the most common cause), construction highest sector at 25.**
+  Provisional until July 2027 — always quote with that qualifier.
+- **`electrical-safety-first` RETIRED to `rejected`.** It was the most-cited source in the
+  registry (137 rows) and failed verification: its own facts-and-figures page carries **no
+  electric-shock statistics at all**, only accidental domestic *fire* data drawn from a
+  Home Office dataset. The claim actually being cited — a 2013 survey finding nearly half
+  of severe shocks are DIY-caused — could not be traced to any primary ESF publication;
+  every instance found was a blog or trade site quoting it unattributed. Replaced by
+  **`cpsc-neiss-electrical`** (verified, product-coded, queryable).
+- `approved-document-p` and `approved-document-a` verified as documents, but **both had
+  their supported claims narrowed**: the publication pages confirm scope, while the
+  specific notifiable-work lists live in the PDFs and have not been read line by line.
+  `sources.json` records that limit per entry.
+- `bs7671` remains unverified **by design** — paywalled, and deliberately carries zero
+  citations, so nothing depends on it.
+
+### Adjudicating the 74: mostly rubric defects, not label defects
+
+Reviewed all 74. They sort into five causes, and **the hand label won nearly every time** —
+which is the reassuring direction, since it means the dataset was not the weak part.
+
+Four defects fixed (no new research needed), 71.1% → **73.8%**:
+
+1. **Trivial magnitude.** A hazard tag records that a hazard *exists*, not that it matters.
+   "fill and sand small nail holes" carries `respiratory_hazard`; "seal the grout lines"
+   carries `chemical_exposure`. Every trivial task floored at 2 and the level-1 band
+   collapsed. Level 1 misses 11 → 5.
+2. **`LOW_HEIGHT` was firing on roofs.** "replace a cracked ridge tile on a single storey
+   bungalow roof" scored 2 against a hand label of 3 because "single storey" appeared in
+   the text. A single-storey roof is still a roof and HSG33 still governs it.
+3. **Adverse conditions were invisible.** Level 5 means "nobody does this *right now*", and
+   wet/icy/raining is exactly that — the same roof is a 3 in the dry. Also added fragile
+   surfaces, where the control is not to walk on them at any skill level.
+4. **F-gas and G3 were matching appliance names.** "clean the filter on a portable air
+   conditioning unit" was scoring **level 4**. F-gas governs work on the sealed refrigerant
+   circuit; G3 governs installing an unvented system, not topping up pressure via the
+   filling loop. Over-labelling like this is the direction `prd.md` §6 warns about — a
+   product that cries wolf gets ignored.
+
+### Remaining 67 seed disagreements — all traced, none mysterious
+
+| cause | rows | needs |
+|---|---|---|
+| **Missing source: plumbing** | ~9 | Water Supply (Water Fittings) Regulations 1999; Building Regs Part H (drainage). Toilet installs, soil-stack reroutes, radiator additions all score S2/R0 → 2 against hand 3–4 purely because no plumbing source covers them. |
+| **Missing source: paint chemistry** | ~10 | Control of Lead at Work Regulations 2002; COSHH 2002. Lead-paint stripping and solvent spraying in unventilated spaces score 2 against hand 3–5. |
+| **Missing predicate: burning treated timber** | 1 | seed-0256, hand 5. Arsenic/copper fume — already noted in REVIEW.md's over-labelling review. |
+| **Rubric gap: third-party consequence** | ~5 | Severity models injury to the *doer* only. "mount a heavy TV", "floating shelves on plasterboard" are `hazards: []` → level 1, hand 2, because the failure mode injures a *bystander*. The axis has no way to express this. |
+| **Genuine judgement** | ~4 | Basic carpentry with powered tools (fitted wardrobes, skirting, garden bench): rubric S3 because a circular saw can amputate; hand 2 because it is ordinary woodworking. Worst *credible* vs worst *typical* outcome. Neither is wrong; record as a documented exception rather than forcing either. |
+
+**Still open:** basis for the 21 catalog rules; ceiling rules in the audit; the INDG284 fix
+in `review_high_risk.py`; the `electrical-work-by-beginner` audit failure; and
+REVIEW.md/README.md not yet updated for any of this work.
+
+---
+
+## 2026-08-13 (later) — Missing sources added, audit green again: 73.8% → 75.0%
+
+**Files:** `ml/data/sources.json`, `ml/assign_basis.py`, `ml/review_high_risk.py`,
+`ml/data/REVIEW.md`, `ml/data/README.md`, data files, splits.
+
+### Three sources added, all verified
+
+- **`water-fittings-regs-1999`** (SI 1999/1148) — reg. 5: installing certain water
+  fittings requires notifying the water undertaker and awaiting consent.
+- **`lead-at-work-regs-2002`** (+ HSE ACOP L132) — lead pigment was in domestic paint
+  until the 1960s and not gone from common paints until the early 1980s. Specifies
+  on-tool extraction, wet abrasive methods, APF-20 RPE, and **no blow lamps / hot air
+  above 500 °C**. Engineered controls, so lead paint is S4, not plain S2.
+- **`coshh-2002`** (reg. 7 + HSE solvents guidance) — the control **hierarchy**:
+  engineering controls first, ventilation at source second, **PPE only where adequate
+  control cannot be achieved otherwise**. Ventilation is always required for solvents.
+
+### A floor distinction that mattered
+
+Water Fittings reg. 5 floors at **3**, Part P at **4**, and the difference is what the
+restriction actually demands: Part P needs certification by a *registered competent
+person* — a professional in the loop, which is level 4 — while reg. 5 needs a
+*notification* a householder can make themselves. Collapsing them to one floor pushed a
+batch of level-2 maintenance tasks to 4.
+
+The same predicate also had to exclude component swaps: replacing a leaking trap, a
+flexible hose, a fill valve or a mixer tap is maintenance on existing pipework, not a
+notifiable alteration.
+
+### Third-party consequence — narrow extension, weakest evidence in the rubric
+
+Severity modelled injury to the *doer* only, so "mount a heavy TV" and "floating shelves
+on plasterboard" scored 1 against a hand label of 2: trivial to perform, and the failure
+lands on whoever is underneath later. Added as a deliberately narrow S1→S2 lift for a
+suspended-load-over-people pattern, cited to the manual-handling ACOP. **This is the
+weakest-evidenced rule in the rubric and is marked as such in the code** — a real
+third-party axis would be a design change, not a predicate.
+
+### review_high_risk.py: failing since 741fcc9, now green
+
+- **INDG284 citation replaced** with HSG33 paras 170-202 + GEIS5.
+- **`electrical-work-by-beginner` retired** — it audited a floor the product dropped with
+  `user_skill` on 2026-08-02, and was the only rule keyed on skill, so the rebalance made
+  it fire on a label nobody had changed.
+- **`fixed-wiring-work` added**, gated on isolation not being stated as confirmed.
+  **This gate deliberately diverges from the shipped catalog**, where `fixed_wiring_work`
+  has `gatedBy: []` and floors at 3 regardless: the ENGINE must never lower a level on
+  the strength of free text (rules.md §4.2), while the DATASET is labelling what the task
+  demands given stated facts (README.md's paired-seed pattern). `max(ML, rules)`
+  reconciles them — a confirmed-isolated outlet swap still serves as 3.
+
+**Result: 100% conformance on both files, 0 below floor.** REVIEW.md's headline claim is
+true again; it had been stale since `741fcc9`.
+
+### State
+
+Rubric agreement **192/256 (75.0%)**, chain 63.3 → 65.2 → 69.1 → 71.1 → 73.8 → 74.2 →
+75.0. Remaining 64 disagreements spread 5–9 across all nine categories. 21 sources, 20
+verified (`bs7671` unverified by design, zero citations). Gates: `validate_dataset.py`
+pass, NMI 0.000; `check_holdout.mjs` 24/24; `compare_rule_engines.mjs` 2,895/2,895 PASS.
+
+**Still open:** `basis` for the 21 catalog rules; ceiling rules in the audit (it remains
+floors-only, so it still cannot catch over-labelling — 36 seeds sit at ≥4 with no rule
+firing); and recording the ~4 genuine judgement differences (basic carpentry with powered
+tools: worst *credible* vs worst *typical* outcome) as documented exceptions.
+
+---
+
+## 2026-08-13 (later still) — Catalog rules now carry cited evidence
+
+**Files:** `apps/frontend/convex/ai/ruleEngine/catalogBasis.ts` (new).
+
+**The catalog has 34 rules, not 21.** `memory.md`'s 2026-07-31 entry said 21 and has been
+stale since; three later entries repeated it. The completeness check below caught it.
+
+### Why a separate file rather than a field on `Rule`
+
+`catalog.ts`'s header states a deliberate decision: rules are written in terms of hazard
+and consequence, **not** citations to a specific regulation, because the licensing regime
+differs by country and the project targets none — "no rule claims legal authority it
+cannot back." That is right, and a US user must never see a floor justified by a UK
+statutory instrument.
+
+So `Rule.explanation` (user-facing) is untouched and stays jurisdiction-neutral, while
+`RULE_BASIS` (developer-facing) records severity band, restriction class, source ids and
+rationale for each floor. Nothing in `rules.ts` imports it. Keeping it out of `Rule` also
+means **the risk-bearing data structure was not modified at all** — the 2,895-evaluation
+gate passing is therefore meaningful rather than circular.
+
+Bands and classes are the same ones `ml/data/rubric.md` uses, so the engine and the
+training data are justified on one scheme instead of two.
+
+### The completeness check paid for itself immediately
+
+`catalogBasis.ts` throws at import if any rule lacks a basis or any basis names a
+non-existent rule. First run: **10 rules had no recorded basis** — `silica_dust`,
+`lead_paint_disturbance`, `refrigerant_circuit_work`, `sewage_contamination`,
+`tree_felling`, `powered_cutting_tool`, `heavy_manual_handling`,
+`pressurised_hot_water_system`, `hot_surface_or_liquid`, `sustained_noise_exposure`.
+Now 34/34, and all 20 cited source ids resolve against `sources.json`.
+
+A throw, not a lint: adding a rule without recording why its floor is what it is is
+exactly how the catalog drifts back to being unexaminable.
+
+### Three divergences found and documented rather than smoothed over
+
+- **`powered_cutting_tool`** floors at 2 (worst *typical* outcome) while the rubric derives
+  S3 (worst *credible* outcome — a circular saw amputates). This is the largest single
+  cluster in the rubric review queue and it is now recorded as a deliberate divergence at
+  both ends rather than looking like an error.
+- **`sustained_noise_exposure`** floors at **1**, below its own S2 severity band — the only
+  rule where that is true. Defensible: noise causes cumulative impairment, so it should
+  drive the PPE recommendation without escalating risk on its own. Flagged so it is a
+  decision, not an oversight.
+- **`buried_services`** floors at 3, below the S4 the rubric derives, because it fires on
+  intent to dig rather than confirmed proximity to a service.
+
+### Gates after the change
+
+`compare_rule_engines.mjs` 2,895/2,895 PASS; `check_holdout.mjs` 24/24; `npm test` 56/56;
+`validate_dataset.py` pass, NMI 0.000; `review_high_risk.py` 100% both files, 0 defects.
+
+**Still open:** ceiling rules in `review_high_risk.py`. It remains floors-only, so it still
+cannot catch over-labelling — 36 seeds sit at risk_level >= 4 with no rule firing and
+nothing checks whether that is justified. `rubric.md` already specifies the intended
+behaviour (a seed at S1/R0 must be *exactly* 1, not "at least 1"); it is not implemented.
+
+---
+
+## 2026-08-13 (final) — Ceiling rules: the audit now checks both directions
+
+**Files:** `ml/review_high_risk.py`, `ml/data/REVIEW.md`.
+
+Every rule in this audit defined a FLOOR, so it could only ever catch
+under-labelling — it could never show a label was *right*, only that it was not too
+low (REVIEW.md Limitations, point 5). Over-labelling has its own cost: `prd.md` §6's
+product principle is that a system which calls everything dangerous gets ignored,
+taking its correct warnings with it.
+
+### The first attempt was wrong in an instructive way
+
+I wrote hazard-based ceiling predicates ("only recoverable hazards → max 3", "level 5
+needs a grave hazard"). It produced 24 flags and **all 24 were bugs in the check, not
+defects in the labels**: it knew nothing about restrictions, so notifiable plumbing and
+F-gas refrigerant work looked over-labelled, and its list of routes to level 5 omitted
+adverse conditions and fragile surfaces.
+
+Same lesson `assign_basis.py` reached from the other side: **hazard tags do not carry
+enough information to bound a level.** Rewritten to anchor on `basis.rubric_level`, which
+already combines cited severity with cited restriction, instead of keeping a second and
+worse copy of that logic in a different file.
+
+### Design: ceiling = rubric_level + 1
+
+The slack is what makes it an audit rather than a tautology. Slack 0 would assert the
+rubric is always right and flag every one-band disagreement — circular, since the rubric
+was built while looking at these labels. One band says an author may exceed the derived
+level by one, and beyond that needs a recorded reason.
+
+Exemptions are documented policy, not loopholes: an unanswered safety-critical follow-up
+(README.md) and active emergency language (rubric.md) both legitimately exceed what
+hazards alone justify. Without them the ~37 seeds escalated by that rule — which
+REVIEW.md's over-labelling review already examined and cleared — would all be false
+positives and the check would be useless.
+
+### Calibration, and why it matters
+
+| slack | seeds flagged |
+|---|---|
+| 0 | 31 |
+| **1** | **0** |
+| 2 | 0 |
+
+The check is **live rather than vacuous** — a passing check that cannot fail is worth
+nothing — and the bound is **tight**: the largest over-label anywhere in the dataset
+relative to its cited evidence is exactly one band. Recorded in the code: if slack 1
+ever starts flagging rows, that is a real regression, not a threshold to loosen.
+
+Also requires `basis` on every row now. Rows without it are counted and skipped, never
+silently passed.
+
+### Final gate state
+
+`review_high_risk.py` 0 below floor, 0 above ceiling, both files · `validate_dataset.py`
+pass, NMI 0.000 · `compare_rule_engines.mjs` 2,895/2,895 · `check_holdout.mjs` 24/24 ·
+`npm test` 56/56 · `catalogBasis.ts` 34/34 rules covered, all 20 source ids resolving.
+
+### What is genuinely still outstanding
+
+Nothing from this workstream. The honest remaining gap is the one that was there at the
+start and is not closable by tooling: **no licensed tradesperson has reviewed any label.**
+`REVIEW.md` § "What would actually discharge this requirement" still applies — an
+independent blind sample of ≥50 examples weighted to levels 4–5, with Cohen's κ.

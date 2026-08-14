@@ -22,14 +22,14 @@ const COPY: Record<
     emailTitle: "Welcome back",
     emailSubtitle: "Sign in to continue",
     successTitle: "You're in!",
-    successSubtitle: "Welcome back to BuildSafe AI",
+    successSubtitle: "Welcome back to CanIDIY",
     cta: "Continue to Chat",
   },
   register: {
     emailTitle: "Create your account",
-    emailSubtitle: "Get started with BuildSafe AI",
+    emailSubtitle: "Get started with CanIDIY",
     successTitle: "Account created",
-    successSubtitle: "Welcome to BuildSafe AI",
+    successSubtitle: "Welcome to CanIDIY",
     cta: "Continue to Chat",
   },
 };
@@ -201,9 +201,9 @@ export function EmailCodeAuth({ mode }: { mode: Mode }) {
 
       <div className="absolute left-6 top-6 z-10 flex items-center gap-2">
         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#F97316] text-sm font-bold text-white">
-          B
+          C
         </div>
-        <span className="text-sm font-semibold text-white/90">BuildSafe AI</span>
+        <span className="text-sm font-semibold text-white/90">CanIDIY</span>
       </div>
 
       <div className="relative z-10 w-full max-w-sm px-4">
@@ -313,7 +313,7 @@ export function EmailCodeAuth({ mode }: { mode: Mode }) {
             </div>
 
             <p className="pt-6 text-xs text-white/40">
-              By continuing, you agree to BuildSafe AI&apos;s Terms and Privacy Notice.
+              By continuing, you agree to CanIDIY&apos;s Terms and Privacy Notice.
             </p>
 
             <p className="text-sm text-white/50">

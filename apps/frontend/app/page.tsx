@@ -1,26 +1,29 @@
-import { redirect } from "next/navigation";
+import type { Metadata } from "next";
+import { LandingPage } from "@/components/landing/LandingPage";
 
 /**
- * Entry point — always the sign-in screen.
+ * The front door.
  *
- * This used to be the Phase 0 scaffold page: it server-fetched the FastAPI
- * backend's GET /health and rendered "Backend: ok" or "Backend: unreachable".
- * That page existed to prove the frontend could reach the backend at all, and
- * there is no longer a separate backend to reach — Convex is called directly by
- * the components that need it, and its health is not something a user should be
- * shown.
+ * This route used to be a bare `redirect("/login")`. That was the right call
+ * while there was nothing to show a first-time visitor — the deployment's only
+ * surface was the app itself, so the shortest path to it was the best one. It
+ * is the wrong call now that the root has something to say: someone arriving
+ * cold needs to know what the product decides, on what basis, and what it
+ * refuses to do, before being asked for an email address.
  *
- * It briefly redirected to /chat instead, letting `proxy.ts` bounce signed-out
- * visitors onward to /login. That worked but cost a visible double hop on the
- * deployed site (/ -> /chat -> /login) for the most common case: someone opening
- * the URL for the first time. Going straight to /login makes the front door of
- * the deployment a single, predictable redirect.
- *
- * Note this is unconditional, so an already-signed-in user opening the root also
- * lands on /login rather than being taken to their chat. That is the intended
- * behaviour here; if it should instead skip straight to /chat when a session
- * exists, this becomes a server-side `auth()` check rather than a bare redirect.
+ * Nothing here is gated. `proxy.ts` protects /chat and /dashboard only, and its
+ * redirect is what lets every call to action on this page point at /chat with a
+ * single href: a signed-out visitor is bounced to /login with a redirect_url
+ * and lands back in the app after signing in, while a signed-in one goes
+ * straight through. No auth state is read to render the page.
  */
+
+export const metadata: Metadata = {
+  title: "CanIDIY — should you be doing this yourself?",
+  description:
+    "Describe a DIY or repair job in plain language. CanIDIY asks the safety questions that change the answer, then files one of five verdicts — with the hardcoded hazard rules that produced it.",
+};
+
 export default function Home() {
-  redirect("/login");
+  return <LandingPage />;
 }

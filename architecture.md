@@ -1,4 +1,4 @@
-# Architecture — BuildSafe AI
+# Architecture — CanIDIY
 
 ## 1. Tech Stack (decided)
 
@@ -109,7 +109,7 @@ runtime rather than a convention held up by a docstring.
 Monorepo, two apps:
 
 ```
-buildsafe-ai/
+canidiy/
 ├── apps/
 │   ├── frontend/                   # Next.js frontend
 │   │   ├── src/

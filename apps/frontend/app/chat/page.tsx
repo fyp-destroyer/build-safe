@@ -39,6 +39,7 @@ import {
 } from "@/lib/convexApi";
 import type {
   FollowupAnswer,
+  FollowupPrompt,
   ChatMessagesOut,
   JobOut,
   RecommendationsOut,
@@ -50,6 +51,46 @@ import type { RiskLevel } from "@/lib/riskLevels";
 // yes/no question forces someone who has not checked to claim something either
 // way, and both claims are wrong in ways that matter for a safety decision.
 const FOLLOWUP_OPTIONS = ["Yes", "No", "Not sure"];
+
+/** The chip label for a stored answer value. Inverse of `handleQuickReply`. */
+const OPTION_FOR_ANSWER: Record<string, string> = {
+  true: "Yes",
+  false: "No",
+  unsure: "Not sure",
+};
+
+/**
+ * The follow-up question, prefixed with the user's own words when the backend
+ * found the description already answers it.
+ *
+ * Asking someone something they just told you reads as not having listened, and
+ * it was the most common complaint about this flow. Quoting them back is also
+ * what makes the suggestion auditable: the user can see exactly which words it
+ * was read from and correct it by tapping a different chip.
+ *
+ * The question is still asked in full. A suggestion pre-selects an answer; it
+ * never submits one, and the wording deliberately stays interrogative so it can
+ * never read as the app asserting a safety fact on the user's behalf.
+ */
+function followupText(prompt: FollowupPrompt): string {
+  const suggested = prompt.suggested;
+  if (!suggested) return prompt.question;
+  const option = OPTION_FOR_ANSWER[String(suggested.answer)];
+  if (!option) return prompt.question;
+  return (
+    `You mentioned "${suggested.evidence}", so I've assumed the answer is ` +
+    `${option} — tap to confirm or change it.\n\n${prompt.question}`
+  );
+}
+
+/** Suggested answer first, so the likely tap is the nearest chip. */
+function followupOptions(prompt: FollowupPrompt): string[] {
+  const option = prompt.suggested
+    ? OPTION_FOR_ANSWER[String(prompt.suggested.answer)]
+    : undefined;
+  if (!option) return FOLLOWUP_OPTIONS;
+  return [option, ...FOLLOWUP_OPTIONS.filter((o) => o !== option)];
+}
 
 // A few example task descriptions to seed the empty-state suggestion chips
 // (the old SCENARIOS demo is gone — these just call handleSend with real
@@ -89,7 +130,7 @@ type TranscriptEntry =
 
 // Key for the job whose conversation is currently on screen, so a refresh
 // reopens it instead of dropping the user on an empty chat.
-const ACTIVE_JOB_STORAGE_KEY = "buildsafe:active-job-id";
+const ACTIVE_JOB_STORAGE_KEY = "canidiy:active-job-id";
 
 // localStorage access is wrapped because it throws in private-mode Safari
 // and when storage is full. Losing the "which chat was open" pointer is a
@@ -254,6 +295,9 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [awaitingReplyOptions, setAwaitingReplyOptions] = useState<string[] | null>(null);
+  // The chip the backend read out of the user's own description, if any. Purely
+  // presentational — it styles a chip, it does not select or submit one.
+  const [suggestedOption, setSuggestedOption] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
   // Sidebar drawer state below the `lg` breakpoint — see Sidebar.tsx. Ignored
@@ -476,7 +520,14 @@ export default function ChatPage() {
     currentJobRef.current = job;
     if (job.next_followup) {
       setStage("followup");
-      await showBotMessage(job.next_followup.question, FOLLOWUP_OPTIONS);
+      const options = followupOptions(job.next_followup);
+      // Set BEFORE the message lands. `showBotMessage` reveals the chips at the
+      // end of its typing delay, so assigning the highlight afterwards renders
+      // one frame of un-highlighted chips first. It clears
+      // `awaitingReplyOptions` on entry but never this, so setting it early is
+      // safe.
+      setSuggestedOption(job.next_followup.suggested ? options[0] : null);
+      await showBotMessage(followupText(job.next_followup), options);
     } else if (job.status === "assessed" || job.status === "failed") {
       // Re-entering an already-finished job (e.g. via the resume prompt) —
       // nothing left to drive here.
@@ -636,6 +687,7 @@ export default function ChatPage() {
 
   const handleQuickReply = (option: string) => {
     setAwaitingReplyOptions(null);
+    setSuggestedOption(null);
     const stage = flowStageRef.current;
     // "Continue" answers the resume prompt, which is deliberately not
     // persisted (it's re-emitted on every open). Storing the answer without
@@ -815,7 +867,7 @@ export default function ChatPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "buildsafe-assessment-history.json";
+    a.download = "canidiy-assessment-history.json";
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -902,9 +954,9 @@ export default function ChatPage() {
           </button>
           <div className="flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--color-accent)] text-xs font-bold text-white">
-              B
+              C
             </div>
-            <span className="text-sm font-semibold">BuildSafe AI</span>
+            <span className="text-sm font-semibold">CanIDIY</span>
           </div>
         </div>
 
@@ -964,7 +1016,11 @@ export default function ChatPage() {
 
                 {awaitingReplyOptions && !isTyping && (
                   <div className="flex justify-start">
-                    <QuickReplyChips options={awaitingReplyOptions} onSelect={handleQuickReply} />
+                    <QuickReplyChips
+                      options={awaitingReplyOptions}
+                      onSelect={handleQuickReply}
+                      highlight={suggestedOption}
+                    />
                   </div>
                 )}
               </div>

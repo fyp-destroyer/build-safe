@@ -13,6 +13,7 @@ import type * as ai_classifier_tfidf from "../ai/classifier/tfidf.js";
 import type * as ai_jobLogic from "../ai/jobLogic.js";
 import type * as ai_llm_client from "../ai/llm/client.js";
 import type * as ai_ruleEngine_catalog from "../ai/ruleEngine/catalog.js";
+import type * as ai_ruleEngine_catalogBasis from "../ai/ruleEngine/catalogBasis.js";
 import type * as ai_ruleEngine_llmAssist from "../ai/ruleEngine/llmAssist.js";
 import type * as ai_ruleEngine_rules from "../ai/ruleEngine/rules.js";
 import type * as assessments from "../assessments.js";
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   "ai/jobLogic": typeof ai_jobLogic;
   "ai/llm/client": typeof ai_llm_client;
   "ai/ruleEngine/catalog": typeof ai_ruleEngine_catalog;
+  "ai/ruleEngine/catalogBasis": typeof ai_ruleEngine_catalogBasis;
   "ai/ruleEngine/llmAssist": typeof ai_ruleEngine_llmAssist;
   "ai/ruleEngine/rules": typeof ai_ruleEngine_rules;
   assessments: typeof assessments;

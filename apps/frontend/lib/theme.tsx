@@ -18,7 +18,7 @@ interface ThemeContextValue {
   toggle: () => void; // quick toggle for screens with no Settings access
 }
 
-const STORAGE_KEY = "buildsafe-theme-choice";
+const STORAGE_KEY = "canidiy-theme-choice";
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function getSystemPref(): Resolved {

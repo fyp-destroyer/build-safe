@@ -46,6 +46,12 @@ export type JobStatus = "pending_followup" | "ready_to_assess" | "assessed" | "f
 export interface FollowupPrompt {
   field: string;
   question: string;
+  /**
+   * The answer the user's own description appears to already give, quoted back
+   * to them. Purely a UI affordance: it pre-selects a chip the user still has to
+   * tap. It is NOT an answer and never reaches `followup_answers` on its own.
+   */
+  suggested?: { answer: FollowupAnswer; evidence: string } | null;
 }
 
 export interface JobOut {

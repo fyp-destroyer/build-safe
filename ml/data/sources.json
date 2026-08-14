@@ -1,0 +1,357 @@
+{
+  "_readme": [
+    "Source registry for the risk-level rubric. Every `basis` entry on a seed cites",
+    "an `id` from this file, so a label can be traced to a document rather than to",
+    "an author's judgement.",
+    "",
+    "`verified` is the date the URL was fetched and confirmed to say what the entry",
+    "claims. An entry with verified: null has NOT been checked and must not be cited",
+    "until it is - carrying an unverified citation is worse than carrying none,",
+    "because it looks like evidence.",
+    "",
+    "`jurisdiction` matters for `type: regulation` only. A restriction is law in one",
+    "country and not another, so the rubric triggers on 'restricted in at least one",
+    "major jurisdiction' and the UI must never state a restriction as universal.",
+    "Injury-surveillance and hazard-physics sources are jurisdiction-independent:",
+    "a 2kg angle grinder does the same thing to a hand in Manchester and Chicago.",
+    "",
+    "CAUTION on injury data: NEISS and HSE counts are EXPOSURE-WEIGHTED. A high",
+    "count means 'many people do this and some get hurt', not 'this task is",
+    "dangerous per attempt'. Ladders outrank asbestos by a wide margin on raw",
+    "counts. Use these sources for SEVERITY (how bad is the worst credible",
+    "outcome), never for frequency-based risk ranking."
+  ],
+
+  "sources": [
+    {
+      "id": "hse-fatal-injuries",
+      "title": "Work-related fatal injuries in Great Britain (annual statistics)",
+      "publisher": "Health and Safety Executive",
+      "type": "injury-data",
+      "jurisdiction": "GB",
+      "url": "https://www.hse.gov.uk/statistics/fatals-overview.htm",
+      "verified": "2026-08-13",
+      "figures": {
+        "reporting_year": "2025/26",
+        "provisional": true,
+        "finalised": "July 2027",
+        "worker_fatalities_total": 126,
+        "falls_from_height": 31,
+        "falls_share_of_worker_deaths": "~24.6%",
+        "highest_sector": "construction, 25 fatalities"
+      },
+      "supports": [
+        "fall_from_height severity: 31 of 126 GB worker fatalities in 2025/26 (RIDDOR) were falls from height - around a quarter, and the single most common cause.",
+        "Construction is the highest-fatality sector at 25 deaths."
+      ],
+      "caution": "Occupational data. DIY exposure differs from occupational exposure; use for worst-credible-outcome severity, not for householder incidence. Figures are PROVISIONAL until July 2027 - quote them with that qualifier.",
+      "note": "Corrected 2026-08-13. The previous URL (/statistics/fatals.htm) was an index page carrying none of these figures, and the figures then attributed to it came from secondary sources. Now taken from the overview page directly."
+    },
+    {
+      "id": "hsg33",
+      "title": "Health and safety in roof work (HSG33)",
+      "publisher": "Health and Safety Executive",
+      "type": "guidance",
+      "jurisdiction": "GB",
+      "url": "https://www.hse.gov.uk/pubns/books/hsg33.htm",
+      "verified": "2026-08-12",
+      "supports": [
+        "fall_from_height on roofs: paras 170-202 cover fragile surfaces specifically.",
+        "Fragile-surface work requires specialist controls (staging, harness, edge protection) - the basis for restriction class R2h rather than a bare severity band."
+      ],
+      "replaces": "indg284",
+      "note": "Replaces the INDG284 citation carried by review_high_risk.py until 2026-08-12. HSE's fragile-surfaces page cites HSG33 and GEIS5; it does not reference INDG284 at all."
+    },
+    {
+      "id": "geis5",
+      "title": "Fragile roofs (GEIS5)",
+      "publisher": "Health and Safety Executive",
+      "type": "guidance",
+      "jurisdiction": "GB",
+      "url": "https://www.hse.gov.uk/pubns/geis5.htm",
+      "verified": "2026-08-12",
+      "supports": [
+        "Fragile roof surfaces (asbestos cement sheet, rooflights, perspex) as a distinct high-fatality hazard."
+      ]
+    },
+    {
+      "id": "hsg47",
+      "title": "Avoiding danger from underground services (HSG47)",
+      "publisher": "Health and Safety Executive",
+      "type": "guidance",
+      "jurisdiction": "GB",
+      "url": "https://www.hse.gov.uk/pubns/books/hsg47.htm",
+      "verified": "2026-08-12",
+      "supports": [
+        "buried_utility_strike: plans alone are insufficient; cable-locating equipment (CAT and Genny) must be used, and a service is positively located only when safely exposed.",
+        "Buried cables can resemble pipes and cannot be identified as live by visual inspection - the basis for treating unknown buried services as a specialist-control hazard."
+      ]
+    },
+    {
+      "id": "gas-safety-regs-1998",
+      "title": "The Gas Safety (Installation and Use) Regulations 1998 (SI 1998/2451)",
+      "publisher": "UK Statutory Instruments",
+      "type": "regulation",
+      "jurisdiction": "GB",
+      "url": "https://www.legislation.gov.uk/uksi/1998/2451/contents",
+      "verified": "2026-08-12",
+      "supports": [
+        "Work on gas fittings and appliances is restricted to registered (Gas Safe) engineers - restriction class R2."
+      ]
+    },
+    {
+      "id": "car-2012",
+      "title": "The Control of Asbestos Regulations 2012 (SI 2012/632)",
+      "publisher": "UK Statutory Instruments",
+      "type": "regulation",
+      "jurisdiction": "GB",
+      "url": "https://www.legislation.gov.uk/uksi/2012/632",
+      "verified": "2026-08-12",
+      "supports": [
+        "Removal, repair or disturbance of asbestos-containing materials is regulated work; many categories require a licensed contractor - restriction class R2."
+      ]
+    },
+    {
+      "id": "confined-spaces-regs-1997",
+      "title": "The Confined Spaces Regulations 1997 (SI 1997/1713)",
+      "publisher": "UK Statutory Instruments",
+      "type": "regulation",
+      "jurisdiction": "GB",
+      "url": "https://www.legislation.gov.uk/uksi/1997/1713",
+      "verified": "2026-08-12",
+      "supports": [
+        "Duty to avoid entry to confined spaces; where entry is unavoidable, a safe system of work and emergency arrangements must be in place BEFORE work starts - restriction class R2."
+      ]
+    },
+    {
+      "id": "noise-regs-2005",
+      "title": "The Control of Noise at Work Regulations 2005",
+      "publisher": "Health and Safety Executive",
+      "type": "regulation",
+      "jurisdiction": "GB",
+      "url": "https://www.hse.gov.uk/noise/regulations.htm",
+      "verified": "2026-08-12",
+      "supports": [
+        "hearing_damage: lower exposure action value 80 dB(A), upper 85 dB(A) at which hearing protection must be provided and enforced, exposure limit value 87 dB(A).",
+        "Gives a numeric threshold for when hearing protection belongs in suggested_ppe rather than an author's guess."
+      ]
+    },
+    {
+      "id": "manual-handling-regs-1992",
+      "title": "Manual Handling Operations Regulations 1992, Guidance on Regulations (L23)",
+      "publisher": "Health and Safety Executive",
+      "type": "guidance",
+      "jurisdiction": "GB",
+      "url": "https://www.hse.gov.uk/pubns/books/l23.htm",
+      "verified": "2026-08-12",
+      "supports": [
+        "heavy_object_handling: guideline filter figures of 25kg (men) / 16kg (women) for lifting close to the body at waist height under ideal conditions."
+      ],
+      "caution": "These are SCREENING FILTERS, not safe limits, and the Regulations deliberately set no weight limit. Never phrase a recommendation as 'the legal limit is 25kg' - that misstates the source. L23 is an Approved Code of Practice, so it carries special legal weight."
+    },
+    {
+      "id": "osha-silica-1926-1153",
+      "title": "29 CFR 1926.1153 - Respirable crystalline silica",
+      "publisher": "Occupational Safety and Health Administration (eCFR)",
+      "type": "regulation",
+      "jurisdiction": "US",
+      "url": "https://www.ecfr.gov/current/title-29/subtitle-B/chapter-XVII/part-1926/subpart-Z/section-1926.1153",
+      "verified": "2026-08-12",
+      "supports": [
+        "respiratory_hazard for cutting/grinding stone, concrete, brick, block and tile. PEL 50 ug/m3 over 8h; action level 25 ug/m3.",
+        "Table 1 lists 18 construction tasks with specified controls, including stationary masonry saws (covers tile saws), handheld grinders and jackhammers.",
+        "Water-fed blades or shroud-and-vacuum collection are the prescribed controls - the basis for recommending them over a bare dust mask."
+      ],
+      "note": "The single best source for the masonry/tiling categories, where UK guidance is thinner and no restriction applies."
+    },
+    {
+      "id": "cpsc-neiss",
+      "title": "National Electronic Injury Surveillance System (NEISS)",
+      "publisher": "US Consumer Product Safety Commission",
+      "type": "injury-data",
+      "jurisdiction": "US",
+      "url": "https://www.cpsc.gov/Research--Statistics/NEISS-Injury-Data",
+      "verified": "2026-08-12",
+      "supports": [
+        "Severity banding for cuts_lacerations, burns, heavy_object_handling and general tool hazards, in the low-to-mid range where no regulation applies.",
+        "Nationally representative probability sample of US hospitals, product-coded, 20 years of data publicly queryable."
+      ],
+      "query_url": "https://www.cpsc.gov/cgibin/NEISSQuery/home.aspx",
+      "caution": "Exposure-weighted - see the registry-level caution. Counts ER visits, not task difficulty."
+    },
+    {
+      "id": "cpsc-power-tools-2003h054",
+      "title": "Hazard Screening Report: Power Tools and Workshop Equipment",
+      "publisher": "US Consumer Product Safety Commission",
+      "type": "injury-data",
+      "jurisdiction": "US",
+      "url": "https://www.cpsc.gov/s3fs-public/pdfs/2003h054.pdf",
+      "verified": "2026-08-12",
+      "supports": [
+        "cuts_lacerations severity for the carpentry and general categories - the band no regulation reaches."
+      ],
+      "caution": "Published 2003. Tool designs and guarding standards have changed; treat as indicative of hazard MECHANISM, and prefer current NEISS query output for counts."
+    },
+    {
+      "id": "approved-document-p",
+      "title": "Building Regulations Approved Document P: Electrical safety - dwellings",
+      "publisher": "UK Ministry of Housing, Communities and Local Government",
+      "type": "regulation",
+      "jurisdiction": "England and Wales",
+      "url": "https://www.gov.uk/government/publications/electrical-safety-approved-document-p",
+      "verified": "2026-08-13",
+      "verified_scope": "Publication page confirms the document and states verbatim: 'The current edition explains when notification of work is required. Information on the design, installation, inspection, testing and provision of information is explained.'",
+      "caution": "The publication PAGE confirms the document exists and that it defines notifiable work; the specific LIST of notifiable work (new circuits, consumer units, kitchens/bathrooms/outdoors) is inside the 2.34 MB PDF and has not been read line by line. Before quoting a specific category as notifiable, check the PDF.",
+      "supports": [
+        "Notifiable electrical work (new circuits, consumer unit replacement, work in kitchens/bathrooms/outdoors) - restriction class R1.",
+        "A householder MAY carry out notifiable work, but it must be inspected and certified by a registered competent person or notified to building control."
+      ],
+      "note": "The R1/R2 distinction rests on this: Part P imposes a CERTIFICATION duty, not a prohibition. Do not describe notifiable work as 'illegal for a homeowner' - that is wrong and the product would be stating it to users."
+    },
+    {
+      "id": "approved-document-g",
+      "title": "Building Regulations Approved Document G: Sanitation, hot water safety and water efficiency",
+      "publisher": "UK Ministry of Housing, Communities and Local Government",
+      "type": "regulation",
+      "jurisdiction": "England and Wales",
+      "url": "https://www.gov.uk/government/publications/sanitation-hot-water-safety-and-water-efficiency-approved-document-g",
+      "pdf": "https://assets.publishing.service.gov.uk/media/66f6c6ce3b919067bb4828cc/ADG_with_2024_amendments.pdf",
+      "verified": "2026-08-12",
+      "supports": [
+        "Part G3: an unvented hot water storage system 'may only be installed by a person competent to do so', with precautions preventing water exceeding 100 C and ensuring safe discharge from safety devices - restriction class R2.",
+        "Where the installer is not registered with a competent person scheme, building control must be notified BEFORE installation.",
+        "Rationale for the severity: an incorrectly installed unvented cylinder can explode or discharge scalding water."
+      ],
+      "note": "Closes the plumbing gap. Sealed/unvented central heating and hot water work was scoring S2/R0 (level 2) against a hand label of 4 purely because no plumbing source existed in this registry."
+    },
+    {
+      "id": "fgas-qualifications",
+      "title": "Qualifications required to work on equipment containing F gas",
+      "publisher": "UK Government (Defra / Environment Agency)",
+      "type": "regulation",
+      "jurisdiction": "GB",
+      "url": "https://www.gov.uk/guidance/qualifications-required-to-work-on-equipment-containing-f-gas",
+      "verified": "2026-08-12",
+      "supports": [
+        "It is against the law to work on equipment containing fluorinated greenhouse gases without the correct qualification (Regulation 2015/2067 as retained in UK law, Article 3).",
+        "Covers refrigerant recovery, installation, maintenance and servicing of stationary air conditioning and heat pump equipment - restriction class R2."
+      ],
+      "note": "Applies to split-system AC recharge and heat-pump installation, both of which appear in the hvac seeds."
+    },
+    {
+      "id": "water-fittings-regs-1999",
+      "title": "The Water Supply (Water Fittings) Regulations 1999 (SI 1999/1148)",
+      "publisher": "UK Statutory Instruments",
+      "type": "regulation",
+      "jurisdiction": "England and Wales",
+      "url": "https://www.legislation.gov.uk/uksi/1999/1148",
+      "verified": "2026-08-13",
+      "supports": [
+        "Regulation 5: a person proposing to install certain water fittings must NOTIFY the water undertaker and must not commence installation without its consent - restriction class R1.",
+        "Water fittings must be installed 'in a workmanlike manner' and must not cause waste, misuse, undue consumption or contamination of the supply.",
+        "Approved contractors may carry out some work without advance notification - the mechanism by which a professional removes the notification duty."
+      ],
+      "note": "Closes the plumbing gap. Toilet installs, soil-stack reroutes, sink relocations and radiator additions were scoring S2/R0 (level 2) against hand labels of 3-4 purely because no plumbing source existed in this registry."
+    },
+    {
+      "id": "lead-at-work-regs-2002",
+      "title": "Control of Lead at Work Regulations 2002 (SI 2002/2676), with HSE ACOP L132 and construction guidance",
+      "publisher": "Health and Safety Executive / UK Statutory Instruments",
+      "type": "regulation",
+      "jurisdiction": "GB",
+      "url": "https://www.hse.gov.uk/construction/healthrisks/hazardous-substances/lead.htm",
+      "legislation_url": "https://www.legislation.gov.uk/uksi/2002/2676/body",
+      "acop_url": "https://www.hse.gov.uk/pubns/books/l132.htm",
+      "verified": "2026-08-13",
+      "supports": [
+        "Lead pigments were widely used in paint for homes until the 1960s and were not removed from all common paints until the early 1980s - so any pre-1980s repaint is a credible lead exposure.",
+        "Specific engineered controls: strip only if flaking or a risk to children; use chemical stripper with wet abrasive paper and ON-TOOL EXTRACTION.",
+        "Do NOT overheat leaded paint with blow lamps or gas torches; keep hot air guns and infrared below 500 C.",
+        "RPE with an assigned protection factor of 20 (FFP3 disposable or half mask with P3 filter); powered RPE for longer work."
+      ],
+      "note": "Specifies engineered controls and on-tool extraction, so lead-paint work qualifies for severity band S4, not merely S2 chemical_exposure. Also justifies respirator_mask over dust_mask in suggested_ppe."
+    },
+    {
+      "id": "coshh-2002",
+      "title": "Control of Substances Hazardous to Health Regulations 2002 (SI 2002/2677), reg. 7, with HSE solvents guidance CIS27",
+      "publisher": "Health and Safety Executive / UK Statutory Instruments",
+      "type": "regulation",
+      "jurisdiction": "GB",
+      "url": "https://www.legislation.gov.uk/uksi/2002/2677/regulation/7",
+      "guidance_url": "https://www.hse.gov.uk/construction/healthrisks/hazardous-substances/solvents.htm",
+      "verified": "2026-08-13",
+      "supports": [
+        "Regulation 7 sets a control HIERARCHY: (a) engineering controls and suitable work processes first, (b) control at source including adequate ventilation, (c) PPE only where adequate control cannot be achieved by other means.",
+        "For solvents: ventilation is ALWAYS required, more of it as risk rises; segregation to keep non-essential people out of the area; dichloromethane-based products need effective and usually MECHANICAL ventilation."
+      ],
+      "note": "PPE last, not first, is the point. It is the citable basis for treating solvent spraying in a sealed or unventilated space as needing forced ventilation rather than a filter mask - i.e. engineered controls, severity band S4."
+    },
+    {
+      "id": "approved-document-a",
+      "title": "Building Regulations Approved Document A: Structure",
+      "publisher": "UK Ministry of Housing, Communities and Local Government",
+      "type": "regulation",
+      "jurisdiction": "England and Wales",
+      "url": "https://www.gov.uk/government/publications/structure-approved-document-a",
+      "verified": "2026-08-12",
+      "supports": [
+        "Verbatim scope, confirmed from the publication page: 'covers the loadings on a building, and the construction of the structural elements including the foundations, walls, floors, roofs and chimneys.'",
+        "Establishes that altering a structural element engages a Building Regulations requirement, hence a design and sign-off duty."
+      ],
+      "note": "Part A, NOT Part P. assign_basis.py cited approved-document-p (electrical safety) for structural work in its first draft; that was simply the wrong document.",
+      "caution": "SCOPE NARROWED after verification. The publication page confirms what AD-A covers, but the specific claim that structural alteration is NOTIFIABLE comes from the Building Regulations 2010 (reg. 12), not from AD-A itself. Do not attribute notifiability to this document. Cite reg. 12 directly once verified."
+    },
+    {
+      "id": "bs7671",
+      "title": "BS 7671 Requirements for Electrical Installations (IET Wiring Regulations)",
+      "publisher": "British Standards Institution / IET",
+      "type": "standard",
+      "jurisdiction": "GB",
+      "url": "https://electrical.theiet.org/bs-7671/",
+      "verified": null,
+      "cited_by_rubric": false,
+      "supports": [
+        "electrical_skock: the technical standard against which fixed-wiring work is judged."
+      ],
+      "caution": "PAYWALLED and therefore unverifiable from here - deliberately carries ZERO citations in assign_basis.py, so nothing in the dataset depends on it. Retained only so a reader knows it was considered and why it is not used. Cite Approved Document P instead, which references it and is public."
+    },
+    {
+      "id": "cpsc-neiss-electrical",
+      "title": "NEISS product-coded injury data, electrical products and wiring",
+      "publisher": "US Consumer Product Safety Commission",
+      "type": "injury-data",
+      "jurisdiction": "US",
+      "url": "https://www.cpsc.gov/Research--Statistics/NEISS-Injury-Data",
+      "query_url": "https://www.cpsc.gov/cgibin/NEISSQuery/home.aspx",
+      "verified": "2026-08-13",
+      "supports": [
+        "electrical_shock severity in a domestic context: NEISS is product-coded and covers household wiring and electrical products, so shock and electrical-burn presentations are queryable directly."
+      ],
+      "caution": "Exposure-weighted, like all NEISS data. Replaced `electrical-safety-first` on 2026-08-13 - see `rejected`. Before quoting any specific figure, run the query and cite the year; do not carry over numbers from the source this replaced.",
+      "note": "Chosen because it is verifiable and product-coded. It is US data being used for a jurisdiction-independent severity judgement, which the registry permits - a 230V conductor injures the same way regardless of which regulator oversees it."
+    }
+  ],
+
+  "rejected": [
+    {
+      "id": "indg284",
+      "reason": "Cited by review_high_risk.py for fragile-surface falls until 2026-08-12. HSE's own fragile-surfaces page cites HSG33 and GEIS5 and does not reference INDG284. The document appears to be a withdrawn 2008 leaflet titled 'Working on roofs'. Replaced by hsg33 + geis5.",
+      "checked": "2026-08-12"
+    },
+    {
+      "id": "hass-lass",
+      "reason": "Home and Leisure Accident Surveillance Systems - the obvious UK equivalent of NEISS, and the source most 'DIY injury statistics' pages ultimately quote. It CEASED COLLECTING DATA IN 2002. Any figure derived from it is 24 years stale. RoSPA's replacement (RIDD) consolidates other sources and is not an equivalent surveillance system.",
+      "checked": "2026-08-12"
+    },
+    {
+      "id": "electrical-safety-first",
+      "reason": "Was the most-cited source in the registry (137 rows) and FAILED VERIFICATION. Its own facts-and-figures page carries no electric-shock statistics at all - only accidental domestic FIRE data, and that is a Home Office dataset surfaced through a dashboard, not ESF's own measurement. The claim actually being cited (a 2013 survey finding nearly half of severe electric shocks are caused by DIY mistakes) could not be traced to any primary ESF publication; every occurrence found was a blog or trade site quoting the figure without attribution. It is also an advocacy charity rather than a statutory body. Replaced as the electrical_shock severity source by `cpsc-neiss-electrical`, which is verifiable and product-coded.",
+      "checked": "2026-08-13"
+    },
+    {
+      "id": "diy-difficulty-blogs",
+      "reason": "No authoritative body publishes a DIY task competence or difficulty scale. Everything found (retailer guides, contractor marketing, home-inspection firms, Today's Homeowner and similar) is uncredentialed, mutually inconsistent, and commercially motivated. This is WHY the 1-5 scale is a published in-repo rubric rather than a borrowed one - see rubric.md.",
+      "checked": "2026-08-12"
+    }
+  ]
+}

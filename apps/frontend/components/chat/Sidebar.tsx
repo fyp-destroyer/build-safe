@@ -116,9 +116,9 @@ export function Sidebar({
         <div className="flex items-center justify-between px-2 pt-1">
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--color-accent)] text-sm font-bold text-white">
-              B
+              C
             </div>
-            <span className="text-sm font-semibold">BuildSafe AI</span>
+            <span className="text-sm font-semibold">CanIDIY</span>
           </div>
           {/* Closes the drawer; has no equivalent at `lg`+ since the rail
               cannot be closed there, so the button itself is hidden there. */}

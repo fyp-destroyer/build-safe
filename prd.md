@@ -1,10 +1,10 @@
-# PRD — BuildSafe AI
+# PRD — CanIDIY
 
 ## 1. What We're Building
 
-BuildSafe AI is a web platform that helps non-expert users decide **whether** a DIY or small construction task is safe to attempt — not just how to do it. A user describes a task in plain language; the system asks follow-up questions, classifies the task into one of five risk levels, explains the decision, recommends tools/materials/PPE with cost and time estimates, and — if the task is too risky — recommends hiring a licensed professional (the product gives guidance, not a quote-routing or booking service).
+CanIDIY is a web platform that helps non-expert users decide **whether** a DIY or small construction task is safe to attempt — not just how to do it. A user describes a task in plain language; the system asks follow-up questions, classifies the task into one of five risk levels, explains the decision, recommends tools/materials/PPE with cost and time estimates, and — if the task is too risky — recommends hiring a licensed professional (the product gives guidance, not a quote-routing or booking service).
 
-**One-line pitch:** Existing DIY assistants help users perform tasks. BuildSafe AI helps users decide whether they should perform the task at all.
+**One-line pitch:** Existing DIY assistants help users perform tasks. CanIDIY helps users decide whether they should perform the task at all.
 
 ## 2. Target Users
 

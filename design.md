@@ -1,8 +1,8 @@
-# Design System — BuildSafe AI
+# Design System — CanIDIY
 
 > **2026-07-18 revision (this version):** rewritten from a prose design spec into an **implementation-ready reference**. A complete working build already exists at [`chat-ui/`](chat-ui) (Vite + React 19 + TypeScript + Tailwind v4 + Motion) — this document is now the annotated source of truth for that implementation, with real code inlined, not aspirational description. If `chat-ui/` and this file ever diverge, treat this file as correct and bring the code back in line with it (or update both together).
 >
-> **How to use this file:** if you (a fresh Claude Code session, with no other context) are asked to build BuildSafe AI's frontend from scratch in React, this document plus its code snippets is sufficient to reproduce it pixel-for-pixel. Copy the file tree in §3, install the exact dependencies in §2, then work through §6–§11 top to bottom — each section's code block is either the complete file or the complete relevant excerpt. Where a section says "verbatim," paste it as-is; the surrounding prose explains *why* it's shaped that way so you don't "simplify" away a fix for a real bug that was already found and fixed once (see the ⚠️ callouts — every one of them is a bug that actually happened during development, not a hypothetical).
+> **How to use this file:** if you (a fresh Claude Code session, with no other context) are asked to build CanIDIY's frontend from scratch in React, this document plus its code snippets is sufficient to reproduce it pixel-for-pixel. Copy the file tree in §3, install the exact dependencies in §2, then work through §6–§11 top to bottom — each section's code block is either the complete file or the complete relevant excerpt. Where a section says "verbatim," paste it as-is; the surrounding prose explains *why* it's shaped that way so you don't "simplify" away a fix for a real bug that was already found and fixed once (see the ⚠️ callouts — every one of them is a bug that actually happened during development, not a hypothetical).
 
 ---
 
@@ -476,7 +476,7 @@ interface ThemeContextValue {
   toggle: () => void; // quick toggle for screens with no Settings access
 }
 
-const STORAGE_KEY = "buildsafe-theme-choice";
+const STORAGE_KEY = "canidiy-theme-choice";
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function getSystemPref(): Resolved {
@@ -553,14 +553,14 @@ const COPY: Record<Mode, { emailTitle: string; emailSubtitle: string; successTit
     emailTitle: "Welcome back",
     emailSubtitle: "Sign in to continue",
     successTitle: "You're in!",
-    successSubtitle: "Welcome back to BuildSafe AI",
+    successSubtitle: "Welcome back to CanIDIY",
     cta: "Continue to Chat",
   },
   register: {
     emailTitle: "Create your account",
-    emailSubtitle: "Get started with BuildSafe AI",
+    emailSubtitle: "Get started with CanIDIY",
     successTitle: "Account created",
-    successSubtitle: "Welcome to BuildSafe AI",
+    successSubtitle: "Welcome to CanIDIY",
     cta: "Continue to Chat",
   },
 };
@@ -628,7 +628,7 @@ export function EmailCodeAuth({ mode }: { mode: Mode }) {
 
       <div className="absolute left-6 top-6 z-10 flex items-center gap-2">
         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#F97316] text-sm font-bold text-white">B</div>
-        <span className="text-sm font-semibold text-white/90">BuildSafe AI</span>
+        <span className="text-sm font-semibold text-white/90">CanIDIY</span>
       </div>
 
       <div className="relative z-10 w-full max-w-sm px-4">
@@ -693,7 +693,7 @@ export function EmailCodeAuth({ mode }: { mode: Mode }) {
               </div>
 
               <p className="pt-6 text-xs text-white/40">
-                By continuing, you agree to BuildSafe AI's Terms and Privacy Notice.
+                By continuing, you agree to CanIDIY's Terms and Privacy Notice.
               </p>
 
               <p className="text-sm text-white/50">
@@ -1039,7 +1039,7 @@ export function Sidebar({
         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--color-accent)] text-sm font-bold text-white">
           B
         </div>
-        <span className="text-sm font-semibold">BuildSafe AI</span>
+        <span className="text-sm font-semibold">CanIDIY</span>
       </div>
 
       <button
@@ -1477,7 +1477,7 @@ export function Composer({ onSend, disabled, autoFocus }: { onSend: (text: strin
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); }
           }}
-          placeholder="Message BuildSafe AI…"
+          placeholder="Message CanIDIY…"
           className="max-h-[160px] w-full resize-none overflow-y-auto bg-transparent px-4 pt-3.5 pb-1 text-[15px] leading-relaxed outline-none placeholder:text-[var(--color-text-secondary)] disabled:opacity-50"
         />
         <div className="flex items-center justify-between px-2 pb-2 pt-1">
@@ -1764,7 +1764,7 @@ function AppearanceTab() {
     <div>
       <SectionTitle>Appearance</SectionTitle>
       <p className="mb-4 text-sm text-[var(--color-text-secondary)]">
-        Choose how BuildSafe AI looks. "System" follows your device's setting automatically.
+        Choose how CanIDIY looks. "System" follows your device's setting automatically.
       </p>
       <div className="grid grid-cols-3 gap-3">
         {options.map((opt) => {
@@ -1842,7 +1842,7 @@ function AccountTab({ onLogOut, onDeleteAccount }: { onLogOut: () => void; onDel
       <SectionTitle>Account</SectionTitle>
 
       <div className="mb-5 flex items-center justify-between rounded-lg border border-[var(--color-border)] p-4">
-        <div className="text-sm font-medium">Log out of BuildSafe AI</div>
+        <div className="text-sm font-medium">Log out of CanIDIY</div>
         <button onClick={onLogOut} className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition-colors hover:border-[var(--color-accent)]">
           <IconLogOut width={14} height={14} />
           Log out
@@ -1982,7 +1982,7 @@ export default function ChatPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "buildsafe-assessment-history.json";
+    a.download = "canidiy-assessment-history.json";
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -2121,6 +2121,48 @@ All motion must respect `prefers-reduced-motion` (handled globally in `index.css
 - Risk level always conveyed through icon + text + color together (`RiskChip`), never color alone.
 - Respect `prefers-reduced-motion` everywhere per §12.
 - Settings modal: `role="dialog"`, `aria-modal="true"`, `aria-label="Settings"`, closes on `Escape` and on backdrop click.
+
+## 13.1 Landing Surface (`/`) — added 2026-08-12
+
+The homepage is the one surface in this app that is **not** the chat product. It is
+covered here rather than in §10–§11 because it inherits this token system but not the
+app shell, and because two of its rules are easy to violate by accident.
+
+Files: `app/page.tsx` (server component, metadata only), `components/landing/LandingPage.tsx`,
+`components/landing/registerData.ts`. Route-specific strategy lives in
+`.impeccable/surfaces/apps-frontend-app-page-tsx.md`, not here.
+
+**It is always dark, and the mechanism matters.** The page root carries `dark`, which
+re-resolves the `.dark` token block from §4 for its whole subtree regardless of the
+user's theme choice. It is the same always-dark treatment as the auth screen (§9) and for
+the same reason — the homepage leads straight into `/login`, and a palette that inverts
+mid-journey reads as a bug. Do **not** reimplement this by hardcoding hex values as §9
+does; scoping the class keeps the page tracking any future token change.
+
+**The page root needs `shrink-0`.** The root layout's `<body>` is `flex flex-col` and
+globals.css gives it `height: 100%`, so a full-page surface is a flex item in a
+viewport-height column and shrinks to its `min-h-screen` floor while its content
+overflows — painting its background for exactly one viewport and letting the rest fall
+through to the themed body background. This cost a full inspection round to find; any
+future full-page surface under this layout hits it too.
+
+**Risk colour rules are unchanged and non-negotiable here.** The five verdicts render
+through `RiskChip` (§10.7) in the page's key, and the verdict stamp on each filed case
+pairs the level numeral with its written label — colour is never the only carrier.
+Brand orange is the register's ink (rule ids, the `max` operator, actions) and never
+stands in for a risk level.
+
+**One authored motion moment.** The verdict stamp lands as each case scrolls into view
+(over-scale, off-angle, blurred → settled, exponential ease-out), gated on
+`useReducedMotion()`. Nothing else on the page has an entrance animation, and the same
+verdict is present as text in the entry's ledger row, so no content depends on the
+animation running.
+
+**Content provenance is load bearing.** Rule ids, floors, follow-up wording and the
+per-level rule counts are quoted from `convex/ai/ruleEngine/catalog.ts`; task text and
+reference numbers are authored illustrations and are labelled as such on the page. The
+header of `registerData.ts` records which is which. Changing a rule's floor in the
+catalog silently makes this page wrong.
 
 ## 14. What This Doc Deliberately Does Not Specify
 

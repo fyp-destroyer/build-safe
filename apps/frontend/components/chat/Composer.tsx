@@ -56,7 +56,7 @@ export function Composer({
               submit();
             }
           }}
-          placeholder="Message BuildSafe AI…"
+          placeholder="Message CanIDIY…"
           className="max-h-[160px] w-full resize-none overflow-y-auto bg-transparent px-4 pt-3.5 pb-1 text-[15px] leading-relaxed outline-none placeholder:text-[var(--color-text-secondary)] disabled:opacity-50"
         />
         <div className="flex items-center justify-between px-2 pb-2 pt-1">

@@ -1,4 +1,4 @@
-# Software Requirements Specification — BuildSafe AI
+# Software Requirements Specification — CanIDIY
 
 A Risk-Aware Construction Task Assessment and Tool Recommendation Platform
 
@@ -11,11 +11,11 @@ Conforms to IEEE 830-style SRS structure
 
 ### 1.1 Purpose
 
-This Software Requirements Specification (SRS) defines the functional and non-functional requirements, system interfaces, data model, and constraints for BuildSafe AI, a web platform that assesses the safety risk of user-submitted DIY/construction tasks and recommends tools and materials, escalating unsafe tasks toward hiring a qualified professional as guidance rather than an in-app booking or quote flow. It is intended for the development team, project supervisor, and evaluation panel.
+This Software Requirements Specification (SRS) defines the functional and non-functional requirements, system interfaces, data model, and constraints for CanIDIY, a web platform that assesses the safety risk of user-submitted DIY/construction tasks and recommends tools and materials, escalating unsafe tasks toward hiring a qualified professional as guidance rather than an in-app booking or quote flow. It is intended for the development team, project supervisor, and evaluation panel.
 
 ### 1.2 Scope
 
-BuildSafe AI will be delivered as a deployed web platform with two principal subsystems: (1) a user-facing conversational task-intake, risk-report, and assessment-history interface, and (2) a hybrid AI risk-classification and recommendation engine. The system classifies tasks into one of five risk levels, explains the classification, and recommends tools/materials/PPE with cost and time estimates; for high-risk tasks it recommends hiring a licensed professional as guidance only — there is no in-app quote-request, professional accounts, or admin dashboard (see §1.5). Payment processing, certified legal permit verification, and computer-vision structural diagnosis are explicitly excluded from this version.
+CanIDIY will be delivered as a deployed web platform with two principal subsystems: (1) a user-facing conversational task-intake, risk-report, and assessment-history interface, and (2) a hybrid AI risk-classification and recommendation engine. The system classifies tasks into one of five risk levels, explains the classification, and recommends tools/materials/PPE with cost and time estimates; for high-risk tasks it recommends hiring a licensed professional as guidance only — there is no in-app quote-request, professional accounts, or admin dashboard (see §1.5). Payment processing, certified legal permit verification, and computer-vision structural diagnosis are explicitly excluded from this version.
 
 ### 1.3 Definitions, Acronyms, and Abbreviations
 
@@ -32,7 +32,7 @@ BuildSafe AI will be delivered as a deployed web platform with two principal sub
 
 ### 1.4 References
 
-- BuildSafe AI Final Year Project Proposal (source document for this SRS)
+- CanIDIY Final Year Project Proposal (source document for this SRS)
 - OSHA Construction Focus Four Training — https://www.osha.gov/training/outreach/construction/focus-four
 - OSHA Construction Focus Four: Electrocution Hazards — https://www.osha.gov/sites/default/files/electr_ig.pdf
 
@@ -50,7 +50,7 @@ BuildSafe AI will be delivered as a deployed web platform with two principal sub
 
 ### 2.1 Product Perspective
 
-BuildSafe AI is a new, standalone product. It is not an extension of an existing platform. It integrates a frontend web application, a backend function layer, a hybrid AI decision layer, and a document database. (Originally specified with a PostgreSQL database plus pgvector for semantic retrieval and object storage for task photos; as built, persistence is Convex, and neither semantic retrieval nor photo upload was implemented — see §10.)
+CanIDIY is a new, standalone product. It is not an extension of an existing platform. It integrates a frontend web application, a backend function layer, a hybrid AI decision layer, and a document database. (Originally specified with a PostgreSQL database plus pgvector for semantic retrieval and object storage for task photos; as built, persistence is Convex, and neither semantic retrieval nor photo upload was implemented — see §10.)
 
 ### 2.2 Product Functions (Summary)
 

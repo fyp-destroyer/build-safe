@@ -2,7 +2,6 @@
   {
     "task_text": "put in an extra socket in the spare bedroom off the existing ring",
     "category": "electrical",
-    "user_skill": "Some experience",
     "family": "new_circuit",
     "expect": "escalate",
     "rationale": "Extending fixed wiring is a new installation, not a like-for-like replacement."
@@ -10,7 +9,6 @@
   {
     "task_text": "run a spur from the kitchen ring for a new washing machine point",
     "category": "electrical",
-    "user_skill": "Some experience",
     "family": "new_circuit",
     "expect": "escalate",
     "rationale": "A spur adds load to an existing circuit; sizing and protection must be assessed."
@@ -18,7 +16,6 @@
   {
     "task_text": "fit an additional double socket in the garage",
     "category": "electrical",
-    "user_skill": "Some experience",
     "family": "new_circuit",
     "expect": "escalate",
     "rationale": "New accessory on fixed wiring, and garages are often a separate supply."
@@ -26,7 +23,6 @@
   {
     "task_text": "extend the lighting circuit to add two downlights in the hallway",
     "category": "electrical",
-    "user_skill": "Beginner",
     "family": "new_circuit",
     "expect": "escalate",
     "rationale": "Circuit extension by a beginner."
@@ -34,7 +30,6 @@
   {
     "task_text": "swap the faceplate on an existing socket, breaker off and tested dead",
     "category": "electrical",
-    "user_skill": "Some experience",
     "family": "new_circuit",
     "expect": "not_escalate",
     "rationale": "NEGATIVE: like-for-like replacement with isolation confirmed. A rule that fires here is over-broad."
@@ -42,7 +37,6 @@
   {
     "task_text": "plug a new lamp into the existing socket in the hallway",
     "category": "electrical",
-    "user_skill": "Beginner",
     "family": "new_circuit",
     "expect": "not_escalate",
     "rationale": "NEGATIVE: no fixed wiring is touched at all."
@@ -50,7 +44,6 @@
   {
     "task_text": "replace decayed rafters in the garage roof",
     "category": "carpentry",
-    "user_skill": "Some experience",
     "family": "roof_timber",
     "expect": "escalate",
     "rationale": "Load-carrying roof members; the structure is compromised while work is in progress."
@@ -58,7 +51,6 @@
   {
     "task_text": "cut out and replace rotten roof timbers where the felt has been leaking",
     "category": "roofing",
-    "user_skill": "Some experience",
     "family": "roof_timber",
     "expect": "escalate",
     "rationale": "Structural decay in a roof, at height."
@@ -66,7 +58,6 @@
   {
     "task_text": "renew the rotten wall plate that the roof sits on",
     "category": "carpentry",
-    "user_skill": "Experienced",
     "family": "roof_timber",
     "expect": "escalate",
     "rationale": "The wall plate transfers the entire roof load to the walls."
@@ -74,7 +65,6 @@
   {
     "task_text": "replace a rotten fence post at the bottom of the garden",
     "category": "carpentry",
-    "user_skill": "Beginner",
     "family": "roof_timber",
     "expect": "not_escalate",
     "rationale": "NEGATIVE: rotten timber, but nothing structural. Catches a rule keyed on 'rotten' alone."
@@ -82,7 +72,6 @@
   {
     "task_text": "take out and replace rotten joists under the bathroom floor",
     "category": "carpentry",
-    "user_skill": "Some experience",
     "family": "roof_timber",
     "expect": "not_escalate",
     "rationale": "NEGATIVE: structural but at floor level, not overhead. The dataset scores the equivalent task 3, so a roof rule must not catch it."
@@ -90,7 +79,6 @@
   {
     "task_text": "sand back a rotten looking patch on a wooden windowsill",
     "category": "carpentry",
-    "user_skill": "Beginner",
     "family": "roof_timber",
     "expect": "not_escalate",
     "rationale": "NEGATIVE: cosmetic decay."
@@ -98,7 +86,6 @@
   {
     "task_text": "rebuild a garden wall that is leaning badly after the storm",
     "category": "masonry",
-    "user_skill": "Some experience",
     "family": "wall_distress",
     "expect": "escalate",
     "rationale": "A leaning masonry wall can collapse without warning."
@@ -106,7 +93,6 @@
   {
     "task_text": "the boundary wall has cracked along the mortar joints and moves when pushed",
     "category": "masonry",
-    "user_skill": "Beginner",
     "family": "wall_distress",
     "expect": "escalate",
     "rationale": "Movement plus cracking indicates active failure."
@@ -114,7 +100,6 @@
   {
     "task_text": "take down and rebuild a leaning brick pier by the driveway",
     "category": "masonry",
-    "user_skill": "Some experience",
     "family": "wall_distress",
     "expect": "escalate",
     "rationale": "A leaning pier is carrying load off-axis."
@@ -122,7 +107,6 @@
   {
     "task_text": "lean a ladder against the wall to clean out the gutters",
     "category": "general",
-    "user_skill": "Some experience",
     "family": "wall_distress",
     "expect": "not_escalate",
     "rationale": "NEGATIVE: the word 'lean' appears but nothing is leaning structurally. Catches a rule keyed on 'lean' alone."
@@ -130,7 +114,6 @@
   {
     "task_text": "fill a hairline crack in the garden wall render",
     "category": "masonry",
-    "user_skill": "Beginner",
     "family": "wall_distress",
     "expect": "not_escalate",
     "rationale": "NEGATIVE: a crack, but hairline and cosmetic. Catches a rule keyed on 'crack' alone."
@@ -138,7 +121,6 @@
   {
     "task_text": "repoint a few crumbling mortar joints on the garden wall",
     "category": "masonry",
-    "user_skill": "Some experience",
     "family": "wall_distress",
     "expect": "not_escalate",
     "rationale": "NEGATIVE: mortar work without movement or lean."
@@ -146,7 +128,6 @@
   {
     "task_text": "hang a picture in the living room",
     "category": "general",
-    "user_skill": "Beginner",
     "family": "control",
     "expect": "not_escalate",
     "rationale": "CONTROL: trivially safe."
@@ -154,7 +135,6 @@
   {
     "task_text": "paint the spare room ceiling with a roller",
     "category": "painting",
-    "user_skill": "Beginner",
     "family": "control",
     "expect": "not_escalate",
     "rationale": "CONTROL: trivially safe."
@@ -162,7 +142,6 @@
   {
     "task_text": "replace the washer in a dripping kitchen tap",
     "category": "plumbing",
-    "user_skill": "Beginner",
     "family": "control",
     "expect": "not_escalate",
     "rationale": "CONTROL: trivially safe."
@@ -170,7 +149,6 @@
   {
     "task_text": "put up a new curtain rail in the bedroom",
     "category": "general",
-    "user_skill": "Beginner",
     "family": "control",
     "expect": "not_escalate",
     "rationale": "CONTROL: trivially safe."
@@ -178,7 +156,6 @@
   {
     "task_text": "change the filter in the extractor hood",
     "category": "hvac",
-    "user_skill": "Beginner",
     "family": "control",
     "expect": "not_escalate",
     "rationale": "CONTROL: trivially safe."
@@ -186,7 +163,6 @@
   {
     "task_text": "tile a small splashback behind the basin",
     "category": "tiling",
-    "user_skill": "Beginner",
     "family": "control",
     "expect": "not_escalate",
     "rationale": "CONTROL: trivially safe."

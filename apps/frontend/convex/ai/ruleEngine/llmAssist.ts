@@ -6,8 +6,18 @@
  * `TASK_CATEGORIES` set for a free-text task description ("tagging"), (b) tag
  * which *existing* catalog hazard rule ids apply to a description, (c) select
  * which *existing* follow-up fields to ask about when the description is
- * ambiguous, and (d) phrase the natural-language wording of a question about an
- * *already-hardcoded* follow-up field.
+ * ambiguous, (d) phrase the natural-language wording of a question about an
+ * *already-hardcoded* follow-up field, and (e) propose — for the user to
+ * confirm or reject — the answer their own description already gives to such a
+ * question.
+ *
+ * (e) is a SUGGESTION and never an answer. It is stored beside the question, not
+ * in `followupAnswers`, and the rule engine never reads it. Only the user's own
+ * tap writes an answer. That boundary is what keeps this additive: an LLM that
+ * could write `true` into `followupAnswers` would be suppressing a hazard, since
+ * a confirmed answer removes a follow-up's escalation — precisely what §4 says
+ * LLM contributions may never do. Pre-filling a chip saves a keystroke; it does
+ * not decide anything.
  *
  * It cannot invent a rule or a question, cannot assign or suggest a risk number,
  * and cannot change any escalation floor: every id it proposes is filtered
@@ -51,7 +61,9 @@ import {
   FOLLOWUPS_BY_FIELD,
   LLM_SELECTABLE_FOLLOWUP_FIELDS,
   RULES,
+  UNSURE_ANSWER,
   VALID_RULE_IDS,
+  type FollowupAnswer,
 } from "./catalog";
 
 /** The 9 categories locked in phases.md Phase 1 (was schemas/job.py). */
@@ -229,6 +241,42 @@ export async function phraseFollowupQuestion(field: string, category: string): P
   return question;
 }
 
+/**
+ * A follow-up answer the description appears to give already, with the user's
+ * own words that give it.
+ *
+ * `answer` is validated against the four literals below rather than parsed
+ * loosely: an unrecognised string becomes "not stated", which discards the
+ * suggestion. There is no coercion path that could turn model noise into a
+ * pre-selected "yes".
+ */
+const SuggestedAnswer = z.object({
+  answer: z.string(),
+  evidence: z.string(),
+});
+
+/** What the description already says about a follow-up field, if anything. */
+export interface FollowupSuggestion {
+  answer: FollowupAnswer;
+  /** Verbatim span of the user's description that gives the answer. */
+  evidence: string;
+}
+
+/** "yes"/"no"/"unsure" → the stored answer type. Anything else → null. */
+function toFollowupAnswer(raw: string): FollowupAnswer | null {
+  switch (raw.trim().toLowerCase()) {
+    case "yes":
+      return true;
+    case "no":
+      return false;
+    case "unsure":
+      return UNSURE_ANSWER;
+    default:
+      // Includes the expected "not_stated" and any string the model invented.
+      return null;
+  }
+}
+
 /** Lowercase and collapse whitespace, for substring evidence checking. */
 function normalize(text: string): string {
   return (text ?? "").toLowerCase().split(/\s+/).filter(Boolean).join(" ");
@@ -256,6 +304,79 @@ export function evidenceSupports(description: string, evidence: string): boolean
 /** De-duplicate preserving first-seen order. */
 function dedupe(items: string[]): string[] {
   return [...new Set(items)];
+}
+
+/**
+ * Does the description already answer `field`? Returns a suggestion, or null.
+ *
+ * Null means "ask the question cold" — the honest default, used whenever the
+ * model is unavailable, says nothing applies, returns an unrecognised answer, or
+ * cannot quote the description. Every failure mode lands there.
+ *
+ * Evidence is checked with the same `evidenceSupports` substring test as hazard
+ * tagging, and for the same reason: a prompt instruction not to infer does not
+ * stop inference, but a quote the model cannot produce does. "Retile a kitchen
+ * wall" must not yield a suggested "yes" to a load-bearing question the user
+ * never addressed — and it cannot, because there is nothing to quote.
+ *
+ * The suggestion is never an answer. See the module docstring: it is stored
+ * beside the question and only the user's tap writes to `followupAnswers`.
+ */
+export async function suggestFollowupAnswer(
+  description: string,
+  field: string,
+): Promise<FollowupSuggestion | null> {
+  const spec = FOLLOWUPS_BY_FIELD[field];
+  if (!spec) return null;
+
+  const prompt =
+    "You are reading a home DIY task description to see whether it ALREADY " +
+    "answers a specific safety question, so the app does not ask the user " +
+    "something they just told it.\n\n" +
+    `Question: ${spec.question}\n` +
+    `Task description: ${JSON.stringify(description)}\n\n` +
+    "RULES:\n" +
+    '1. Answer "yes", "no" or "unsure" ONLY if the description itself settles ' +
+    'the question. Otherwise answer "not_stated".\n' +
+    "2. Quote, in `evidence`, the exact words from the description that settle " +
+    "it. Copy them verbatim. A quote not found in the description is discarded, " +
+    "so a guess is the same as no answer.\n" +
+    "3. NEVER infer. If the description does not mention the topic at all, that " +
+    'is "not_stated" — not "no", and never "yes". Silence is not an answer.\n' +
+    '4. "unsure" is for a description that raises the topic without settling it ' +
+    "(\"not sure if it's load-bearing\"). That IS a response and should be " +
+    'reported as "unsure", not "not_stated".\n' +
+    "5. Keep the question's polarity: \"yes\" must mean the SAFE situation as " +
+    "the question words it. Do not rate severity or assign any risk level.\n\n" +
+    'Return `answer` as exactly one of: "yes", "no", "unsure", "not_stated".';
+
+  const result = await generateStructured(prompt, SuggestedAnswer, "SuggestedAnswer");
+  if (result === null) {
+    // Not a failure worth warning about: the flow simply asks the question, in
+    // full, which is what it did before this existed.
+    console.info(
+      `suggestFollowupAnswer: no LLM result for field=${JSON.stringify(field)}; ` +
+        `asking the question without a suggestion`,
+    );
+    return null;
+  }
+
+  const answer = toFollowupAnswer(result.answer);
+  if (answer === null) return null;
+
+  if (!evidenceSupports(description, result.evidence)) {
+    // The model asserted the user had already answered and could not quote them
+    // on it. Warned rather than logged quietly: a rising rate here means the
+    // prompt is drifting toward inference, the same failure hazard tagging had.
+    console.warn(
+      `suggestFollowupAnswer: discarded ungrounded suggestion for ` +
+        `field=${JSON.stringify(field)} (evidence not found in the ` +
+        `description): ${JSON.stringify(result.evidence.slice(0, 80))}`,
+    );
+    return null;
+  }
+
+  return { answer, evidence: result.evidence.trim() };
 }
 
 /**

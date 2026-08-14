@@ -1,6 +1,53 @@
 # Label Quality Review — Phase 2
 
-Reproduce with `python ml/review_high_risk.py`. Date: 2026-07-29.
+Reproduce with `python ml/review_high_risk.py`. Date: 2026-07-29,
+**updated 2026-08-13**.
+
+> **2026-08-13 update.** This document describes the *floors-only* audit. It has
+> since been joined by `ml/data/rubric.md`, which derives every label from cited
+> severity and restriction inputs rather than only checking it is not too low, and
+> by `ml/data/sources.json`, which records each source with a verification date.
+> Read those first; this file remains accurate about the floors audit and its
+> limitations, and its Limitations section still stands in full.
+>
+> Three changes were made to `review_high_risk.py` on that date:
+> - **`fragile-roof-surface` cited INDG284**, which HSE's own fragile-surfaces page
+>   does not reference — it appears to be a withdrawn 2008 leaflet. Now cites
+>   **HSG33 paras 170-202 and GEIS5**.
+> - **`electrical-work-by-beginner` retired.** It audited a floor the product no
+>   longer implements: `user_skill` was removed from the product on 2026-08-02 and
+>   the shipped catalog replaced that rule with `fixed_wiring_work`, floor 3 for
+>   everyone. It was also the only rule keyed on `user_skill`, so the skill
+>   rebalance in commit `741fcc9` made it fire on a label nobody had changed —
+>   leaving this audit failing at 98.5% while this document claimed 100%.
+> - **`fixed-wiring-work` added** in its place, gated on isolation not being stated
+>   as confirmed. That gate is a deliberate divergence from the catalog and the
+>   reason is documented at the rule.
+>
+> The audit is green again: **100% on both files, 0 below floor.**
+>
+> **The audit now checks both directions.** Every rule here defines a *floor*, so
+> until 2026-08-13 it could only catch under-labelling — which meant it could
+> never show a label was *right*, only that it was not too low. That limitation is
+> point 5 of the Limitations section below, and it is now partly addressed.
+>
+> A **ceiling** bounds how far a label may exceed the level its cited evidence
+> derives (`basis.rubric_level` from `ml/data/rubric.md`), with one band of slack
+> for author judgement. Rows carrying a documented policy escalation — an
+> unanswered safety-critical follow-up, or active emergency language — are exempt,
+> since those legitimately exceed what hazards alone justify.
+>
+> Calibration over the 256 seeds: **slack 0 flags 31 rows, slack 1 flags 0, slack 2
+> flags 0.** So the check is live rather than vacuous, and the bound is tight — the
+> largest over-label anywhere in the dataset, relative to its cited evidence, is
+> exactly one band.
+>
+> The first implementation of this check wrote its own hazard predicates and
+> produced 24 flags, **all 24 of which were bugs in the check** rather than defects
+> in the labels: it knew nothing about restrictions, so notifiable plumbing and
+> F-gas work looked over-labelled. It was rewritten to anchor on the rubric, which
+> already combines cited severity with cited restriction, rather than keep a second
+> and worse copy of that logic.
 
 ## Read this first: what this review is and is not
 

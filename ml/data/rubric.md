@@ -151,10 +151,52 @@ the over-labelling direction and the audit reports it.
 **May:** *"Every risk level is a documented, deterministic function of two
 externally-sourced inputs: worst-credible-outcome severity, evidenced by injury
 surveillance data, and regulatory restriction, evidenced by named legislation and
-tagged with the jurisdiction it applies in. The function is published."*
+tagged with the jurisdiction it applies in. The function is published. The dataset
+is audited in both directions — no label falls below its standards-implied floor,
+and none exceeds its cited evidence by more than one band. Where a label disagrees
+with the derivation, the disagreement is recorded rather than resolved by fiat."*
 
 **May:** *"The system fails toward caution by construction: the rule engine can
 only escalate, and `finalRisk = max(classifier, rules)`."*
+
+### The same claim in plain words
+
+For a supervisor, a demo, a viva, or anyone who does not already know what
+"worst-credible-outcome severity" means. This is not a softer claim — it says
+exactly the same thing, and the two load-bearing details are deliberately kept.
+
+> We don't guess the risk levels. Each one is worked out from two things we can
+> point to: how badly someone could be hurt, based on hospital injury records, and
+> whether the law says a qualified professional has to do the job — we name the law
+> and the country it applies in. The way we combine those two things into a number
+> is written down, so anyone can check our working.
+>
+> We test the ratings in both directions. Nothing is rated lower than the safety
+> standards allow, and nothing is rated more than one step higher than our evidence
+> supports. When our own rating doesn't match what the method produces, we write
+> that down and leave it visible instead of quietly changing one to match the other.
+
+Spoken, one sentence:
+
+> Every risk level comes from injury data plus the law, combined by a published
+> rule — and we check nothing's rated too low or too high, with any disagreements
+> written down rather than hidden.
+
+**Two things must survive any further simplification:**
+
+1. **"we name the law and the country it applies in."** Drop this and it sounds
+   like one universal legal standard, which is false — Gas Safe registration is GB
+   law with no US equivalent in that form. It is also the first thing an informed
+   reader will probe.
+2. **"we write that down and leave it visible."** Anyone can assert their labels
+   are right. Being able to say *"here are the 64 cases where our method and our
+   judgement still disagree"* is the part that is hard to fake, and it is the
+   strongest sentence in the paragraph.
+
+**If asked directly "so are they correct?"** — the honest answer is *"they're
+traceable and consistent; we haven't had an electrician or plumber verify them
+yet."* Do not upgrade that to "verified" or "accurate". See the outstanding item
+at the end of this section.
 
 **May not:** *"Risk levels are based on / verified against safety standards, so
 they are accurate."* The severity band is a judgement about which cited outcome

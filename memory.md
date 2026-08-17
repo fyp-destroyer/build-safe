@@ -826,3 +826,74 @@ Nothing from this workstream. The honest remaining gap is the one that was there
 start and is not closable by tooling: **no licensed tradesperson has reviewed any label.**
 `REVIEW.md` § "What would actually discharge this requirement" still applies — an
 independent blind sample of ≥50 examples weighted to levels 4–5, with Cohen's κ.
+
+---
+
+## 2026-08-14 — Stakeholder wording documented in rubric.md
+
+**Files:** `ml/data/rubric.md`, `ml/data/README.md`.
+
+The "What may and may not be claimed" section of `rubric.md` now carries **both** a
+formal and a plain-English version of the claim, plus a one-sentence spoken form. Use
+these verbatim for a supervisor, demo or viva rather than improvising — the wording is
+load-bearing and several obvious paraphrases overclaim.
+
+Recorded there as must-survive-any-simplification:
+
+1. **"we name the law and the country it applies in"** — without it the claim implies one
+   universal legal standard, which is false (Gas Safe is GB law, no US equivalent in that
+   form) and is the first thing an informed reader probes.
+2. **"we write that down and leave it visible"** — anyone can assert their labels are
+   right; being able to point at the ~64 recorded method-vs-judgement disagreements is the
+   part that cannot be faked.
+
+Also recorded: **if asked "so are they correct?", the answer is "traceable and consistent;
+we haven't had an electrician or plumber verify them yet."** Never upgrade to "verified"
+or "accurate" — that is the one gap tooling cannot close, and it needs an independent
+blind sample with Cohen's κ (`REVIEW.md`).
+
+The formal claim was also updated — it predated the ceiling work and did not mention the
+two-directional audit.
+
+---
+
+## 2026-08-16 - Scope expanded: five new capabilities, PRD updated to match
+
+**Files:** `prd.md` (SS1, 2, 3a, 4, 5, 6, 7), `CanIDIY - Feasibility Report.md`/`.docx`.
+
+The project is a 12-month FYP currently in its first quarter, and the feasibility report
+was reframed accordingly: it no longer says remaining work is smaller than work completed
+(that framing undersold a 12-month project and read as not-FYP-worthy). The new framing is
+that the risk engine was deliberately front-loaded because it carried the most technical
+risk, leaving ~9 months of capability work on a proven foundation.
+
+Five capabilities added to scope, now `prd.md` SS3a items 7-11:
+photo attachment with image-assisted hazard tagging; RAG over a tool/material/PPE catalog;
+step-by-step guidance for low-risk tasks; professional discovery via a mapping/places
+service; Urdu and multilingual support.
+
+**Two of these crossed lines SS4 previously drew, and were narrowed rather than dropped:**
+
+1. **Guidance** contradicted SS1's "whether, not how" on its face. Resolved by gating it in
+   code on the risk decision: guidance only below Professional Recommended, withheld
+   entirely above. SS6 now records that this *operationalises* the principle rather than
+   weakening it, and that a misclassification now costs more (instructions, not just a
+   label), which raises the value of the escalate-only bias. SS4 gained an explicit
+   "no how-to at or above Professional Recommended" line and SS5 a test-case criterion.
+2. **Professional discovery** brushed SS4's "no professionals as app users at all".
+   Resolved by distinguishing read-only directory lookup over public map data from a
+   marketplace. No accounts, routing, ranking, or transacting. SS4 now states that
+   distinction is load bearing and that listings must carry a no-endorsement notice in the
+   UI, not only in docs.
+
+Photos stay compatible with the existing CV exclusion: images may only help identify which
+*hardcoded* rules apply, never diagnose structure or assign risk, and an ambiguous image is
+treated as hazard-present (same direction as an absent follow-up answer).
+
+**Two open questions added to SS7, both genuinely unresolved:**
+- **How Urdu reaches the classifier.** Translate-then-classify puts a translation step
+  inside the safety path; a multilingual embedding model avoids that but forces classifier
+  re-validation and worsens the 512 MB hosting memory constraint. (b) is preferred, not
+  committed. Blocks SS3a.11.
+- **Whether "DIY with Supervision" gets walkthroughs.** Conservative reading is that
+  supervision implies a human present who does not need the app's instructions.
